@@ -1,0 +1,28 @@
+{
+    "name": "loveorigami/yii2-plugins-system",
+    "description": "Plugins system as WP for Yii2",
+    "keywords": ["yii2", "plugin", "event", "yii2-plugin"],
+    "type": "yii2-extension",
+    "license": "MIT",
+    "support": {
+        "source": "https://github.com/loveorigami/yii2-plugins-system",
+        "issues": "https://github.com/loveorigami/yii2-plugins-system/issues"
+    },
+    "authors": [
+        {
+            "name": "LoveOrigami",
+            "homepage": "https://github.com/loveorigami/"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": ">=2.0.6",
+        "components/highlightjs":"*",
+        "loveorigami/yii2-jsoneditor": "*",
+        "tpoxa/shortcodes": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "lo\\plugins\\": ""
+        }
+    }
+}
