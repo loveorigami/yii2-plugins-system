@@ -381,7 +381,9 @@ class ItemController extends Controller
             foreach (self::$plugins_pool[$handlerClass]['events'] as $className => $events) {
                 foreach ($events as $eventName => $handler) {
 
-                    $handlerActive = self::$plugins_active[$handlerClass]['events'][$className][$eventName];
+                    $handlerActive = isset(self::$plugins_active[$handlerClass]['events'][$className][$eventName]) ?
+                        self::$plugins_active[$handlerClass]['events'][$className][$eventName] : '';
+
                     $handlerMethodActive = is_array($handlerActive) ? $handlerActive[0] : $handlerActive;
                     $handlerMethodPool = is_array($handler) ? $handler[0] : $handler;
 
