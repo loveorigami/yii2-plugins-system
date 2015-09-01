@@ -90,7 +90,7 @@ more about `$eventSenderClassName` and `$eventName` you can be found on the info
     /**
      * handler method foo
      */
-    public function foo($event)
+    public static function foo($event)
     {
         $term = ($event->data['term']) ? $event->data['term'] : self::$config['term'];
 
