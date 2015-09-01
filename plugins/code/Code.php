@@ -39,14 +39,15 @@ class Code
     /**
      * Parse shortcode [code], more styles you can find in https://highlightjs.org
      */
-    public function shortCode($event)
+    public static function shortCode($event)
     {
         $view = $event->sender;
 
         $style = ($event->data['style']) ? $event->data['style'] : self::$config['style'];
         $lang = ($event->data['lang']) ? $event->data['lang'] : self::$config['lang'];
 
-        CodeAsset::register($view, ['style' => $style]);
+        CodeAsset::$style = $style;
+        CodeAsset::register($view);
 
         $view->registerJs("hljs.initHighlightingOnLoad();");
 
