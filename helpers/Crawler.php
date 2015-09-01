@@ -165,7 +165,8 @@ class Crawler
     public static function getNamespace($filename)
     {
         $lines = file($filename);
-        $namespaceLine = array_shift(preg_grep('/^namespace /', $lines));
+        $lines = preg_grep('/^namespace /', $lines);
+        $namespaceLine = array_shift($lines);
         $match = array();
         preg_match('/^namespace (.*);/', $namespaceLine, $match);
         $fullNamespace = trim(array_pop($match));

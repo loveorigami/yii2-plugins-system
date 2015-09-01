@@ -24,12 +24,12 @@ class EventBootstrap implements BootstrapInterface
      * Default: frontend
      * @var appId string
      */
-    public static $appId = 'frontend';
+    public $appId = 'frontend';
 
     /**
      * @var EventManager EventManager memory storage for getEventManager method
      */
-    protected static $_eventManager = [];
+    protected $_eventManager = [];
 
     /**
      * @inheritdoc
@@ -45,10 +45,10 @@ class EventBootstrap implements BootstrapInterface
      * @return EventManager app event manager component
      * @throws Exception Define event manager
      */
-    public static function getEventManager($app)
+    public function getEventManager($app)
     {
-        if (self::$_eventManager) {
-            return self::$_eventManager;
+        if ($this->_eventManager) {
+            return $this->_eventManager;
         }
 
         foreach ($app->components as $name => $config) {
@@ -56,29 +56,30 @@ class EventBootstrap implements BootstrapInterface
 
             // if eventManager component in config
             if ($class == str_replace('Bootstrap', 'Manager', get_called_class())) {
-                self::$_eventManager = $app->$name->events;
+                $this->_eventManager = $app->$name->events;
             }
 
             // this class. set $appId from config
             if ($class == str_replace('Manager', 'Bootstrap', get_called_class())) {
                 if($app->$name->appId){
-                    self::$appId = $app->$name->appId;
+                    $this->appId = $app->$name->appId;
                 };
             }
         }
 
-        $events = ModelEvent::eventList(self::$appId);
+        $events = ModelEvent::eventList($this->appId);
 
         // merge config events with plugins
-        self::$_eventManager = array_merge_recursive($events, self::$_eventManager);
+        $this->_eventManager = array_merge_recursive($events, $this->_eventManager);
 
         $app->setComponents([
             'eventManager' => [
                 'class' => 'lo\plugins\components\EventManager',
-                'events' => self::$_eventManager
+                'events' => $this->_eventManager
             ],
         ]);
 
-        return self::$_eventManager = $app->eventManager;
+        return $this->_eventManager = $app->eventManager;
+
     }
 }

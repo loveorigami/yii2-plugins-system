@@ -72,7 +72,7 @@ class Httpauth
     /**
      * @return boolean Whether the application can be accessed by the current user.
      */
-    private function _checkAllowedIps()
+    private static function _checkAllowedIps()
     {
         if (in_array(Yii::$app->request->getUserIP(), self::$_allowedIps)) {
             return true;
@@ -83,7 +83,7 @@ class Httpauth
     /**
      * @return boolean  Whether the application can be accessed by the current user.
      */
-    private function _checkHttpAuthentication()
+    private static function _checkHttpAuthentication()
     {
         $username = Yii::$app->request->getAuthUser();
         $password = Yii::$app->request->getAuthPassword();
