@@ -69,7 +69,7 @@ class Item extends \yii\db\ActiveRecord
      */
     public function getEvents()
     {
-        return $this->hasMany(Event::className(), ['plugin_id' => 'id']);
+        return $this->hasMany(Event::class, ['plugin_id' => 'id']);
     }
 
     /**

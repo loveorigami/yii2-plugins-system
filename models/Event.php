@@ -41,9 +41,9 @@ class Event extends \yii\db\ActiveRecord
             [['plugin_id', 'app_id'], 'required'],
             [['plugin_id', 'status', 'pos'], 'integer'],
             [['trigger_class', 'trigger_event', 'handler_method'], 'string', 'max' => 255],
-            [['data'], JsonValidator::className()],
-            //[['plugin_id'], 'exist', 'skipOnError' => true, 'targetClass' => Item::className(), 'targetAttribute' => ['id']],
-            //[['app_id'], 'exist', 'skipOnError' => true, 'targetClass' => App::className(), 'targetAttribute' => ['id']],
+            [['data'], JsonValidator::class],
+            //[['plugin_id'], 'exist', 'skipOnError' => true, 'targetClass' => Item::class, 'targetAttribute' => ['id']],
+            //[['app_id'], 'exist', 'skipOnError' => true, 'targetClass' => App::class, 'targetAttribute' => ['id']],
         ];
 
     }
@@ -71,7 +71,7 @@ class Event extends \yii\db\ActiveRecord
      */
     public function getApp()
     {
-        return $this->hasOne(App::className(), ['id' => 'app_id']);
+        return $this->hasOne(App::class, ['id' => 'app_id']);
     }
 
     /**
@@ -79,7 +79,7 @@ class Event extends \yii\db\ActiveRecord
      */
     public function getPlugin()
     {
-        return $this->hasOne(Item::className(), ['id' => 'plugin_id']);
+        return $this->hasOne(Item::class, ['id' => 'plugin_id']);
     }
 
     /**

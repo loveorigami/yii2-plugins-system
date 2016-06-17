@@ -50,7 +50,7 @@ class App extends \yii\db\ActiveRecord
      */
     public function getEvents()
     {
-        return $this->hasMany(Event::className(), ['app_id' => 'id']);
+        return $this->hasMany(Event::class, ['app_id' => 'id']);
     }
 
 }

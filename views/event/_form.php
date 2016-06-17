@@ -15,7 +15,7 @@ use lo\widgets\Jsoneditor;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'data')->widget(Jsoneditor::className(),
+            <?= $form->field($model, 'data')->widget(Jsoneditor::class,
                 [
                     'editorOptions' => [
                         'modes' => ['code', 'form', 'text', 'tree', 'view'], // available modes
