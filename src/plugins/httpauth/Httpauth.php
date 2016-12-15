@@ -22,7 +22,7 @@ class Httpauth extends BasePlugin
      * Default: frontend
      * @var string appId
      */
-    public $appId = self::APP_BACKEND;
+    public static $appId = self::APP_BACKEND;
 
     /**
      * Default configuration for plugin.
