@@ -72,9 +72,9 @@ Also do the same thing with `@backend/config/main.php`:
 
 ## Core plugins (examples)
 
-* [Hello world!] (plugins/helloworld)
-* [Code Highlighting] (plugins/code)
-* [Http Authentication] (plugins/httpauth)
+* [Hello world!] (src/plugins/helloworld)
+* [Code Highlighting] (src/plugins/code)
+* [Http Authentication] (src/plugins/httpauth)
 
 ## Your plugins
 
