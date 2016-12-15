@@ -1,29 +1,32 @@
 <?php
 namespace lo\plugins\plugins\httpauth;
 
+use lo\plugins\components\BasePlugin;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\UnauthorizedHttpException;
+
 /**
  * Plugin Name: Http Authentication
  * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/tree/master/plugins/httpauth
- * Version: 1.0
+ * Version: 1.1
  * Description: Authentication for backend
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami
  */
-class Httpauth
+class Httpauth extends BasePlugin
 {
     /**
      * Application id, where plugin will be worked.
      * Support values: frontend, backend, common
      * Default: frontend
-     * @var appId string
+     * @var string appId
      */
-    public static $appId = 'backend';
+    public $appId = self::APP_BACKEND;
 
     /**
      * Default configuration for plugin.
-     * @var config array()
+     * @var [] config
      */
     public static $config = [
         'allowedIps' => ['127.0.0.1', '127.0.0.2'],
@@ -53,20 +56,21 @@ class Httpauth
 
     /**
      * Logining
+     * @param $event
+     * @return bool|void
+     * @throws UnauthorizedHttpException
      */
     public static function login($event)
     {
-        self::$_allowedIps = ($event->data['allowedIps']) ? $event->data['allowedIps'] : self::$config['allowedIps'];
-        self::$_users = ($event->data['users']) ? $event->data['users'] : self::$config['users'];
+        self::$_allowedIps = ArrayHelper::getValue($event->data, 'allowedIps', self::$config['allowedIps']);
+        self::$_users = ArrayHelper::getValue($event->data, 'users', self::$config['users']);
 
         if (Yii::$app->request->isConsoleRequest || self::_checkAllowedIps() || self::_checkHttpAuthentication()) {
-            return;
+            return null;
         }
 
         Yii::$app->response->headers->add('WWW-Authenticate', 'Basic realm="HTTP authentication"');
         throw new UnauthorizedHttpException(Yii::t('yii', 'You are not allowed to perform this action.'), 401);
-
-        return false;
     }
 
     /**

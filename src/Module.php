@@ -1,9 +1,7 @@
 <?php
 
 namespace lo\plugins;
-
 use Yii;
-use yii\helpers\Inflector;
 
 class Module extends \yii\base\Module
 {
@@ -19,7 +17,7 @@ class Module extends \yii\base\Module
         // custom initialization code goes here
 
         if (!isset(\Yii::$app->i18n->translations['plugin'])) {
-            \Yii::$app->i18n->translations['plugin'] = [
+            Yii::$app->i18n->translations['plugin'] = [
                 'class' => 'yii\i18n\PhpMessageSource',
                 'sourceLanguage' => 'en',
                 'basePath' => '@lo/plugins/messages'

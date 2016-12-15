@@ -18,12 +18,11 @@
         "yiisoft/yii2": ">=2.0.6",
 		"php": ">=5.5.0",
         "components/highlightjs":"*",
-        "loveorigami/yii2-jsoneditor": "*",
-        "tpoxa/shortcodes": "dev-master"
+        "loveorigami/yii2-jsoneditor": "*"
     },
     "autoload": {
         "psr-4": {
-            "lo\\plugins\\": ""
+            "lo\\plugins\\": "src/"
         }
     }
 }

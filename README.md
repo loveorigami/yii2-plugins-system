@@ -12,7 +12,7 @@ Yii2-plugins-system can be installed using composer. Run following command to do
 install Yii2-plugins-system:
 
 ```bash
-composer require "loveorigami/yii2-plugins-system": "*"
+composer require "loveorigami/yii2-plugins-system": "2.0"
 ```
 
 ### 2. Update database schema
@@ -90,9 +90,3 @@ review the [guidelines for contributing](CONTRIBUTING.md).
 
 Yii2-plugins-system is released under the MIT License. See the bundled [LICENSE.md](LICENSE.md)
 for details.
-
-## Thanks
-
-* Bariew for [event manager] (https://github.com/bariew/yii2-event-component) component
-* Troxa for [yii2-shortcodes] (https://github.com/tpoxa/yii2-shortcodes) component 
-* ElisDn for great webinar about [yii2-events] (http://www.elisdn.ru/blog/74/events-on-yii2-and-javascript) (by ru)

@@ -10,7 +10,8 @@ To create your plugin you need to run the following required steps
 * New named as folder class `Test`, with information about plugin
 
 ```php
-<?php
+
+use lo\plugins\components\BasePlugin;
 
 namespace common\plugins\test;
 
@@ -22,7 +23,8 @@ namespace common\plugins\test;
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami
  */
-class Test
+ 
+class Test extends BasePlugin
 {
 ...
 }
@@ -39,7 +41,7 @@ class Test
      * Default: frontend
      * @var appId string
      */
-    public static $appId = 'frontend';
+    public static $appId = self::APP_FRONTEND;
 
 ```
 
@@ -74,8 +76,8 @@ for example:
     public static function events()
     {
         return [
-            'yii\base\View' => [
-                'afterRender' => ['foo', self::$config]
+            yii\base\View::class => [
+                View::EVENT_AFTER_RENDER => ['foo', self::$config]
             ],
         ];
     }
