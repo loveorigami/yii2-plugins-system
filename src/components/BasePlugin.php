@@ -47,10 +47,8 @@ abstract class BasePlugin implements IPlugin
      */
     public function getShortcode(array $data)
     {
-        if (!self::$_shortcode) {
-            $container = Yii::$container;
-            self::$_shortcode = $container->get(Shortcode::class);
-        }
+        $container = Yii::$container;
+        self::$_shortcode = $container->get(Shortcode::class);
         $shortcode = self::$_shortcode;
         $shortcode->callbacks = $data;
 
