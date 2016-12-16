@@ -17,12 +17,7 @@ class Shortcode extends Component {
     public $callbacks;
 
     /**
-     * Constructor
-     */
-
-    /**
      * Parse shortcodes in given content
-     *
      * @param string $content Content to parse for shortcodes
      * @return string
      */
@@ -44,9 +39,7 @@ class Shortcode extends Component {
 
     /**
      * Parse single shortcode
-     *
      * Borrowed from WordPress wp/wp-includes/shortcode.php
-     *
      * @param array $m Shortcode matches
      * @return string
      */
@@ -71,7 +64,6 @@ class Shortcode extends Component {
 
     /**
      * Get the list of all shortcodes found in given content
-     *
      * @param string $content Content to process
      * @return array
      */
