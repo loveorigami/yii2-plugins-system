@@ -1,6 +1,9 @@
 <?php
 namespace lo\plugins\components;
 
+use lo\plugins\interfaces\IPlugin;
+use Yii;
+
 /**
  * Class BasePlugin
  * @package lo\plugins\plugins
@@ -27,4 +30,30 @@ abstract class BasePlugin implements IPlugin
      */
     public static $config = [];
 
+    /**
+     * @var Shortcode $_shortcode
+     */
+    private static $_shortcode;
+
+    /**
+     * @param array $data
+     * @return Shortcode|object
+     *  'callbacks' => [
+     *      'lastphotos' => ['frontend\widgets\lastPhoto\lastPhoto', 'widget'],
+     *      'anothershortcode'=>function($attrs, $content, $tag){
+     *          .....
+     *      },
+     *  ]
+     */
+    public function getShortcode(array $data)
+    {
+        if (!self::$_shortcode) {
+            $container = Yii::$container;
+            self::$_shortcode = $container->get(Shortcode::class);
+        }
+        $shortcode = self::$_shortcode;
+        $shortcode->callbacks = $data;
+
+        return $shortcode;
+    }
 }
