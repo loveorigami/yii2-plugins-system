@@ -1,4 +1,7 @@
 # Getting started with Yii2-plugins-system
+[![Latest Stable Version](https://poser.pugx.org/loveorigami/yii2-plugins-system/v/stable)](https://packagist.org/packages/loveorigami/yii2-plugins-system) 
+[![Total Downloads](https://poser.pugx.org/loveorigami/yii2-plugins-system/downloads)](https://packagist.org/packages/loveorigami/yii2-plugins-system)
+[![License](https://poser.pugx.org/loveorigami/yii2-plugins-system/license)](https://packagist.org/packages/loveorigami/yii2-plugins-system)
 
 Yii2-plugins-system is designed to work out of the box. It means that installation requires
 minimal steps. Only one configuration step should be taken and you are ready to
