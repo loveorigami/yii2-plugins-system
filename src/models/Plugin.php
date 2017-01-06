@@ -2,10 +2,12 @@
 
 namespace lo\plugins\models;
 
+use lo\plugins\models\query\PluginQuery;
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "{{%plugins__item}}".
+ * This is the model class for table "{{%plugins__plugin}}".
  *
  * @property integer $id
  * @property string $name
@@ -14,21 +16,24 @@ use Yii;
  * @property string $text
  * @property string $author
  * @property string $author_url
+ * @property string $hash
  * @property integer $status
  *
- * @property PluginsEvent[] $pluginsEvents
+ * @property Event[] $pluginsEvents
  */
-class Item extends \yii\db\ActiveRecord
+class Plugin extends ActiveRecord
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
+
+    const CORE_EVENT = 1;
 
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%plugins__item}}';
+        return '{{%plugins__plugin}}';
     }
 
     /**
@@ -37,12 +42,11 @@ class Item extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name','handler_class'], 'required'],
-            // a1 needs to be unique
-            ['handler_class', 'unique'],
+            [['name'], 'required'],
             [['text'], 'string'],
             [['status'], 'integer'],
             [['name', 'url', 'version', 'author', 'author_url'], 'string', 'max' => 255],
+            [['hash'], 'string', 'max' => 32],
         ];
     }
 
@@ -53,7 +57,6 @@ class Item extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('plugin', 'ID'),
-            'handler_class' => Yii::t('plugin', 'Handler Class'),
             'name' => Yii::t('plugin', 'Name'),
             'url' => Yii::t('plugin', 'Url'),
             'version' => Yii::t('plugin', 'Version'),
@@ -61,6 +64,7 @@ class Item extends \yii\db\ActiveRecord
             'author' => Yii::t('plugin', 'Author'),
             'author_url' => Yii::t('plugin', 'Author Url'),
             'status' => Yii::t('plugin', 'Status'),
+            'hash' => Yii::t('plugin', 'Hash'),
         ];
     }
 
@@ -74,10 +78,10 @@ class Item extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return ItemQuery the active query used by this AR class.
+     * @return PluginQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new ItemQuery(get_called_class());
+        return new PluginQuery(get_called_class());
     }
 }

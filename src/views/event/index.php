@@ -1,11 +1,16 @@
 <?php
 
+use lo\plugins\helpers\BS;
+use lo\plugins\models\App;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-/* @var $this yii\web\View */
-/* @var $searchModel lo\plugins\models\EventSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var $this yii\web\View
+ * @var $searchModel lo\plugins\models\search\EventSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ */
 
 $this->title = Yii::t('plugin', 'Events');
 $this->params['breadcrumbs'][] = $this->title;
@@ -22,37 +27,24 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => 'app_id',
-                'label' =>  Yii::t('plugin','App'),
+                'label' => Yii::t('plugin', 'App'),
                 'options' => ['style' => 'width: 25px; align: center;'],
-                'value' => function ($model, $key, $index, $column) {
-                    switch ($model->app_id) {
-                        case 1:
-                            return '<span class="label label-primary">F</span>';
-                            break;
-                        case 2:
-                            return '<span class="label label-success">C</span>';
-                            break;
-                        case 3:
-                            return '<span class="label label-danger">B</span>';
-                            break;
-                    }
+                'value' => function ($model) {
+                    return BS::appLabel($model->app_id);
                 },
-                'filter' => [
-                    1 => Yii::t('plugin', 'Frontend'),
-                    2 => Yii::t('plugin', 'Common'),
-                    3 => Yii::t('plugin', 'Backend')
-                ],
+                'filter' => ArrayHelper::map(App::find()->all(), 'id', 'name'),
                 'format' => "raw"
             ],
             'trigger_class',
             'trigger_event',
-            'plugin.handler_class',
+            'handler_class',
             'handler_method',
+            'data',
             [
                 'attribute' => 'status',
                 'options' => ['style' => 'width: 75px; align: center;'],
-                'value' => function ($model, $key, $index, $column) {
-                    return $model->status == $model::STATUS_ACTIVE ? '<span class="label label-success">Enabled</span>' : '<span class="label label-danger">Disabled</span>';
+                'value' => function ($model) {
+                    return $model->status == $model::STATUS_ACTIVE ? BS::label('Enabled', BS::TYPE_SUCCESS) : BS::label('Disabled', BS::TYPE_DANGER);
                 },
                 'filter' => [
                     1 => Yii::t('plugin', 'Enabled'),

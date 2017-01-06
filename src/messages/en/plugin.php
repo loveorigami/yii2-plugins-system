@@ -35,6 +35,7 @@ return [
 
     'Handler Class' => 'Handler Class',
     'Handler Method' => 'Handler Method',
+    'Hash' => 'Hash',
 
     'ID' => 'ID',
     'Info' => 'Info',

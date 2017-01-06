@@ -52,8 +52,8 @@ Next, open `@frontend/config/main.php` and add following:
 ...
 'components' => [
     'plugins' => [
-        'class' => 'lo\plugins\components\EventBootstrap',
-        'appId' => 'frontend'
+        'class' => lo\plugins\components\EventBootstrap::class,
+        'appId' => lo\plugins\components\BasePlugin::APP_FRONTEND
     ],
     ...
 ]
@@ -66,8 +66,8 @@ Also do the same thing with `@backend/config/main.php`:
 ...
 'components' => [
     'plugins' => [
-        'class' => 'lo\plugins\components\EventBootstrap',
-        'appId' => 'backend'
+        'class' => lo\plugins\components\EventBootstrap::class,
+        'appId' => lo\plugins\components\BasePlugin::APP_BACKEND
     ],
     ...
 ]

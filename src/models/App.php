@@ -3,6 +3,7 @@
 namespace lo\plugins\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%plugins__app}}".
@@ -10,12 +11,8 @@ use Yii;
  * @property integer $id
  * @property string $name
  */
-class App extends \yii\db\ActiveRecord
+class App extends ActiveRecord
 {
-
-    const APP_FRONTEND = 1;
-    const APP_COMMON = 2;
-    const APP_BACKEND = 3;
     /**
      * @inheritdoc
      */

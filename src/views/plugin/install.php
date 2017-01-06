@@ -1,10 +1,14 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\LinkPager;
 use yii\widgets\ListView;
 
-/* @var $this yii\web\View */
-/* @var $model lo\plugins\models\Item */
+/**
+ * @var yii\web\View $this
+ * @var lo\plugins\models\Plugin $model
+ * @var \yii\data\ArrayDataProvider $dataProvider
+ */
 
 $this->title = Yii::t('plugin', 'Install');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('plugin', 'Items'), 'url' => ['info']];
@@ -25,28 +29,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 </tr>
               </thead>';
     ?>
+
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
         'layout' => "$thead{items}",
+        'itemView' => '_item',
         'options' => [
             'tag' => 'table',
             'class' => 'table table-bordered table-striped',
         ],
         'itemOptions' => [
+            'class' => 'item',
             'tag' => false,
         ],
-        'itemOptions' => ['class' => 'item'],
-        'itemView' => '_item',
-        /*'itemView' => function ($model, $key, $index, $widget) use ($transportRun) {
-            // return print_r($model, true);
-            return $key;
-         },*/
     ]) ?>
 
-    <?php echo \yii\widgets\LinkPager::widget([
+    <?= LinkPager::widget([
         'pagination' => $dataProvider->pagination,
     ]); ?>
-
-    <?php //\yii\helpers\VarDumper::dump($data, 10, true) ?>
 
 </div>

@@ -3,15 +3,16 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-/* @var $this yii\web\View */
-/* @var $searchModel lo\plugins\models\ItemSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var $this yii\web\View
+ * @var $searchModel lo\plugins\models\search\PluginSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ */
 
 $this->title = Yii::t('plugin', 'Items');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="item-index">
-
     <h1><?= Html::encode($this->title) ?></h1>
     <?= $this->render('/_menu') ?>
 
@@ -20,14 +21,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'handler_class',
             'name',
             'url:url',
             'version',
             'text:ntext',
             [
                 'attribute' => 'status',
-                'options' => ['style'=>'width: 75px; align: center;'],
+                'options' => ['style' => 'width: 75px; align: center;'],
                 'value' => function ($model, $key, $index, $column) {
                     return $model->status == $model::STATUS_ACTIVE ? '<span class="label label-success">Enabled</span>' : '<span class="label label-danger">Disabled</span>';
                 },
@@ -35,13 +35,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     1 => Yii::t('plugin', 'Enabled'),
                     0 => Yii::t('plugin', 'Disabled')
                 ],
-                'format'=>"raw"
+                'format' => "raw"
             ],
 
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {view} {delete}',
-                'options' => ['style'=>'width: 100px;'],
+                'options' => ['style' => 'width: 100px;'],
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::a('<i class="glyphicon glyphicon-pencil"></i>', $url, [

@@ -4,7 +4,7 @@ namespace lo\plugins\controllers;
 
 use Yii;
 use lo\plugins\models\Event;
-use lo\plugins\models\EventSearch;
+use lo\plugins\models\search\EventSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

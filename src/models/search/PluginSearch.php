@@ -1,16 +1,14 @@
 <?php
 
-namespace lo\plugins\models;
+namespace lo\plugins\models\search;
 
-use Yii;
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use lo\plugins\models\Item;
+use lo\plugins\models\Plugin;
 
 /**
- * ItemSearch represents the model behind the search form about `lo\plugins\models\Item`.
+ * ItemSearch represents the model behind the search form.
  */
-class ItemSearch extends Item
+class PluginSearch extends Plugin
 {
     /**
      * @inheritdoc
@@ -19,29 +17,18 @@ class ItemSearch extends Item
     {
         return [
             [['id', 'status'], 'integer'],
-            [['handler_class', 'name', 'url', 'version', 'text', 'author', 'author_url'], 'safe'],
+            [['name', 'url', 'version', 'text', 'author', 'author_url'], 'safe'],
         ];
     }
 
     /**
-     * @inheritdoc
-     */
-    public function scenarios()
-    {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
-    }
-
-    /**
      * Creates data provider instance with search query applied
-     *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)
     {
-        $query = Item::find();
+        $query = Plugin::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -61,7 +48,6 @@ class ItemSearch extends Item
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'handler_class', $this->handler_class])
             ->andFilterWhere(['like', 'url', $this->url])
             ->andFilterWhere(['like', 'version', $this->version])
             ->andFilterWhere(['like', 'text', $this->text])

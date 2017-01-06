@@ -16,7 +16,7 @@ use yii\bootstrap\Nav;
     'items' => [
         [
             'label'   => Yii::t('plugin', 'Items'),
-            'url'     => ['/plugins/item/index'],
+            'url'     => ['/plugins/plugin/index'],
         ],
         [
             'label'   => Yii::t('plugin', 'Events'),
@@ -24,11 +24,11 @@ use yii\bootstrap\Nav;
         ],
         [
             'label'   => Yii::t('plugin', 'Install'),
-            'url'     => ['/plugins/item/find'],
+            'url'     => ['/plugins/plugin/install'],
         ],
         [
             'label'   => Yii::t('plugin', 'Info'),
-            'url'     => ['/plugins/item/info'],
+            'url'     => ['/plugins/plugin/info'],
         ],
     ]
 ]) 

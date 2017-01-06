@@ -2,25 +2,27 @@
 
 namespace lo\plugins\models;
 
+use lo\plugins\models\query\EventQuery;
+use lo\plugins\validators\JsonValidator;
 use Yii;
-use lo\plugins\helpers\JsonValidator;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%plugins__event}}".
  *
  * @property integer $id
  * @property integer $plugin_id
+ * @property integer $app_id
  * @property string $trigger_class
  * @property string $trigger_event
  * @property string $handler_class
  * @property string $handler_method
+ * @property string $data
  * @property integer $status
- *
- * @property PluginsItem $plugin
+ * @property Plugin $plugin
  */
-class Event extends \yii\db\ActiveRecord
+class Event extends ActiveRecord
 {
-
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
 
@@ -40,12 +42,9 @@ class Event extends \yii\db\ActiveRecord
         return [
             [['plugin_id', 'app_id'], 'required'],
             [['plugin_id', 'status', 'pos'], 'integer'],
-            [['trigger_class', 'trigger_event', 'handler_method'], 'string', 'max' => 255],
-            [['data'], JsonValidator::class],
-            //[['plugin_id'], 'exist', 'skipOnError' => true, 'targetClass' => Item::class, 'targetAttribute' => ['id']],
-            //[['app_id'], 'exist', 'skipOnError' => true, 'targetClass' => App::class, 'targetAttribute' => ['id']],
+            [['trigger_class', 'trigger_event', 'handler_class', 'handler_method'], 'string', 'max' => 255],
+            [['data'], JsonValidator::class]
         ];
-
     }
 
     /**
@@ -59,6 +58,7 @@ class Event extends \yii\db\ActiveRecord
             'plugin_id' => Yii::t('plugin', 'Plugin ID'),
             'trigger_class' => Yii::t('plugin', 'Trigger Class'),
             'trigger_event' => Yii::t('plugin', 'Trigger Event'),
+            'handler_class' => Yii::t('plugin', 'Handler Class'),
             'handler_method' => Yii::t('plugin', 'Handler Method'),
             'data' => Yii::t('plugin', 'Data'),
             'pos' => Yii::t('plugin', 'Position'),
@@ -69,17 +69,9 @@ class Event extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getApp()
-    {
-        return $this->hasOne(App::class, ['id' => 'app_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getPlugin()
     {
-        return $this->hasOne(Item::class, ['id' => 'plugin_id']);
+        return $this->hasOne(Plugin::class, ['id' => 'plugin_id']);
     }
 
     /**
@@ -108,9 +100,9 @@ class Event extends \yii\db\ActiveRecord
             ->joinWith(['plugin'])
             ->where([
                 't.status' => self::STATUS_ACTIVE,
-                Item::tableName() . '.status' => Item::STATUS_ACTIVE,
+                Plugin::tableName() . '.status' => Plugin::STATUS_ACTIVE,
             ])
-            ->andWhere([$cond, 't.app_id', App::APP_COMMON])
+            ->andWhere([$cond, 't.app_id', 2])
             ->orderBy($order)
             ->all();
 

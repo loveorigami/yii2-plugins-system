@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model lo\plugins\models\Item */
+/* @var $model lo\plugins\models\Plugin */
 
 $this->title = Yii::t('plugin', 'Update {modelClass}: ', [
     'modelClass' => 'Item',

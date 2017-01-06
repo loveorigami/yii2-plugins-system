@@ -1,9 +1,7 @@
 <?php
 
-namespace lo\plugins\models;
+namespace lo\plugins\models\search;
 
-use Yii;
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use lo\plugins\models\Event;
 
@@ -19,24 +17,13 @@ class EventSearch extends Event
     {
         return [
             [['id', 'plugin_id', 'app_id', 'status'], 'integer'],
-            [['trigger_class', 'trigger_event', 'handler_method'], 'safe'],
+            [[ 'trigger_class', 'trigger_event', 'handler_class', 'handler_method', 'data'], 'safe'],
         ];
     }
 
     /**
-     * @inheritdoc
-     */
-    public function scenarios()
-    {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
-    }
-
-    /**
      * Creates data provider instance with search query applied
-     *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)
@@ -58,13 +45,15 @@ class EventSearch extends Event
         $query->andFilterWhere([
             'id' => $this->id,
             'plugin_id' => $this->plugin_id,
-            'app_id' => $this->app_id,
             'status' => $this->status,
+            'app_id' => $this->app_id,
         ]);
 
         $query->andFilterWhere(['like', 'trigger_class', $this->trigger_class])
             ->andFilterWhere(['like', 'trigger_event', $this->trigger_event])
-            ->andFilterWhere(['like', 'handler_method', $this->handler_method]);
+            ->andFilterWhere(['like', 'handler_method', $this->handler_class])
+            ->andFilterWhere(['like', 'handler_method', $this->handler_method])
+            ->andFilterWhere(['like', 'data', $this->data]);
 
         return $dataProvider;
     }

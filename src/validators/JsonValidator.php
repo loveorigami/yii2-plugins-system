@@ -1,12 +1,13 @@
 <?php
 
-namespace lo\plugins\helpers;
+namespace lo\plugins\validators;
 
 use yii\validators\Validator;
 use Yii;
 
 /**
- * @author Eugene Terentev <eugene@terentev.net>
+ * Class JsonValidator
+ * @package lo\plugins\validators
  */
 class JsonValidator extends Validator
 {
@@ -20,20 +21,26 @@ class JsonValidator extends Validator
             $this->message = Yii::t('common', '"{attribute}" must be a valid JSON');
         }
     }
+
     /**
-     * @inheritdoc
+     * @param mixed $value
+     * @return array|bool
      */
     public function validateValue($value)
     {
-        if(!$value) return true;
+        if (!$value) return true;
 
         if (!@json_decode($value)) {
             return [$this->message, []];
         }
+        return false;
     }
 
     /**
-     * @inheritdoc
+     * @param \yii\base\Model $model
+     * @param string $attribute
+     * @param \yii\web\View $view
+     * @return string
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {

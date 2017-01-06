@@ -11,10 +11,11 @@ use Yii;
  */
 abstract class BasePlugin implements IPlugin
 {
-    const APP_FRONTEND = 'frontend';
-    const APP_BACKEND = 'backend';
-    const APP_COMMON = 'common';
-    const APP_API = 'api';
+    const APP_FRONTEND = 1;
+    const APP_BACKEND = 2;
+    const APP_COMMON = 3;
+    const APP_API = 4;
+    const APP_CONSOLE = 5;
 
     /**
      * Application id, where plugin will be worked.

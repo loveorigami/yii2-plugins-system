@@ -6,7 +6,7 @@ use Yii;
 class Module extends \yii\base\Module
 {
     public $controllerNamespace = 'lo\plugins\controllers';
-    public $defaultRoute = 'item';
+    public $defaultRoute = 'plugin';
 
     // Directory
     public $pluginsDir;

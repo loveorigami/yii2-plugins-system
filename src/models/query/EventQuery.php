@@ -1,13 +1,16 @@
 <?php
 
-namespace lo\plugins\models;
+namespace lo\plugins\models\query;
+
+use lo\plugins\models\Event;
+use yii\db\ActiveQuery;
 
 /**
  * This is the ActiveQuery class for [[Event]].
  *
  * @see Event
  */
-class EventQuery extends \yii\db\ActiveQuery
+class EventQuery extends ActiveQuery
 {
     /*public function active()
     {

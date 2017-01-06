@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model lo\plugins\models\Item */
+/* @var $model lo\plugins\models\Plugin */
 
 $this->title = Yii::t('plugin', 'Create Item');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('plugin', 'Items'), 'url' => ['index']];
