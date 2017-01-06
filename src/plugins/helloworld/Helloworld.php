@@ -7,11 +7,11 @@ use yii\web\View;
 
 /**
  * Plugin Name: Hello World
- * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/plugins/helloworld
- * Version: 1.3
+ * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/src/plugins/helloworld
+ * Version: 1.4
  * Description: A simple hello world plugin
  * Author: Andrey Lukyanov
- * Author URI: https://github.com/loveorigami/yii2-plugins-system
+ * Author URI: https://github.com/loveorigami
  */
 class Helloworld extends BasePlugin
 {
