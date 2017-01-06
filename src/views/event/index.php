@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="event-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?= $this->render('/_menu') ?>
 
     <?= GridView::widget([

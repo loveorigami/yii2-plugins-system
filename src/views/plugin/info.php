@@ -12,12 +12,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>
     h2{
-        margin-top:0px;
+        margin-top:0;
     }
 </style>
 <div class="item-info">
-
-    <h1><?= Html::encode($this->title) ?></h1>
     <?= $this->render('/_menu') ?>
 
     <!-- Main content -->

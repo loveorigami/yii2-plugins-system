@@ -13,7 +13,6 @@ $this->title = Yii::t('plugin', 'Items');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="item-index">
-    <h1><?= Html::encode($this->title) ?></h1>
     <?= $this->render('/_menu') ?>
 
     <?= GridView::widget([
