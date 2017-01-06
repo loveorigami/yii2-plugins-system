@@ -8,8 +8,8 @@ use yii\web\UnauthorizedHttpException;
 
 /**
  * Plugin Name: Http Authentication
- * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/src/plugins/httpauth
- * Version: 1.3
+ * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/blob/master/src/plugins/httpauth
+ * Version: 1.4
  * Description: Authentication for backend
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami

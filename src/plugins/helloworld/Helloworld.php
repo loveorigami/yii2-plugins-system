@@ -7,8 +7,8 @@ use yii\web\View;
 
 /**
  * Plugin Name: Hello World
- * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/src/plugins/helloworld
- * Version: 1.4
+ * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/tree/master/src/plugins/helloworld
+ * Version: 1.5
  * Description: A simple hello world plugin
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami
