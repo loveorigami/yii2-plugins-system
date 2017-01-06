@@ -7,8 +7,8 @@ use yii\web\View;
 
 /**
  * Plugin Name: Code Highlighting
- * Plugin URI: https://github.com/loveorigami/yii2-plugins-system
- * Version: 1.4
+ * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/tree/master/src/plugins/code
+ * Version: 1.5
  * Description: A shortcode for code highlighting in view. Use as [code lang="php"]...content...[/code]
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami
