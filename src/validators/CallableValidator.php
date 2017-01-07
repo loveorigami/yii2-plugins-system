@@ -2,6 +2,7 @@
 
 namespace lo\plugins\validators;
 
+use yii\base\InvalidConfigException;
 use yii\validators\Validator;
 use Yii;
 
@@ -15,6 +16,11 @@ class CallableValidator extends Validator
      * @var string the name of the attribute to be callable with.
      */
     public $callableAttribute;
+
+    /**
+     * @var string the name of the attribute to be callable with.
+     */
+    public $callableValue;
 
     /**
      * @var string the user-defined error message. It may contain the following placeholders which
@@ -36,6 +42,9 @@ class CallableValidator extends Validator
         if ($this->message === null) {
             $this->message = Yii::t('plugin', '{attribute} must be a callable as [{callableValue}::{value}]');
         }
+        if ($this->callableAttribute === null) {
+            throw new InvalidConfigException('CallableValidator::callableAttribute must be set.');
+        }
     }
 
     /**
@@ -56,15 +65,29 @@ class CallableValidator extends Validator
         }
 
         $callableAttribute = $this->callableAttribute;
-        $callableValue = $model->$callableAttribute;
+        $this->callableValue = $model->$callableAttribute;
+        $result = $this->validateValue($value);
 
-        if (!is_callable([$callableValue, $value])) {
-            $this->addError($model, $attribute, $this->message, [
-                'value' => $value,
-                'callableAttribute' => $callableAttribute,
-                'callableValue' => $callableValue
-            ]);
+        if (!empty($result)) {
+            $this->addError($model, $attribute, $result[0], $result[1]);
+            return;
         }
+
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected function validateValue($value)
+    {
+        if (!is_callable([$this->callableValue, $value])) {
+            return [$this->message, [
+                'value' => $value,
+                'callableAttribute' => $this->callableAttribute,
+                'callableValue' => $this->callableValue
+            ]];
+        } else {
+            return null;
+        }
+    }
 }
