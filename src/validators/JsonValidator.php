@@ -24,16 +24,19 @@ class JsonValidator extends Validator
 
     /**
      * @param mixed $value
-     * @return array|bool
+     * @return array|null
      */
     public function validateValue($value)
     {
-        if (!$value) return true;
+        if ($value === null || $value === '') {
+            return null;
+        }
 
         if (!@json_decode($value)) {
             return [$this->message, []];
         }
-        return false;
+
+        return null;
     }
 
     /**
