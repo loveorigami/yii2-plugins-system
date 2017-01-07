@@ -4,6 +4,7 @@ namespace lo\plugins\models;
 
 use lo\plugins\components\BasePlugin;
 use lo\plugins\models\query\EventQuery;
+use lo\plugins\validators\CallableValidator;
 use lo\plugins\validators\JsonValidator;
 use Yii;
 use yii\db\ActiveRecord;
@@ -41,10 +42,13 @@ class Event extends ActiveRecord
     public function rules()
     {
         return [
-            [['plugin_id', 'app_id'], 'required'],
+            [['plugin_id', 'app_id', 'trigger_class', 'trigger_event', 'handler_class', 'handler_method'], 'required'],
             [['plugin_id', 'status', 'pos'], 'integer'],
             [['trigger_class', 'trigger_event', 'handler_class', 'handler_method'], 'string', 'max' => 255],
-            [['data'], JsonValidator::class]
+            [['pos'], 'default', 'value' => 1],
+            [['data'], JsonValidator::class],
+            [['handler_method'], CallableValidator::class, 'callableAttribute' => 'handler_class'],
+            [['trigger_event'], CallableValidator::class, 'callableAttribute' => 'trigger_class']
         ];
     }
 

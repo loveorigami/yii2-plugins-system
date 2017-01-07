@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'plugin_id',
             'trigger_class',
             'trigger_event',
-            'plugin.handler_class',
+            'handler_class',
             'handler_method',
             'data',
             'pos',

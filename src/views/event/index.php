@@ -16,7 +16,9 @@ $this->title = Yii::t('plugin', 'Events');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="event-index">
-
+    <?= Html::a(Yii::t('plugin', 'Create {modelClass}', [
+        'modelClass' => Yii::t('plugin', 'Event')
+    ]), ['create'], ['class' => 'btn btn-success pull-right']) ?>
     <?= $this->render('/_menu') ?>
 
     <?= GridView::widget([

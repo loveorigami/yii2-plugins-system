@@ -2,6 +2,7 @@
 
 namespace lo\plugins\controllers;
 
+use lo\plugins\models\Plugin;
 use Yii;
 use lo\plugins\models\Event;
 use lo\plugins\models\search\EventSearch;
@@ -58,12 +59,13 @@ class EventController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function _actionCreate()
+    public function actionCreate()
     {
         $model = new Event();
+        $model->plugin_id = Plugin::CORE_EVENT;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect('index');
         } else {
             return $this->render('create', [
                 'model' => $model,

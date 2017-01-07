@@ -18,11 +18,14 @@
  */
 return [
     'Are you sure to delete this item?' => 'Уверены, что хотите удалить эту запись?',
+    '"{attribute}" must be a valid JSON' => '"{attribute}" должен содержать валидный JSON',
     'Author' => 'Автор',
     'Author Url' => 'Url автора',
     'Create' => 'Добавить',
     'Create Item' => 'Создать плагин',
+    'Create {modelClass}' => 'Создать {modelClass}',
     'Delete' => 'Удалить',
+    'Event' => 'Событие',
     'Events' => 'События',
     'Hash' => 'Хеш',
     'ID' => 'ID',

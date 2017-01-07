@@ -20,17 +20,20 @@ return [
     'Are you sure to delete this item?' => 'Are you sure to delete this item?',
     'App' => 'App',
     'App Id' => 'App Id',
+    '"{attribute}" must be a valid JSON' => '"{attribute}" must be a valid JSON',
     'Author' => 'Author',
     'Author Url' => 'Author Url',
 
     'Create' => 'Create',
     'Create Item' => 'Create Plugin',
+    'Create {modelClass}' => 'Create {modelClass}',
 
     'Data' => 'Data',
     'Delete' => 'Delete',
     'Disabled' => 'Disabled',
 
     'Enabled' => 'Enabled',
+    'Event' => 'Event',
     'Events' => 'Events',
 
     'Handler Class' => 'Handler Class',

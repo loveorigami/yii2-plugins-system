@@ -59,7 +59,7 @@ class EventBootstrap implements BootstrapInterface
 
             // this class. set $appId from config
             if ($class == str_replace('Manager', 'Bootstrap', get_called_class())) {
-                if($app->$name->appId){
+                if ($app->$name->appId) {
                     $this->appId = $app->$name->appId;
                 };
             }
