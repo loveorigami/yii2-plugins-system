@@ -2,57 +2,24 @@
 
 namespace lo\plugins\repositories;
 
-use lo\plugins\interfaces\IStorage;
-
-abstract class EventRepository implements IStorage
+abstract class EventRepository
 {
-    protected $_pool = [];
-    protected $_diff = [];
+    protected $_data = [];
 
     /**
-     * @param array $diff
+     * @param $pluginClass
+     * @return mixed
      */
-    public function setDiff($diff)
+    public function findEventsByHandler($pluginClass)
     {
-        $this->_diff = $diff;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDiff()
-    {
-        if (!$this->_diff) {
-            $this->populate();
+        if (!$this->_data) {
+            $this->populate($pluginClass);
         }
-        return $this->_diff;
+        return $this->_data;
     }
 
     /**
-     * @return mixed
+     * @param $pluginClass
      */
-    abstract protected function populate();
-
-    /**
-     * @param $item
-     * @return mixed
-     */
-    abstract protected function key($item);
-
-    /**
-     * @return array
-     */
-    public function getPool()
-    {
-        return $this->_pool;
-    }
-
-    /**
-     * @param array $pool
-     */
-    public function setPool($pool)
-    {
-        $this->_pool = $pool;
-    }
-
+    abstract protected function populate($pluginClass);
 } 

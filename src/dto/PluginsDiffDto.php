@@ -4,6 +4,10 @@ namespace lo\plugins\dto;
 
 use yii\helpers\Json;
 
+/**
+ * Class PluginsDiffDto
+ * @package lo\plugins\dto
+ */
 class PluginsDiffDto
 {
     protected $_data = [];

@@ -3,6 +3,7 @@
 namespace lo\plugins\repositories;
 
 use lo\plugins\dto\PluginDto;
+use lo\plugins\models\Event;
 use lo\plugins\models\Plugin;
 
 class PluginDbRepository extends PluginRepository
@@ -109,6 +110,14 @@ class PluginDbRepository extends PluginRepository
         $model->setAttributes($data);
         $this->add($model);
         return $model;
+    }
+
+    /**
+     * @param Plugin $model
+     * @param Event $event
+     */
+    public function link(Plugin $model, Event $event){
+        $model->link('events', $event);
     }
 
 }

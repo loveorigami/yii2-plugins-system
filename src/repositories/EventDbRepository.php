@@ -2,7 +2,7 @@
 
 namespace lo\plugins\repositories;
 
-use lo\core\helpers\ArrayHelper;
+use lo\plugins\dto\EventDto;
 use lo\plugins\models\Event;
 
 class EventDbRepository extends EventRepository
@@ -21,12 +21,11 @@ class EventDbRepository extends EventRepository
     }
 
     /**
-     * @return array|\lo\plugins\models\Event[]
+     * @param $pluginClass
      */
-    public function findAll()
+    public function populate($pluginClass)
     {
-        $items = Event::find()->where(['<>', 'plugin_id', Event::CORE_EVENT])->all();
-        return $items;
+        $this->_data = Event::find()->where(['handler_class' =>$pluginClass])->indexBy('handler_method')->all();
     }
 
     /**
@@ -52,33 +51,36 @@ class EventDbRepository extends EventRepository
     }
 
     /**
-     * populate diff
+     * @param Event $item
      */
-    protected function populate()
+    public function delete(Event $item)
     {
-        $items = $this->findAll();
-        foreach ($items as $item) {
-            $key = $this->key($item);
-            $this->_diff[] = $key;
-            $this->_pool[$key] = $this->poolData($item);
+        if ($item->getIsNewRecord()) {
+            throw new \InvalidArgumentException('Model not exists');
         }
+        $item->update(false);
     }
 
     /**
-     * @param Event $item
-     * @return string
+     * @param array $data
+     * @return Event
      */
-    protected function key($item)
+    public function addEvent($data)
     {
-        return md5($item->handler_class . '-' . $item->handler_method . '-' . $item->plugin->version);
+        $data = (array) new EventDto($data);
+        $model = new Event();
+        $model->setAttributes($data);
+        $this->add($model);
+        return $model;
     }
 
     /**
-     * @param Event $item
-     * @return array
+     * @param array $data
      */
-    protected function poolData(Event $item)
+    public function deleteEvent($data)
     {
-        return ArrayHelper::toArray($item);
+        $data = new EventDto($data);
+        $model = $this->find($data->id);
+        $model->delete();
     }
 } 

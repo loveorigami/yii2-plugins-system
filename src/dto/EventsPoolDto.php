@@ -3,10 +3,10 @@
 namespace lo\plugins\dto;
 
 /**
- * Class PluginsPoolDto
+ * Class EventsPoolDto
  * @package lo\plugins\dto
  */
-class PluginsPoolDto
+class EventsPoolDto
 {
     public $data = [];
 

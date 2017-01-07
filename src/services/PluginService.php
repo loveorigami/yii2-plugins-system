@@ -2,6 +2,8 @@
 
 namespace lo\plugins\services;
 
+use lo\plugins\dto\EventsDiffDto;
+use lo\plugins\dto\EventsPoolDto;
 use lo\plugins\dto\PluginDataDto;
 use lo\plugins\dto\PluginsDiffDto;
 use lo\plugins\dto\PluginsPoolDto;
@@ -68,12 +70,48 @@ class PluginService
         $pluginInfoDir = $this->pluginDirRepository->getInfoByHash($hash);
         $pluginInfoDb = $this->pluginDbRepository->getInfoByHash($hash);
 
+        $pluginDataDto = new PluginDataDto($pluginInfoDir);
+        $pluginClass = $pluginDataDto->getPluginClass();
+
+        $eventsArrayDir = $this->eventDirRepository->findEventsByHandler($pluginClass);
+
         if ($pluginInfoDb) {
+            /** Update plugin */
             $data = ArrayHelper::merge($pluginInfoDb, $pluginInfoDir);
             $plugin = $this->pluginDbRepository->savePlugin($hash, $data);
+
+            $eventsArrayDb = $this->eventDbRepository->findEventsByHandler($pluginClass);
+
+            $eventsDiffDir = new EventsDiffDto($eventsArrayDir);
+            $eventsDiffDb = new EventsDiffDto($eventsArrayDb);
+
+            $eventsPoolDir = new EventsPoolDto($eventsArrayDir);
+            $eventsPoolDb = new EventsPoolDto($eventsArrayDb);
+
+            /** Get Deleted events */
+            foreach (array_filter(array_diff($eventsDiffDb->getDiff(), $eventsDiffDir->getDiff())) as $key) {
+                $data = $eventsPoolDb->getInfo($key);
+                $this->eventDbRepository->deleteEvent($data);
+            }
+
+            /** Get Installed events */
+            foreach (array_filter(array_diff($eventsDiffDir->getDiff(), $eventsDiffDb->getDiff())) as $key) {
+                $data = $eventsPoolDir->getInfo($key);
+                $event = $this->eventDbRepository->addEvent($data);
+                $this->pluginDbRepository->link($plugin, $event);
+            }
+
             Yii::$app->session->setFlash('success', 'Plugin updated');
+
         } else {
+            /** Install plugin */
             $plugin = $this->pluginDbRepository->addPlugin($pluginInfoDir);
+
+            foreach ($eventsArrayDir as $data) {
+                $event = $this->eventDbRepository->addEvent($data);
+                $this->pluginDbRepository->link($plugin, $event);
+            }
+
             Yii::$app->session->setFlash('success', 'Plugin installed');
         }
     }

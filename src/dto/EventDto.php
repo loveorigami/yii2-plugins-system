@@ -3,19 +3,19 @@
 namespace lo\plugins\dto;
 
 /**
- * Class PluginDto
+ * Class EventDto
  * @package lo\plugins\dto
  */
-class PluginDto
+class EventDto
 {
     public $id;
-    public $name;
-    public $url;
+    public $app_id;
+    public $trigger_class;
+    public $trigger_event;
+    public $handler_class;
+    public $handler_method;
+    public $data;
     public $text;
-    public $author;
-    public $author_url;
-    public $hash;
-    public $version;
 
     /**
      * PluginDataDto constructor.
@@ -27,14 +27,6 @@ class PluginDto
             if (property_exists($this, $key)) {
                 $this->$key = $value;
             }
-        }
-
-        if (isset($data['new_version'])) {
-            $this->version = $data['new_version'];
-        }
-
-        if (isset($data['new_hash'])) {
-            $this->hash = $data['new_hash'];
         }
     }
 }

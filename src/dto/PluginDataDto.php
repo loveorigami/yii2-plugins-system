@@ -39,4 +39,12 @@ class PluginDataDto
     {
         return ($this->hash) ? true : false;
     }
+
+    /**
+     * @return string
+     */
+    public function getPluginClass()
+    {
+        return $this->handler_class;
+    }
 }
