@@ -13,7 +13,7 @@ if ($model->isInstalled()) {
     $class = BS::TYPE_SUCCESS;
 } else {
     $name = 'Install';
-    $ver = BS::label($model->version, BS::TYPE_PRIMARY);
+    $ver = BS::label($model->new_version, BS::TYPE_PRIMARY);
     $class = BS::TYPE_PRIMARY;
 };
 
