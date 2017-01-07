@@ -2,6 +2,7 @@
 
 namespace lo\plugins\models;
 
+use lo\plugins\components\BasePlugin;
 use lo\plugins\models\query\EventQuery;
 use lo\plugins\validators\JsonValidator;
 use Yii;
@@ -84,25 +85,24 @@ class Event extends ActiveRecord
     }
 
     /**
-     * eventList for BootstrapManager
+     * @param null $appId
      * @return array
      */
-    public static function eventList($appId = 'frontend')
+    public static function eventList($appId = null)
     {
-        // (frontentd and common) or (backend and common) events
-        $cond = ($appId == 'backend') ? '>=' : '<=';
+        if (!$appId) return [];
+
         $attributes = ['trigger_class', 'trigger_event', 'plugin_id', 'pos', 'handler_method']; // handler_class
         $order = array_combine($attributes, array_fill(0, count($attributes), SORT_ASC));
 
         $allEvents = self::find()
-            ->select('t.*')
-            ->from(self::tableName() . 'AS t')
-            ->joinWith(['plugin'])
-            ->where([
-                't.status' => self::STATUS_ACTIVE,
-                Plugin::tableName() . '.status' => Plugin::STATUS_ACTIVE,
+            ->alias('e')
+            ->innerJoinWith(['plugin p'])
+            ->where(['AND',
+                ['e.status' => Event::STATUS_ACTIVE],
+                ['p.status' => Plugin::STATUS_ACTIVE],
+                ['e.app_id' => [$appId, BasePlugin::APP_COMMON]]
             ])
-            ->andWhere([$cond, 't.app_id', 2])
             ->orderBy($order)
             ->all();
 
@@ -110,9 +110,9 @@ class Event extends ActiveRecord
 
         foreach ($allEvents as $data) {
             if ($data->data) {
-                $handler = [[$data->plugin->handler_class, $data->handler_method], json_decode($data->data, true)];
+                $handler = [[$data->handler_class, $data->handler_method], json_decode($data->data, true)];
             } else {
-                $handler = [$data->plugin->handler_class, $data->handler_method];
+                $handler = [$data->handler_class, $data->handler_method];
             }
             $result[$data->trigger_class][$data->trigger_event][] = $handler;
         }
