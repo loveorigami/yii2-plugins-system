@@ -77,7 +77,6 @@ class PluginController extends Controller
 
             if ($id && Yii::$app->request->isPost) {
                 $this->pluginService->installPlugins($id);
-                Yii::$app->session->setFlash('success', 'Plugin updated');
                 return $this->redirect('install');
             }
 

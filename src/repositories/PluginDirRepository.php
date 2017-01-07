@@ -5,6 +5,7 @@ namespace lo\plugins\repositories;
 use lo\plugins\helpers\Crawler;
 use Yii;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 
@@ -13,28 +14,14 @@ class PluginDirRepository extends PluginRepository
     /**
      * @var array
      */
-    protected $dirs;
+    protected $_dirs;
 
     /**
      * @param array $dirs
      */
     public function setDirs($dirs)
     {
-        $this->dirs = $dirs;
-    }
-
-    /**
-     * @param string $hash
-     * @return mixed
-     * @throws Exception
-     */
-    public function getPoolByHash($hash)
-    {
-        if (isset($this->_pool[$hash])) {
-            return $this->_pool[$hash];
-        } else {
-            throw new Exception("Can't install this plugin");
-        }
+        $this->_dirs = $dirs;
     }
 
     /**
@@ -42,7 +29,11 @@ class PluginDirRepository extends PluginRepository
      */
     protected function populate()
     {
-        foreach ($this->dirs as $path) {
+        if (!is_array($this->_dirs)) {
+            throw new InvalidConfigException("Plugins directory is not array.");
+        }
+
+        foreach ($this->_dirs as $path) {
             $dir = Yii::getAlias($path);
             $files = FileHelper::findFiles(Yii::getAlias($path), ['only' => ['*.php']]);
 
@@ -53,36 +44,24 @@ class PluginDirRepository extends PluginRepository
                     if (!is_array($pluginClass::events())) {
                         continue;
                     }
-                    $hash = $this->hash($pluginClass);
-                    $this->_pool[$hash] = $this->poolData($pluginClass);
-                    $this->_diff[] = $this->diffData($hash);
+                    $this->_data[md5($pluginClass)] = $this->getInfo($pluginClass);
                 }
             }
         }
     }
 
     /**
-     * @param $pluginClass
-     * @return array
+     * @param string $hash
+     * @return mixed
+     * @throws Exception
      */
-    protected function poolData($pluginClass)
+    public function getInfoByHash($hash)
     {
-        return [
-            'class' => $pluginClass,
-            self::MODEL_FORM => $this->getInfo($pluginClass)
-        ];
-    }
-
-    /**
-     * @param $hash
-     * @return array
-     */
-    protected function diffData($hash)
-    {
-        return $this->encode([
-            'hash' => $hash,
-            'version' => $this->version($hash)
-        ]);
+        if (isset($this->_data[$hash])) {
+            return $this->_data[$hash];
+        } else {
+            throw new Exception("Can't install this plugin");
+        }
     }
 
     /**
@@ -102,32 +81,16 @@ class PluginDirRepository extends PluginRepository
 
 
         return [
+            'handler_class' => $pluginClass,
             'name' => trim(ArrayHelper::getValue($name, 1, 'plugin')),
             'url' => trim(ArrayHelper::getValue($url, 1)),
-            'version' => trim(ArrayHelper::getValue($version, 1, '1.0')),
             'text' => trim(ArrayHelper::getValue($text, 1)),
             'author' => trim(ArrayHelper::getValue($author, 1)),
             'author_url' => trim(ArrayHelper::getValue($author_url, 1)),
-            'hash' => $this->hash($pluginClass)
+            'new_version' => trim(ArrayHelper::getValue($version, 1, '1.0')),
+            'new_hash' => md5($pluginClass)
         ];
 
     }
 
-    /**
-     * @param $pluginClass
-     * @return string
-     */
-    protected function hash($pluginClass)
-    {
-        return md5($pluginClass);
-    }
-
-    /**
-     * @param $hash
-     * @return mixed
-     */
-    protected function version($hash)
-    {
-        return $this->_pool[$hash][self::MODEL_FORM]['version'];
-    }
 } 

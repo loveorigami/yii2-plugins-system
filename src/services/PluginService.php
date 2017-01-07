@@ -2,11 +2,14 @@
 
 namespace lo\plugins\services;
 
-use lo\plugins\repositories\DataRepository;
+use lo\plugins\dto\PluginDataDto;
+use lo\plugins\dto\PluginsDiffDto;
+use lo\plugins\dto\PluginsPoolDto;
 use lo\plugins\repositories\EventDbRepository;
 use lo\plugins\repositories\EventDirRepository;
 use lo\plugins\repositories\PluginDbRepository;
 use lo\plugins\repositories\PluginDirRepository;
+use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 
@@ -16,21 +19,18 @@ class PluginService
     private $eventDirRepository;
     private $pluginDbRepository;
     private $pluginDirRepository;
-    private $dataRepository;
 
     public function __construct(
         PluginDirRepository $pluginDirRepository,
         PluginDbRepository $pluginDbRepository,
         EventDirRepository $eventDirRepository,
-        EventDbRepository $eventDbRepository,
-        DataRepository $dataRepository
+        EventDbRepository $eventDbRepository
     )
     {
         $this->pluginDirRepository = $pluginDirRepository;
         $this->pluginDbRepository = $pluginDbRepository;
         $this->eventDirRepository = $eventDirRepository;
         $this->eventDbRepository = $eventDbRepository;
-        $this->dataRepository = $dataRepository;
     }
 
 
@@ -41,20 +41,22 @@ class PluginService
      */
     public function getPlugins($dirs)
     {
-        if (!is_array($dirs)) {
-            throw new InvalidConfigException("Plugins directory is not array.");
-        }
-
         $this->pluginDirRepository->setDirs($dirs);
 
-        $diff_dir = $this->pluginDirRepository->getDiff();
-        $diff_db = $this->pluginDbRepository->getDiff();
+        $pluginsArrayDir = $this->pluginDirRepository->findAllAsArray();
+        $pluginsArrayDb = $this->pluginDbRepository->findAllAsArray();
 
-        $pool_dir = $this->pluginDirRepository->getPool();
-        $pool_db = $this->pluginDbRepository->getPool();
+        $pluginsDiffDir = new PluginsDiffDto($pluginsArrayDir);
+        $pluginsDiffDb = new PluginsDiffDto($pluginsArrayDb);
 
-        $data = $this->dataRepository->getData($diff_dir, $diff_db, $pool_dir, $pool_db);
+        $pluginsPoolDir = new PluginsPoolDto($pluginsArrayDir);
+        $pluginsPoolDb = new PluginsPoolDto($pluginsArrayDb);
 
+        $data = [];
+        foreach (array_filter(array_diff($pluginsDiffDir->getDiff(), $pluginsDiffDb->getDiff())) as $key => $value) {
+            $pool = ArrayHelper::merge($pluginsPoolDb->getInfo($key), $pluginsPoolDir->getInfo($key));
+            $data[$key] = new PluginDataDto($pool);
+        }
         return $data;
     }
 
@@ -63,16 +65,16 @@ class PluginService
      */
     public function installPlugins($hash)
     {
-        $pool_dir = $this->pluginDirRepository->getPoolByHash($hash);
-        $pool_db = $this->pluginDbRepository->getPoolByHash($hash);
+        $pluginInfoDir = $this->pluginDirRepository->getInfoByHash($hash);
+        $pluginInfoDb = $this->pluginDbRepository->getInfoByHash($hash);
 
-        if ($pool_db) {
-            $data = ArrayHelper::merge($pool_db, $pool_dir);
+        if ($pluginInfoDb) {
+            $data = ArrayHelper::merge($pluginInfoDb, $pluginInfoDir);
             $plugin = $this->pluginDbRepository->savePlugin($hash, $data);
-
+            Yii::$app->session->setFlash('success', 'Plugin updated');
         } else {
-            $plugin = $this->pluginDbRepository->addPlugin($pool_dir);
+            $plugin = $this->pluginDbRepository->addPlugin($pluginInfoDir);
+            Yii::$app->session->setFlash('success', 'Plugin installed');
         }
-
     }
 }

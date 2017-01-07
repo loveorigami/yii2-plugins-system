@@ -2,82 +2,30 @@
 
 namespace lo\plugins\repositories;
 
-use lo\plugins\interfaces\IStorage;
-use yii\helpers\Json;
-
-abstract class PluginRepository implements IStorage
+abstract class PluginRepository
 {
-    protected $_pool = [];
-    protected $_diff = [];
-
-    const MODEL_FORM = 'Plugin';
+    protected $_data = [];
 
     /**
+     * find all plugins
      * @return array
      */
-    public function getDiff()
+    public function findAllAsArray()
     {
-        if (!$this->_diff) {
+        if (!$this->_data) {
             $this->populate();
         }
-        return $this->_diff;
+        return $this->_data;
     }
 
     /**
-     * @param string $item
-     * @return array
-     */
-    public function getDiffFromJson($item)
-    {
-        return $this->decode($item);
-    }
-
-    /**
-     * @return array
-     */
-    public function getPool()
-    {
-        if (!$this->_pool) {
-            $this->populate();
-        }
-        return $this->_pool;
-    }
-
-    /**
-     * @param string $hash
-     * @return array
-     */
-    public function getPoolByHash($hash)
-    {
-        return isset($this->_pool[$hash]) ? $this->_pool[$hash] : null;
-    }
-
-    /**
-     * @return mixed
+     * populate pool
      */
     abstract protected function populate();
 
     /**
-     * @param $item
-     * @return mixed
+     * @param $hash
+     * @return array
      */
-    abstract protected function hash($item);
-
-    /**
-     * @param $item
-     * @return mixed
-     */
-    protected function decode($item)
-    {
-        return Json::decode($item);
-    }
-
-    /**
-     * @param $item
-     * @return mixed
-     */
-    protected function encode($item)
-    {
-        return Json::encode($item);
-    }
-} 
+    abstract public function getInfoByHash($hash);
+}

@@ -2,8 +2,8 @@
 
 namespace lo\plugins\repositories;
 
+use lo\plugins\dto\PluginDto;
 use lo\plugins\models\Plugin;
-use yii\helpers\ArrayHelper;
 
 class PluginDbRepository extends PluginRepository
 {
@@ -21,34 +21,6 @@ class PluginDbRepository extends PluginRepository
     }
 
     /**
-     * @param $hash
-     * @return array|Plugin|null
-     */
-    public function findByHash($hash)
-    {
-        if (!$item = Plugin::find()->where(['hash' => $hash])->limit(1)->one()) {
-            throw new \InvalidArgumentException('Model not found');
-        }
-        return $item;
-    }
-
-    public function add(Plugin $item)
-    {
-        if (!$item->getIsNewRecord()) {
-            throw new \InvalidArgumentException('Model not exists');
-        }
-        $item->insert(false);
-    }
-
-    public function save(Plugin $item)
-    {
-        if ($item->getIsNewRecord()) {
-            throw new \InvalidArgumentException('Model not exists');
-        }
-        $item->update(false);
-    }
-
-    /**
      * @return array|\lo\plugins\models\Plugin[]
      */
     public function findAll()
@@ -59,83 +31,84 @@ class PluginDbRepository extends PluginRepository
 
     /**
      * @param $hash
-     * @param $data
-     * @return array|Plugin|null
+     * @return Plugin|null
      */
-    public function savePlugin($hash, $data)
+    public function findByHash($hash)
     {
-        $model = $this->findByHash($hash);
-        if ($model->load($data)) {
-            $this->save($model);
+        if (!$item = Plugin::find()->where(['hash' => $hash])->limit(1)->one()) {
+            throw new \InvalidArgumentException('Model not found');
         }
-        return $model;
+        return $item;
     }
 
     /**
-     * @param $data
-     * @return array|Plugin|null
-     */
-    public function addPlugin($data)
-    {
-        $model = new Plugin();
-        if ($model->load($data)) {
-            $this->add($model);
-        }
-        return $model;
-    }
-
-    /**
-     * populate diff
+     * populate data
      */
     protected function populate()
     {
-        $items = $this->findAll();
-        foreach ($items as $item) {
-            $hash = $this->hash($item);
-            $this->_pool[$hash] = $this->poolData($item);
-            $this->_diff[] = $this->diffData($item);
+        $this->_data = Plugin::find()->where(['<>', 'id', Plugin::CORE_EVENT])->indexBy('hash')->asArray()->all();
+    }
+
+    /**
+     * @param string $hash
+     * @return array
+     */
+    public function getInfoByHash($hash)
+    {
+        if (isset($this->_data[$hash])) {
+            return $this->_data[$hash];
+        } else {
+            return [];
         }
     }
 
     /**
      * @param Plugin $item
-     * @return array
      */
-    protected function poolData(Plugin $item)
+    public function add(Plugin $item)
     {
-        return [
-            'class' => '',
-            self::MODEL_FORM => ArrayHelper::toArray($item)
-        ];
+        if (!$item->getIsNewRecord()) {
+            throw new \InvalidArgumentException('Model not exists');
+        }
+        $item->insert(false);
     }
 
     /**
      * @param Plugin $item
-     * @return array
      */
-    protected function diffData($item)
+    public function save(Plugin $item)
     {
-        return $this->encode([
-            'hash' => $this->hash($item),
-            'version' => $this->version($item),
-        ]);
+        if ($item->getIsNewRecord()) {
+            throw new \InvalidArgumentException('Model not exists');
+        }
+        $item->update(false);
     }
 
     /**
-     * @param Plugin $item
-     * @return string
+     * @param $hash
+     * @param array $data
+     * @return Plugin|null
      */
-    protected function hash($item)
+    public function savePlugin($hash, $data)
     {
-        return $item->hash;
+        $data = (array) new PluginDto($data);
+        $model = $this->findByHash($hash);
+        $model->setAttributes($data);
+        $this->save($model);
+        return $model;
     }
 
     /**
-     * @param Plugin $item
-     * @return mixed
+     * @param array $data
+     * @return Plugin
      */
-    protected function version($item)
+    public function addPlugin($data)
     {
-        return $item->version;
+        $data = (array) new PluginDto($data);
+        $model = new Plugin();
+        $model->setAttributes($data);
+        $this->add($model);
+        return $model;
     }
+
 }

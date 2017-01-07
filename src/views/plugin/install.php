@@ -1,12 +1,10 @@
 <?php
 
-use yii\helpers\Html;
 use yii\widgets\LinkPager;
 use yii\widgets\ListView;
 
 /**
  * @var yii\web\View $this
- * @var lo\plugins\models\Plugin $model
  * @var \yii\data\ArrayDataProvider $dataProvider
  */
 
