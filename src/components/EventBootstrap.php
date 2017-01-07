@@ -13,18 +13,17 @@ use lo\plugins\models\Event as ModelEvent;
 
 /**
  * Bootstrap class initiates event manager.
- *
  * @author Pavel Bariev <bariew@yandex.ru>, modify Loveorigami
  */
 class EventBootstrap implements BootstrapInterface
 {
     /**
      * Application id for category plugins.
-     * Support values: frontend, backend, common
-     * Default: frontend
-     * @var appId string
+     * Support constants: APP_FRONTEND, APP_BACKEND, APP_COMMON
+     * Default: 1
+     * @var integer $appId
      */
-    public $appId = 'frontend';
+    public $appId = BasePlugin::APP_FRONTEND;
 
     /**
      * @var EventManager EventManager memory storage for getEventManager method
@@ -43,7 +42,6 @@ class EventBootstrap implements BootstrapInterface
      * finds and creates app event manager from its settings
      * @param Application $app yii app
      * @return EventManager app event manager component
-     * @throws Exception Define event manager
      */
     public function getEventManager($app)
     {
@@ -74,12 +72,11 @@ class EventBootstrap implements BootstrapInterface
 
         $app->setComponents([
             'eventManager' => [
-                'class' => 'lo\plugins\components\EventManager',
+                'class' => EventManager::class,
                 'events' => $this->_eventManager
             ],
         ]);
 
         return $this->_eventManager = $app->eventManager;
-
     }
 }
