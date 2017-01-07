@@ -1,6 +1,7 @@
 <?php
 
 namespace lo\plugins\dto;
+use lo\plugins\models\Event;
 
 /**
  * Class EventDto
@@ -16,6 +17,7 @@ class EventDto
     public $handler_method;
     public $data;
     public $text;
+    public $status = Event::STATUS_ACTIVE;
 
     /**
      * PluginDataDto constructor.

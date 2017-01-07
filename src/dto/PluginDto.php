@@ -1,6 +1,7 @@
 <?php
 
 namespace lo\plugins\dto;
+use lo\plugins\models\Plugin;
 
 /**
  * Class PluginDto
@@ -16,6 +17,7 @@ class PluginDto
     public $author_url;
     public $hash;
     public $version;
+    public $status = Plugin::STATUS_INACTIVE;
 
     /**
      * PluginDataDto constructor.
