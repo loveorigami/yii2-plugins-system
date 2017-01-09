@@ -2,7 +2,7 @@
 
 namespace lo\plugins\repositories;
 
-use lo\plugins\helpers\Crawler;
+use lo\plugins\helpers\ClassHelper;
 use Yii;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
@@ -70,7 +70,7 @@ class PluginDirRepository extends PluginRepository
      */
     protected function getInfo($pluginClass)
     {
-        $plugin_info = Crawler::getPluginInfo($pluginClass);
+        $plugin_info = ClassHelper::getPluginInfo($pluginClass);
 
         preg_match('|Plugin Name:(.*)$|mi', $plugin_info, $name);
         preg_match('|Plugin URI:(.*)$|mi', $plugin_info, $url);

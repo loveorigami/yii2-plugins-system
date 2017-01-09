@@ -3,10 +3,10 @@
 namespace lo\plugins\helpers;
 
 /**
- * Class Crawler
+ * Class ClassHelper
  * @package lo\plugins\helpers
  */
-class Crawler
+class ClassHelper
 {
     /**
      * @param $className
