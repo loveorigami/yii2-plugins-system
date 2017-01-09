@@ -17,11 +17,29 @@ use yii\helpers\ArrayHelper;
 
 class PluginService
 {
+    /**
+     *  Repositories
+     */
     private $eventDbRepository;
     private $eventDirRepository;
     private $pluginDbRepository;
     private $pluginDirRepository;
 
+    /**
+     * Dto
+     */
+    private $_pluginsPoolDir;
+    private $_pluginsPoolDb;
+    private $_pluginsDiffDb;
+    private $_pluginsDiffDir;
+
+    /**
+     * PluginService constructor.
+     * @param PluginDirRepository $pluginDirRepository
+     * @param PluginDbRepository $pluginDbRepository
+     * @param EventDirRepository $eventDirRepository
+     * @param EventDbRepository $eventDbRepository
+     */
     public function __construct(
         PluginDirRepository $pluginDirRepository,
         PluginDbRepository $pluginDbRepository,
@@ -45,14 +63,11 @@ class PluginService
     {
         $this->pluginDirRepository->setDirs($dirs);
 
-        $pluginsArrayDir = $this->pluginDirRepository->findAllAsArray();
-        $pluginsArrayDb = $this->pluginDbRepository->findAllAsArray();
+        $pluginsDiffDir = $this->getPluginsDiffDir();
+        $pluginsDiffDb = $this->getPluginsDiffDb();
 
-        $pluginsDiffDir = new PluginsDiffDto($pluginsArrayDir);
-        $pluginsDiffDb = new PluginsDiffDto($pluginsArrayDb);
-
-        $pluginsPoolDir = new PluginsPoolDto($pluginsArrayDir);
-        $pluginsPoolDb = new PluginsPoolDto($pluginsArrayDb);
+        $pluginsPoolDir = $this->getPluginsPoolDir();
+        $pluginsPoolDb = $this->getPluginsPoolDb();
 
         $data = [];
         foreach (array_filter(array_diff($pluginsDiffDir->getDiff(), $pluginsDiffDb->getDiff())) as $key => $value) {
@@ -67,11 +82,8 @@ class PluginService
      */
     public function installPlugin($hash)
     {
-        $pluginsArrayDir = $this->pluginDirRepository->findAllAsArray();
-        $pluginsArrayDb = $this->pluginDbRepository->findAllAsArray();
-
-        $pluginsPoolDir = new PluginsPoolDto($pluginsArrayDir);
-        $pluginsPoolDb = new PluginsPoolDto($pluginsArrayDb);
+        $pluginsPoolDir = $this->getPluginsPoolDir();
+        $pluginsPoolDb = $this->getPluginsPoolDb();
 
         $pluginInfoDir = $pluginsPoolDir->getInfo($hash);
         $pluginInfoDb = $pluginsPoolDb->getInfo($hash);
@@ -121,4 +133,50 @@ class PluginService
             Yii::$app->session->setFlash('success', 'Plugin installed');
         }
     }
+
+    /**
+     * @return PluginsPoolDto
+     */
+    protected function getPluginsPoolDb()
+    {
+        if (!$this->_pluginsPoolDb) {
+            $this->_pluginsPoolDb = new PluginsPoolDto($this->pluginDbRepository->findAllAsArray());
+        }
+        return $this->_pluginsPoolDb;
+    }
+
+    /**
+     * @return PluginsPoolDto
+     */
+    protected function getPluginsPoolDir()
+    {
+        if (!$this->_pluginsPoolDir) {
+            $this->_pluginsPoolDir = new PluginsPoolDto($this->pluginDirRepository->findAllAsArray());
+        }
+        return $this->_pluginsPoolDir;
+    }
+
+    /**
+     * @return PluginsDiffDto
+     */
+    protected function getPluginsDiffDb()
+    {
+        if (!$this->_pluginsDiffDb) {
+            $this->_pluginsDiffDb = new PluginsDiffDto($this->pluginDbRepository->findAllAsArray());
+        }
+        return $this->_pluginsDiffDb;
+    }
+
+    /**
+     * @return PluginsDiffDto
+     */
+    protected function getPluginsDiffDir()
+    {
+        if (!$this->_pluginsDiffDir) {
+            $this->_pluginsDiffDir = new PluginsDiffDto($this->pluginDirRepository->findAllAsArray());
+        }
+        return $this->_pluginsDiffDir;
+    }
+
+
 }
