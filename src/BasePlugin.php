@@ -43,7 +43,7 @@ abstract class BasePlugin implements IPlugin
      *      },
      *  ]
      */
-    public static function getShortcode(array $data)
+    public static function addShortcode(array $data)
     {
         /** @var Shortcode $shortcode */
         $shortcode = Yii::$container->get(Shortcode::class);

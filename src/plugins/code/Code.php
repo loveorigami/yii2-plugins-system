@@ -60,7 +60,7 @@ class Code extends BasePlugin
 
             $view->registerJs("hljs.initHighlightingOnLoad();");
 
-            $shortcode = self::getShortcode([
+            $shortcode = self::addShortcode([
                 'code' => function ($attrs, $content) use ($lang) {
                     $lg = isset($attrs['lang']) ? $attrs['lang'] : $lang;
                     $tag[] = Html::beginTag('pre');
