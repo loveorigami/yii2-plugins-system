@@ -49,7 +49,7 @@ class m170105_094942_plugins_event extends Migration
 
         $this->insert($this->tn(self::TBL), [
             'id' => 1,
-            'plugin_id' => 2, // Code Highlighting
+            'plugin_id' => Plugin::CORE_EVENT + 1, // Code Highlighting
             'app_id' => BasePlugin::APP_FRONTEND,
             'trigger_class' => 'yii\base\View',
             'trigger_event' => 'afterRender',

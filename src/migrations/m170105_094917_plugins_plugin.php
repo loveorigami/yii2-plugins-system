@@ -36,7 +36,7 @@ class m170105_094917_plugins_plugin extends Migration
         ]);
 
         $this->insert($this->tn(self::TBL), [
-            'id' => 2,
+            'id' => Plugin::CORE_EVENT + 1,
             'status' => Plugin::STATUS_ACTIVE,
             'name' => 'Code Highlighting plugin',
             'url' => 'https://github.com/loveorigami/yii2-plugins-system/tree/master/src/plugins/code',
