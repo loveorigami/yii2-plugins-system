@@ -3,12 +3,13 @@ namespace lo\plugins\plugins\code;
 
 use lo\plugins\BasePlugin;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use yii\web\View;
 
 /**
  * Plugin Name: Code Highlighting
  * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/tree/master/src/plugins/code
- * Version: 1.5
+ * Version: 1.6
  * Description: A shortcode for code highlighting in view. Use as [code lang="php"]...content...[/code]
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami
@@ -62,7 +63,10 @@ class Code extends BasePlugin
             $shortcode = self::getShortcode([
                 'code' => function ($attrs, $content) use ($lang) {
                     $lg = isset($attrs['lang']) ? $attrs['lang'] : $lang;
-                    return '<pre><code class="' . $lg . '">' . htmlspecialchars($content) . '</code></pre>';
+                    $tag[] = Html::beginTag('pre');
+                    $tag[] = Html::tag('code', Html::encode($content), ['class' => $lg]);
+                    $tag[] = Html::endTag('pre');
+                    return implode('', $tag);
                 },
             ]);
 

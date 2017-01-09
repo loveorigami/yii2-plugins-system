@@ -1,28 +1,40 @@
 <?php
 namespace lo\plugins\shortcodes;
 
-use yii\base\Component;
-
 /**
  * Class Shortcode
- * @package lo\plugins\components
+ * @package lo\plugins\shorcodes
  * @author Lukyanov Andrey <loveorigami@mail.ru>
  */
-class Shortcode extends Component {
-
+class Shortcode
+{
     /**
      * Associative array of shortcodes and their
      * respective callbacks
      */
-    public $callbacks;
+    protected $callbacks = [];
+
+    /**
+     * @param array $data
+     */
+    public function registerCallback($data)
+    {
+        foreach ($data as $key => $value) {
+            if (isset($this->callbacks[$key])) {
+                continue;
+            } else {
+                $this->callbacks[$key] = $value;
+            }
+        }
+    }
 
     /**
      * Parse shortcodes in given content
      * @param string $content Content to parse for shortcodes
      * @return string
      */
-    public function parse($content) {
-
+    public function parse($content)
+    {
         $result = $content;
 
         $shortcodes = $this->getShortcodeList($content);
@@ -43,8 +55,8 @@ class Shortcode extends Component {
      * @param array $m Shortcode matches
      * @return string
      */
-    protected function parseSingle($m) {
-
+    protected function parseSingle($m)
+    {
         // allow [[foo]] syntax for escaping a tag
         if ($m[1] == '[' && $m[6] == ']') {
             return substr($m[0], 1, -1);
@@ -67,7 +79,8 @@ class Shortcode extends Component {
      * @param string $content Content to process
      * @return array
      */
-    protected function getShortcodeList($content) {
+    protected function getShortcodeList($content)
+    {
         $result = array();
 
         preg_match_all("/\[([A-Za-z_]+[^\ \]]+)/", $content, $matches);
@@ -87,7 +100,8 @@ class Shortcode extends Component {
      * @param string $text
      * @return array
      */
-    protected function shortcodeParseAtts($text) {
+    protected function shortcodeParseAtts($text)
+    {
         $atts = array();
         $pattern = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
         $text = preg_replace("/[\x{00a0}\x{200b}]+/u", " ", $text);
@@ -117,8 +131,8 @@ class Shortcode extends Component {
      *
      * @return string
      */
-    protected function getShortcodeRegexp($tagregexp) {
-
+    protected function getShortcodeRegexp($tagregexp)
+    {
         return
             '\\['                              // Opening bracket
             . '(\\[?)'                           // 1: Optional second opening bracket for escaping shortcodes: [[tag]]

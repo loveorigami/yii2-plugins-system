@@ -7,7 +7,7 @@ use Yii;
 
 /**
  * Class BasePlugin
- * @package lo\plugins\plugins
+ * @package lo\plugins
  * @author Lukyanov Andrey <loveorigami@mail.ru>
  */
 abstract class BasePlugin implements IPlugin
@@ -32,14 +32,10 @@ abstract class BasePlugin implements IPlugin
      */
     public static $config = [];
 
-    /**
-     * @var Shortcode $_shortcode
-     */
-    private static $_shortcode;
 
     /**
      * @param array $data
-     * @return Shortcode|object
+     * @return Shortcode
      *  'callbacks' => [
      *      'lastphotos' => ['frontend\widgets\lastPhoto\lastPhoto', 'widget'],
      *      'anothershortcode'=>function($attrs, $content, $tag){
@@ -49,11 +45,9 @@ abstract class BasePlugin implements IPlugin
      */
     public function getShortcode(array $data)
     {
-        $container = Yii::$container;
-        self::$_shortcode = $container->get(Shortcode::class);
-        $shortcode = self::$_shortcode;
-        $shortcode->callbacks = $data;
-
+        /** @var Shortcode $shortcode */
+        $shortcode = Yii::$container->get(Shortcode::class);
+        $shortcode->registerCallback($data);
         return $shortcode;
     }
 }

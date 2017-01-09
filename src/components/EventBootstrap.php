@@ -6,6 +6,9 @@
  */
 namespace lo\plugins\components;
 
+use lo\plugins\BasePlugin;
+use lo\plugins\shortcodes\Shortcode;
+use Yii;
 use yii\base\BootstrapInterface;
 use yii\base\Application;
 
@@ -35,6 +38,7 @@ class EventBootstrap implements BootstrapInterface
      */
     public function bootstrap($app)
     {
+        Yii::$container->setSingleton(Shortcode::class);
         self::getEventManager($app);
     }
 
