@@ -17,10 +17,12 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    '"{attribute}" must be a callable as [{callableValue}::{value}]' => '"{attribute}" must be a callable as [{callableValue}::{value}]',
+    '"{attribute}" must be a valid JSON' => '"{attribute}" must be a valid JSON',
+
     'Are you sure to delete this item?' => 'Are you sure to delete this item?',
     'App' => 'App',
     'App Id' => 'App Id',
-    '"{attribute}" must be a valid JSON' => '"{attribute}" must be a valid JSON',
     'Author' => 'Author',
     'Author Url' => 'Author Url',
 
@@ -58,6 +60,7 @@ return [
     'Trigger Class' => 'Trigger Class',
     'Trigger Event' => 'Trigger Event',
 
+    'Unable to find specified class' => 'Unable to find specified class',
     'Update' => 'Update',
     'Url' => 'Url',
 

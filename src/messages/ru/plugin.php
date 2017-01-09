@@ -17,24 +17,37 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Are you sure to delete this item?' => 'Уверены, что хотите удалить эту запись?',
+    '"{attribute}" must be a callable as [{callableValue}::{value}]' => '"{attribute}" должен находится в классе  [{callableValue}::{value}]',
     '"{attribute}" must be a valid JSON' => '"{attribute}" должен содержать валидный JSON',
+
+    'Are you sure to delete this item?' => 'Уверены, что хотите удалить эту запись?',
     'Author' => 'Автор',
     'Author Url' => 'Url автора',
+
     'Create' => 'Добавить',
     'Create Item' => 'Создать плагин',
     'Create {modelClass}' => 'Создать {modelClass}',
+
     'Delete' => 'Удалить',
+
     'Event' => 'Событие',
     'Events' => 'События',
+
     'Hash' => 'Хеш',
+
     'ID' => 'ID',
     'Info' => 'Информация',
     'Install' => 'Установить',
     'Items' => 'Плагины',
+
     'Name' => 'Название',
+
     'Status' => 'Статус',
+
     'Text' => 'Описание',
+
+    'Unable to find specified class' => 'Не удалось найти указанный класс',
     'Url' => 'Url',
+
     'Version' => 'Версия',
 ];

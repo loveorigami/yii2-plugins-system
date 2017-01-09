@@ -7,7 +7,7 @@ use yii\validators\Validator;
 use Yii;
 
 /**
- * Class JsonValidator
+ * Class CallableValidator
  * @package lo\plugins\validators
  */
 class CallableValidator extends Validator
@@ -40,10 +40,10 @@ class CallableValidator extends Validator
     {
         parent::init();
         if ($this->message === null) {
-            $this->message = Yii::t('plugin', '{attribute} must be a callable as [{callableValue}::{value}]');
+            $this->message = Yii::t('plugin', '"{attribute}" must be a callable as [{callableValue}::{value}]');
         }
         if ($this->callableAttribute === null) {
-            throw new InvalidConfigException('CallableValidator::callableAttribute must be set.');
+            throw new InvalidConfigException('CallableValidator::callableAttribute must be set');
         }
     }
 
@@ -56,11 +56,6 @@ class CallableValidator extends Validator
 
         if (is_array($value)) {
             $this->addError($model, $attribute, Yii::t('yii', '{attribute} is invalid.'));
-            return;
-        }
-
-        if (!$this->callableAttribute) {
-            $this->addError($model, $attribute, Yii::t('plugin', 'callableAttribute is missing.'));
             return;
         }
 
