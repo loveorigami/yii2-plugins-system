@@ -1,7 +1,7 @@
 <?php
 namespace lo\plugins\plugins\httpauth;
 
-use lo\plugins\components\BasePlugin;
+use lo\plugins\BasePlugin;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\UnauthorizedHttpException;

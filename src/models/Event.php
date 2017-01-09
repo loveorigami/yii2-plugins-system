@@ -2,7 +2,7 @@
 
 namespace lo\plugins\models;
 
-use lo\plugins\components\BasePlugin;
+use lo\plugins\BasePlugin;
 use lo\plugins\models\query\EventQuery;
 use lo\plugins\validators\CallableValidator;
 use lo\plugins\validators\JsonValidator;

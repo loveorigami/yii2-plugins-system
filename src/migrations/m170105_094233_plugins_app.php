@@ -1,7 +1,7 @@
 <?php
 namespace lo\plugins\migrations;
 
-use lo\plugins\components\BasePlugin;
+use lo\plugins\BasePlugin;
 
 class m170105_094233_plugins_app extends Migration
 {

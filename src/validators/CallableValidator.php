@@ -72,7 +72,6 @@ class CallableValidator extends Validator
             $this->addError($model, $attribute, $result[0], $result[1]);
             return;
         }
-
     }
 
     /**

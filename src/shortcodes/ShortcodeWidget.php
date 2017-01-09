@@ -1,5 +1,5 @@
 <?php
-namespace lo\plugins\components;
+namespace lo\plugins\shortcodes;
 
 use yii\base\Widget;
 

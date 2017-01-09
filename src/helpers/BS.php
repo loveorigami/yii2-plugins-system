@@ -2,7 +2,7 @@
 
 namespace lo\plugins\helpers;
 
-use lo\plugins\components\BasePlugin;
+use lo\plugins\BasePlugin;
 use yii\bootstrap\Html;
 
 /**

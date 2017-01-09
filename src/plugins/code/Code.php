@@ -1,7 +1,7 @@
 <?php
 namespace lo\plugins\plugins\code;
 
-use lo\plugins\components\BasePlugin;
+use lo\plugins\BasePlugin;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
 

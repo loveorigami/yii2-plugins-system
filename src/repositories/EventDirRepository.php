@@ -2,7 +2,7 @@
 
 namespace lo\plugins\repositories;
 
-use lo\plugins\components\BasePlugin;
+use lo\plugins\BasePlugin;
 use yii\helpers\Json;
 
 class EventDirRepository extends EventRepository

@@ -1,7 +1,8 @@
 <?php
-namespace lo\plugins\components;
+namespace lo\plugins;
 
 use lo\plugins\interfaces\IPlugin;
+use lo\plugins\shortcodes\Shortcode;
 use Yii;
 
 /**

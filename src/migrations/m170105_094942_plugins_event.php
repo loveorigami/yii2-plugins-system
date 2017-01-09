@@ -1,7 +1,7 @@
 <?php
 namespace lo\plugins\migrations;
 
-use lo\plugins\components\BasePlugin;
+use lo\plugins\BasePlugin;
 use lo\plugins\models\Event;
 use lo\plugins\models\Plugin;
 
