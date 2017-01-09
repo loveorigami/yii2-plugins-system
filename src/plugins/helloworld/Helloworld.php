@@ -8,7 +8,7 @@ use yii\web\View;
 /**
  * Plugin Name: Hello World
  * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/tree/master/src/plugins/helloworld
- * Version: 1.5
+ * Version: 1.6
  * Description: A simple hello world plugin
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami
@@ -38,7 +38,6 @@ class Helloworld extends BasePlugin
 
     /**
      * @param $event
-     * @return bool
      */
     public static function hello($event)
     {
@@ -48,8 +47,9 @@ class Helloworld extends BasePlugin
 
         if (isset($event->output)) {
             $content = $event->output;
-            $event->output = str_replace($search, "<span style='background-color:$color;'>$replace</span>", $content);
+            $event->output = str_replace($search, Html::tag('span', $replace, [
+                'style' => "background-color:$color;"
+            ]), $content);
         }
-        return true;
     }
 }
