@@ -38,6 +38,7 @@ return [
     'Event' => 'Событие',
     'Events' => 'События',
 
+    'Handler' => 'Handler',
     'Handler Class' => 'Handler class',
     'Handler Method' => 'Handler method',
     'Hash' => 'Хеш',
@@ -51,12 +52,14 @@ return [
     'New event installed' => 'Новое событие установлено',
 
     'Plugin ID' => 'Плагин ID',
+    'Pos.' => 'Поз.',
     'Position' => 'Позиция',
 
     'Status' => 'Статус',
 
     'Text' => 'Описание',
     'This plugin alredy installed' => 'Этот плагин уже установлен',
+    'Trigger' => 'Trigger',
     'Trigger Class' => 'Trigger class',
     'Trigger Event' => 'Trigger event',
 

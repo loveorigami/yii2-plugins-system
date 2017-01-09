@@ -38,6 +38,7 @@ return [
     'Event' => 'Event',
     'Events' => 'Events',
 
+    'Handler' => 'Handler',
     'Handler Class' => 'Handler Class',
     'Handler Method' => 'Handler Method',
     'Hash' => 'Hash',
@@ -51,12 +52,14 @@ return [
     'New event installed' => 'New event installed',
 
     'Plugin ID' => 'Plugin ID',
+    'Pos.' => 'Pos.',
     'Position' => 'Position',
 
     'Status' => 'Status',
 
     'Text' => 'Text',
     'This plugin alredy installed' => 'This plugin alredy installed',
+    'Trigger' => 'Trigger',
     'Trigger Class' => 'Trigger Class',
     'Trigger Event' => 'Trigger Event',
 

@@ -36,11 +36,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => ArrayHelper::map(App::find()->all(), 'id', 'name'),
                 'format' => "raw"
             ],
-            'trigger_class',
-            'trigger_event',
-            'handler_class',
-            'handler_method',
-            'data',
+            [
+                'attribute' => 'trigger_class',
+                'label' => Yii::t('plugin', 'Trigger'),
+                'value' => function ($model) {
+                    return $model->trigger_class . BS::label('::') . $model->trigger_event;
+                },
+                'format' => "raw"
+            ],
+            [
+                'attribute' => 'handler_class',
+                'label' => Yii::t('plugin', 'Handler'),
+                'value' => function ($model) {
+                    return $model->handler_class . BS::label('::') . $model->handler_method;
+                },
+                'format' => "raw"
+            ],
+            [
+                'attribute' =>'pos',
+                'label' => Yii::t('plugin', 'Pos.')
+            ],
             [
                 'attribute' => 'status',
                 'options' => ['style' => 'width: 75px; align: center;'],
@@ -55,23 +70,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {view} {delete}',
-                'options' => ['style' => 'width: 100px;'],
+                'template' => '{update} {delete}',
+                'options' => ['style' => 'width: 75px;'],
                 'buttons' => [
-                    'update' => function ($url, $model) {
-                        return Html::a('<i class="glyphicon glyphicon-pencil"></i>', $url, [
+                    'update' => function ($url) {
+                        return Html::a(BS::icon('pencil'), $url, [
                             'class' => 'btn btn-xs btn-primary',
                             'title' => Yii::t('plugin', 'Update'),
                         ]);
                     },
-                    'view' => function ($url, $model) {
-                        return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', $url, [
-                            'class' => 'btn btn-xs btn-warning',
-                            'title' => Yii::t('plugin', 'View'),
-                        ]);
-                    },
-                    'delete' => function ($url, $model) {
-                        return Html::a('<i class="glyphicon glyphicon-trash"></i>', $url, [
+                    'delete' => function ($url) {
+                        return Html::a(BS::icon('trash'), $url, [
                             'class' => 'btn btn-xs btn-danger',
                             'data-method' => 'post',
                             'data-confirm' => Yii::t('plugin', 'Are you sure to delete this item?'),
