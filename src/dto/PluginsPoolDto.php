@@ -10,6 +10,9 @@ use yii\helpers\ArrayHelper;
  */
 class PluginsPoolDto
 {
+    /**
+     * @var array
+     */
     public $data = [];
 
     /**

@@ -12,6 +12,7 @@ use lo\plugins\repositories\EventDirRepository;
 use lo\plugins\repositories\PluginDbRepository;
 use lo\plugins\repositories\PluginDirRepository;
 use Yii;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 
@@ -79,13 +80,18 @@ class PluginService
 
     /**
      * @param $hash
+     * @throws Exception
      */
     public function installPlugin($hash)
     {
         $pluginsPoolDir = $this->getPluginsPoolDir();
-        $pluginsPoolDb = $this->getPluginsPoolDb();
-
         $pluginInfoDir = $pluginsPoolDir->getInfo($hash);
+
+        if (!$pluginInfoDir) {
+            throw new Exception("Can't install plugin");
+        }
+
+        $pluginsPoolDb = $this->getPluginsPoolDb();
         $pluginInfoDb = $pluginsPoolDb->getInfo($hash);
 
         $pluginDataDto = new PluginDataDto($pluginInfoDir);
@@ -177,6 +183,5 @@ class PluginService
         }
         return $this->_pluginsDiffDir;
     }
-
 
 }
