@@ -27,7 +27,7 @@ class m170105_094917_plugins_plugin extends Migration
             'id' => Plugin::CORE_EVENT,
             'status' => Plugin::STATUS_ACTIVE,
             'name' => 'Core Events',
-            'url' => '#',
+            'url' => '',
             'version' => '1.0',
             'author' => 'Lukyanov Andrey',
             'author_url' => 'https://github.com/loveorigami',

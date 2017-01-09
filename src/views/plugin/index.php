@@ -1,5 +1,6 @@
 <?php
 
+use lo\plugins\helpers\BS;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -20,14 +21,32 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'url',
+                'format' => "raw",
+                'options' => ['style' => 'width: 50px; align: center;'],
+                'value' => function ($model) {
+                    if ($model->url) {
+                        return Html::a(BS::icon('link'), $model->url, [
+                            'class' => 'btn btn-xs btn-' . BS::TYPE_PRIMARY,
+                            'target' => '_blank'
+                        ]);
+                    }
+                    return '';
+                },
+                'filter' => false
+            ],
             'name',
-            'url:url',
-            'version',
+            [
+                'attribute' => 'version',
+                'options' => ['style' => 'width: 100px; align: center;'],
+                'filter' => false
+            ],
             'text:ntext',
             [
                 'attribute' => 'status',
                 'options' => ['style' => 'width: 75px; align: center;'],
-                'value' => function ($model, $key, $index, $column) {
+                'value' => function ($model) {
                     return $model->status == $model::STATUS_ACTIVE ? '<span class="label label-success">Enabled</span>' : '<span class="label label-danger">Disabled</span>';
                 },
                 'filter' => [
@@ -36,26 +55,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'format' => "raw"
             ],
-
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {view} {delete}',
-                'options' => ['style' => 'width: 100px;'],
+                'template' => '{update} {delete}',
+                'options' => ['style' => 'width: 75px;'],
                 'buttons' => [
-                    'update' => function ($url, $model) {
-                        return Html::a('<i class="glyphicon glyphicon-pencil"></i>', $url, [
+                    'update' => function ($url) {
+                        return Html::a(BS::icon('pencil'), $url, [
                             'class' => 'btn btn-xs btn-primary',
                             'title' => Yii::t('plugin', 'Update'),
                         ]);
                     },
-                    'view' => function ($url, $model) {
-                        return Html::a('<i class="glyphicon glyphicon-eye-open"></i>', $url, [
-                            'class' => 'btn btn-xs btn-warning',
-                            'title' => Yii::t('plugin', 'View'),
-                        ]);
-                    },
-                    'delete' => function ($url, $model) {
-                        return Html::a('<i class="glyphicon glyphicon-trash"></i>', $url, [
+                    'delete' => function ($url) {
+                        return Html::a(BS::icon('trash'), $url, [
                             'class' => 'btn btn-xs btn-danger',
                             'data-method' => 'post',
                             'data-confirm' => Yii::t('plugin', 'Are you sure to delete this item?'),
