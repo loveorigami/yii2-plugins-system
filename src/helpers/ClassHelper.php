@@ -2,12 +2,54 @@
 
 namespace lo\plugins\helpers;
 
+use Yii;
+use yii\helpers\FileHelper;
+
 /**
  * Class ClassHelper
  * @package lo\plugins\helpers
  */
 class ClassHelper
 {
+
+    /**
+     * @param string|array $dirs
+     * @param null|string $callback
+     * @return array
+     */
+    public static function getClassesFromDir($dirs, $callback = null)
+    {
+        if (!$dirs) {
+            return [];
+        }
+
+        if (is_string($dirs)) $dirs = [$dirs];
+
+        $result = [];
+
+        foreach ($dirs as $path) {
+            $dir = Yii::getAlias($path);
+            $files = FileHelper::findFiles(Yii::getAlias($path), ['only' => ['*.php']]);
+
+            foreach ($files as $filePath) {
+
+                $class = str_replace([$dir, '.php', '/', '@'], [$path, '', '\\', ''], $filePath);
+
+                if ($callback instanceof \Closure) {
+                    $className = call_user_func($callback, $class);
+                } else {
+                    $className = $class;
+                }
+
+                if ($className) {
+                    $result[] = $className;
+                }
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * @param $className
      * @return null|string

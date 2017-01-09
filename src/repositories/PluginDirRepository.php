@@ -2,11 +2,9 @@
 
 namespace lo\plugins\repositories;
 
+use lo\plugins\BasePlugin;
 use lo\plugins\helpers\ClassHelper;
-use Yii;
-use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
-use yii\helpers\FileHelper;
 
 class PluginDirRepository extends PluginRepository
 {
@@ -28,25 +26,18 @@ class PluginDirRepository extends PluginRepository
      */
     protected function populate()
     {
-        if (!is_array($this->_dirs)) {
-            throw new InvalidConfigException("Plugins directory is not array.");
-        }
-
-        foreach ($this->_dirs as $path) {
-            $dir = Yii::getAlias($path);
-            $files = FileHelper::findFiles(Yii::getAlias($path), ['only' => ['*.php']]);
-
-            foreach ($files as $filePath) {
-                $pluginClass = str_replace([$dir, '.php', '/', '@'], [$path, '', '\\', ''], $filePath);
-
-                if (is_callable([$pluginClass, 'events'])) {
-                    if (!is_array($pluginClass::events())) {
-                        continue;
-                    }
-                    $this->_data[] = $this->getInfo($pluginClass);
+        ClassHelper::getClassesFromDir($this->_dirs, function ($class) {
+            /** @var BasePlugin $class */
+            if (is_callable([$class, 'events'])) {
+                if (!is_array($class::events())) {
+                    return null;
+                } else {
+                    $this->_data[] = $this->getInfo($class);
+                    return $class;
                 }
             }
-        }
+            return null;
+        });
     }
 
     /**
@@ -66,7 +57,7 @@ class PluginDirRepository extends PluginRepository
 
         return [
             'handler_class' => $pluginClass,
-            'name' => trim(ArrayHelper::getValue($name, 1, 'plugin - '.$pluginClass)),
+            'name' => trim(ArrayHelper::getValue($name, 1, 'plugin - ' . $pluginClass)),
             'url' => trim(ArrayHelper::getValue($url, 1)),
             'text' => trim(ArrayHelper::getValue($text, 1)),
             'author' => trim(ArrayHelper::getValue($author, 1)),
