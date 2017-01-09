@@ -39,8 +39,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             [
                 'attribute' => 'version',
-                'options' => ['style' => 'width: 100px; align: center;'],
-                'filter' => false
+                'label' => Yii::t('plugin', 'Ver.'),
+                'options' => ['style' => 'width: 65px; align: center;'],
+                'filter' => false,
+                'format' => "raw",
+                'value' => function ($model) {
+                    return BS::label($model->version);
+                }
             ],
             'text:ntext',
             [

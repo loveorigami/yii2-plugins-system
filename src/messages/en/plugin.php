@@ -67,5 +67,6 @@ return [
     'Update' => 'Update',
     'Url' => 'Url',
 
+    'Ver.' => 'Ver.',
     'Version' => 'Version',
 ];
