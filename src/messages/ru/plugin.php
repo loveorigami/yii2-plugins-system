@@ -21,6 +21,8 @@ return [
     '"{attribute}" must be a valid JSON' => '"{attribute}" должен содержать валидный JSON',
 
     'Are you sure to delete this item?' => 'Уверены, что хотите удалить эту запись?',
+    'App' => 'App',
+    'App Id' => 'App Id',
     'Author' => 'Автор',
     'Author Url' => 'Url автора',
 
@@ -28,11 +30,16 @@ return [
     'Create Item' => 'Создать плагин',
     'Create {modelClass}' => 'Создать {modelClass}',
 
+    'Data' => 'Data',
     'Delete' => 'Удалить',
+    'Disabled' => 'Не активно',
 
+    'Enabled' => 'Активно',
     'Event' => 'Событие',
     'Events' => 'События',
 
+    'Handler Class' => 'Handler класс',
+    'Handler Method' => 'Handler метод',
     'Hash' => 'Хеш',
 
     'ID' => 'ID',
@@ -41,12 +48,20 @@ return [
     'Items' => 'Плагины',
 
     'Name' => 'Название',
+    'New event installed' => 'Новое событие установлено',
+
+    'Plugin ID' => 'Плагин ID',
+    'Position' => 'Позиция',
 
     'Status' => 'Статус',
 
     'Text' => 'Описание',
+    'This plugin alredy installed' => 'Этот плагин уже установлен',
+    'Trigger Class' => 'Trigger класс',
+    'Trigger Event' => 'Trigger событие',
 
     'Unable to find specified class' => 'Не удалось найти указанный класс',
+    'Update' => 'Обновить',
     'Url' => 'Url',
 
     'Version' => 'Версия',
