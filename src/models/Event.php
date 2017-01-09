@@ -47,8 +47,7 @@ class Event extends ActiveRecord
             [['trigger_class', 'trigger_event', 'handler_class', 'handler_method'], 'string', 'max' => 255],
             [['pos'], 'default', 'value' => 1],
             [['data'], JsonValidator::class],
-            [['handler_method'], CallableValidator::class, 'callableAttribute' => 'handler_class'],
-            [['trigger_event'], CallableValidator::class, 'callableAttribute' => 'trigger_class']
+            [['handler_method'], CallableValidator::class, 'callableAttribute' => 'handler_class']
         ];
     }
 
