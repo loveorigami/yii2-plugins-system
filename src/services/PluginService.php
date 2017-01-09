@@ -65,7 +65,7 @@ class PluginService
     /**
      * @param $hash
      */
-    public function installPlugins($hash)
+    public function installPlugin($hash)
     {
         $pluginInfoDir = $this->pluginDirRepository->getInfoByHash($hash);
         $pluginInfoDb = $this->pluginDbRepository->getInfoByHash($hash);

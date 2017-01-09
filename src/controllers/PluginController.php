@@ -76,20 +76,11 @@ class PluginController extends Controller
             ]);
 
             if ($id && Yii::$app->request->isPost) {
-                $this->pluginService->installPlugins($id);
+                $this->pluginService->installPlugin($id);
                 return $this->redirect('install');
             }
 
             return $this->render('install', compact('dataProvider'));
-
-            /**
-             * $model = Plugin::findOne(['handler_class' => $handlerClass]);
-             *
-             * if ($model->load($data) && $model->save()) {
-             * // here install events to Event
-             * $this->includeEvents($model->id, $handlerClass);
-             * }
-             */
 
         } catch (Exception $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
