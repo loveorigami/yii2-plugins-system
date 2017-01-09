@@ -20,7 +20,7 @@ class PluginsDiffDto
      */
     public function __construct($data = [])
     {
-        foreach ($data as $hash => $item) {
+        foreach ($data as $item) {
 
             $diff = ['hash' => null, 'version' => null];
 
@@ -33,7 +33,7 @@ class PluginsDiffDto
                 }
             }
 
-            $this->_data[$hash] = Json::encode($diff);
+            $this->_data[$diff['hash']] = Json::encode($diff);
         }
     }
 

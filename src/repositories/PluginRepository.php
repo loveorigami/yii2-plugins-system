@@ -23,9 +23,4 @@ abstract class PluginRepository
      */
     abstract protected function populate();
 
-    /**
-     * @param $hash
-     * @return array
-     */
-    abstract public function getInfoByHash($hash);
 }

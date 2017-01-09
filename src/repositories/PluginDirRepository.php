@@ -4,7 +4,6 @@ namespace lo\plugins\repositories;
 
 use lo\plugins\helpers\ClassHelper;
 use Yii;
-use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
@@ -44,23 +43,9 @@ class PluginDirRepository extends PluginRepository
                     if (!is_array($pluginClass::events())) {
                         continue;
                     }
-                    $this->_data[md5($pluginClass)] = $this->getInfo($pluginClass);
+                    $this->_data[] = $this->getInfo($pluginClass);
                 }
             }
-        }
-    }
-
-    /**
-     * @param string $hash
-     * @return mixed
-     * @throws Exception
-     */
-    public function getInfoByHash($hash)
-    {
-        if (isset($this->_data[$hash])) {
-            return $this->_data[$hash];
-        } else {
-            throw new Exception("Can't install this plugin");
         }
     }
 

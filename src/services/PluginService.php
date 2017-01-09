@@ -67,8 +67,14 @@ class PluginService
      */
     public function installPlugin($hash)
     {
-        $pluginInfoDir = $this->pluginDirRepository->getInfoByHash($hash);
-        $pluginInfoDb = $this->pluginDbRepository->getInfoByHash($hash);
+        $pluginsArrayDir = $this->pluginDirRepository->findAllAsArray();
+        $pluginsArrayDb = $this->pluginDbRepository->findAllAsArray();
+
+        $pluginsPoolDir = new PluginsPoolDto($pluginsArrayDir);
+        $pluginsPoolDb = new PluginsPoolDto($pluginsArrayDb);
+
+        $pluginInfoDir = $pluginsPoolDir->getInfo($hash);
+        $pluginInfoDb = $pluginsPoolDb->getInfo($hash);
 
         $pluginDataDto = new PluginDataDto($pluginInfoDir);
         $pluginClass = $pluginDataDto->getPluginClass();

@@ -47,20 +47,7 @@ class PluginDbRepository extends PluginRepository
      */
     protected function populate()
     {
-        $this->_data = Plugin::find()->where(['<>', 'id', Plugin::CORE_EVENT])->indexBy('hash')->asArray()->all();
-    }
-
-    /**
-     * @param string $hash
-     * @return array
-     */
-    public function getInfoByHash($hash)
-    {
-        if (isset($this->_data[$hash])) {
-            return $this->_data[$hash];
-        } else {
-            return [];
-        }
+        $this->_data = Plugin::find()->where(['<>', 'id', Plugin::CORE_EVENT])->asArray()->all();
     }
 
     /**

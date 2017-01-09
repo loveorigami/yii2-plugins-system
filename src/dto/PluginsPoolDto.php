@@ -2,6 +2,8 @@
 
 namespace lo\plugins\dto;
 
+use yii\helpers\ArrayHelper;
+
 /**
  * Class PluginsPoolDto
  * @package lo\plugins\dto
@@ -16,7 +18,11 @@ class PluginsPoolDto
      */
     public function __construct($data = [])
     {
-        foreach ($data as $hash => $item) {
+        foreach ($data as $item) {
+            $hash = ArrayHelper::getValue($item, 'hash');
+            if (!$hash) {
+                $hash = ArrayHelper::getValue($item, 'new_hash');
+            }
             $this->data[$hash] = $item;
         }
     }
