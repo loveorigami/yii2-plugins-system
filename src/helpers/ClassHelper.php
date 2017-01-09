@@ -17,7 +17,7 @@ class ClassHelper
      * @param null|string $callback
      * @return array
      */
-    public static function getClassesFromDir($dirs, $callback = null)
+    public static function getAllClasses($dirs, $callback = null)
     {
         if (!$dirs) {
             return [];

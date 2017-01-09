@@ -26,7 +26,7 @@ class PluginDirRepository extends PluginRepository
      */
     protected function populate()
     {
-        ClassHelper::getClassesFromDir($this->_dirs, function ($class) {
+        ClassHelper::getAllClasses($this->_dirs, function ($class) {
             /** @var BasePlugin $class */
             if (is_callable([$class, 'events'])) {
                 if (!is_array($class::events())) {
