@@ -126,9 +126,8 @@ class Shortcode
 
     /**
      * Returns a regular expression for matching a shortcode tag
-     *
      * Borrowed from WordPress wp/wp-includes/shortcode.php
-     *
+     * @param $tagregexp
      * @return string
      */
     protected function getShortcodeRegexp($tagregexp)
