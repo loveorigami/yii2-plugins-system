@@ -70,6 +70,23 @@ class ClassHelper
 
     /**
      * @param $className
+     * @return array
+     */
+    public static function getEventNames($className)
+    {
+        $result = [];
+        $reflection = new \ReflectionClass($className);
+        foreach ($reflection->getConstants() as $name => $value) {
+            if (!preg_match('/^EVENT/', $name)) {
+                continue;
+            }
+            $result[$name] = $value;
+        }
+        return $result;
+    }
+
+    /**
+     * @param $className
      * @return bool|\ReflectionClass
      */
     protected static function getReflection($className)
