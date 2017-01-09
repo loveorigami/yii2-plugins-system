@@ -11,7 +11,7 @@ To create your plugin you need to run the following required steps
 
 ```php
 
-use lo\plugins\components\BasePlugin;
+use lo\plugins\BasePlugin;
 
 namespace common\plugins\test;
 
