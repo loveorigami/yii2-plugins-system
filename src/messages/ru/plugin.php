@@ -38,8 +38,8 @@ return [
     'Event' => 'Событие',
     'Events' => 'События',
 
-    'Handler Class' => 'Handler класс',
-    'Handler Method' => 'Handler метод',
+    'Handler Class' => 'Handler class',
+    'Handler Method' => 'Handler method',
     'Hash' => 'Хеш',
 
     'ID' => 'ID',
@@ -57,8 +57,8 @@ return [
 
     'Text' => 'Описание',
     'This plugin alredy installed' => 'Этот плагин уже установлен',
-    'Trigger Class' => 'Trigger класс',
-    'Trigger Event' => 'Trigger событие',
+    'Trigger Class' => 'Trigger class',
+    'Trigger Event' => 'Trigger event',
 
     'Unable to find specified class' => 'Не удалось найти указанный класс',
     'Update' => 'Обновить',
