@@ -1,6 +1,8 @@
 <?php
 namespace lo\plugins\shortcodes;
 
+use yii\helpers\ArrayHelper;
+
 /**
  * Class Shortcode
  * @package lo\plugins\shorcodes
@@ -12,15 +14,27 @@ class Shortcode
      * Associative array of shortcodes and their
      * respective callbacks
      */
-    protected $callbacks = [];
+    private $callbacks = [];
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function hasShortcode($key)
+    {
+        if (isset($this->callbacks[$key])) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * @param array $data
      */
-    public function registerCallback($data)
+    public function registerCallbacks($data)
     {
         foreach ($data as $key => $value) {
-            if (isset($this->callbacks[$key])) {
+            if ($this->hasShortcode($key)) {
                 continue;
             } else {
                 $this->callbacks[$key] = $value;
@@ -62,15 +76,27 @@ class Shortcode
             return substr($m[0], 1, -1);
         }
 
+        $is_widget = false;
         $tag = $m[2];
         $attr = $this->shortcodeParseAtts($m[3]);
+        $callback = $this->callbacks[$tag];
+
+        if (is_array($callback) && isset($callback['callback'])) {
+            $is_widget = true;
+            $callback = $this->callbacks[$tag]['callback'];
+        }
 
         if (isset($m[5])) {
+            if ($is_widget) {
+                if (!is_array($attr)) $attr = [$attr];
+                $attr = ArrayHelper::merge($this->callbacks[$tag]['config'], $attr);
+                $attr['content'] = $m[5];
+            };
             // enclosing tag - extra parameter
-            return $m[1] . call_user_func($this->callbacks[$tag], $attr, $m[5], $tag) . $m[6];
+            return $m[1] . call_user_func($callback, $attr, $m[5], $tag) . $m[6];
         } else {
             // self-closing tag
-            return $m[1] . call_user_func($this->callbacks[$tag], $attr, null, $tag) . $m[6];
+            return $m[1] . call_user_func($callback, $attr, null, $tag) . $m[6];
         }
     }
 
@@ -81,7 +107,7 @@ class Shortcode
      */
     protected function getShortcodeList($content)
     {
-        $result = array();
+        $result = [];
 
         preg_match_all("/\[([A-Za-z_]+[^\ \]]+)/", $content, $matches);
         if (!empty($matches[1])) {
@@ -94,15 +120,13 @@ class Shortcode
 
     /**
      * Parses attributes from a shortcode
-     *
      * Borrowed from WordPress wp/wp-includes/shortcode.php
-     *
      * @param string $text
      * @return array
      */
     protected function shortcodeParseAtts($text)
     {
-        $atts = array();
+        $atts = [];
         $pattern = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
         $text = preg_replace("/[\x{00a0}\x{200b}]+/u", " ", $text);
         if (preg_match_all($pattern, $text, $match, PREG_SET_ORDER)) {

@@ -11,6 +11,15 @@ use yii\base\Widget;
 class ShortcodeWidget extends Widget
 {
     /**
+     * Content inner shorcode
+     * ```
+     * [code]...content here...[\code]
+     * ```
+     * @var string
+     */
+    public $content;
+
+    /**
      * @param string $name
      * @param mixed $string
      */

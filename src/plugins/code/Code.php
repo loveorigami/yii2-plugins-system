@@ -1,27 +1,18 @@
 <?php
 namespace lo\plugins\plugins\code;
 
-use lo\plugins\BasePlugin;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
-use yii\web\View;
+use lo\plugins\BaseShortcode;
 
 /**
  * Plugin Name: Code Highlighting
  * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/tree/master/src/plugins/code
- * Version: 1.6
+ * Version: 1.9
  * Description: A shortcode for code highlighting in view. Use as [code lang="php"]...content...[/code]
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami
  */
-class Code extends BasePlugin
+class Code extends BaseShortcode
 {
-    /**
-     * Application id, where plugin will be worked.
-     * @var string appId
-     */
-    public static $appId = self::APP_FRONTEND;
-
     /**
      * Default configuration for plugin.
      * @var  array $config
@@ -34,43 +25,10 @@ class Code extends BasePlugin
     /**
      * @return array
      */
-    public static function events()
+    public static function shortcodes()
     {
         return [
-            View::class => [
-                View::EVENT_AFTER_RENDER => ['shortcode', self::$config]
-            ],
+            'code' => [CodeWidget::class, 'widget'],
         ];
-    }
-
-    /**
-     * Parse shortcode [code], more styles you can find in https://highlightjs.org
-     * @param $event
-     */
-    public static function shortcode($event)
-    {
-        if (isset($event->output)) {
-            /** @var View $view */
-            $view = $event->sender;
-            $style = ArrayHelper::getValue($event->data, 'style', self::$config['style']);
-            $lang = ArrayHelper::getValue($event->data, 'lang', self::$config['lang']);
-
-            CodeAsset::$style = $style;
-            CodeAsset::register($view);
-
-            $view->registerJs("hljs.initHighlightingOnLoad();");
-
-            $shortcode = self::addShortcode([
-                'code' => function ($attrs, $content) use ($lang) {
-                    $lg = isset($attrs['lang']) ? $attrs['lang'] : $lang;
-                    $tag[] = Html::beginTag('pre');
-                    $tag[] = Html::tag('code', Html::encode($content), ['class' => $lg]);
-                    $tag[] = Html::endTag('pre');
-                    return implode('', $tag);
-                },
-            ]);
-
-            $event->output = $shortcode->parse($event->output);
-        }
     }
 }

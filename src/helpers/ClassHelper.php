@@ -69,6 +69,9 @@ class ClassHelper
     }
 
     /**
+     * ```php
+     *  ClassHelper::getEventNames(yii\base\View::class);
+     * ```
      * @param $className
      * @return array
      */

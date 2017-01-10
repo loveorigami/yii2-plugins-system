@@ -1,14 +1,14 @@
 <?php
 
-use yii\helpers\Html;
-use yii\widgets\DetailView;
-
-/* @var $this yii\web\View */
-/* @var $model lo\plugins\models\Plugin */
+/**
+ * @var $this yii\web\View
+ * @var $model lo\plugins\models\Plugin
+ */
 
 $this->title = Yii::t('plugin', 'Info');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('plugin', 'Items'), 'url' => ['info']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <style>
     h2{

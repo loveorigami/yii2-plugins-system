@@ -3,12 +3,13 @@ namespace lo\plugins\plugins\helloworld;
 
 use lo\plugins\BasePlugin;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use yii\web\View;
 
 /**
  * Plugin Name: Hello World
  * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/tree/master/src/plugins/helloworld
- * Version: 1.6
+ * Version: 1.7
  * Description: A simple hello world plugin
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami
