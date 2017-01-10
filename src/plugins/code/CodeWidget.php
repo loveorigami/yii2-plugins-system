@@ -22,7 +22,7 @@ class CodeWidget extends ShortcodeWidget
     {
         $this->registerAsset();
         $tag[] = Html::beginTag('pre');
-        $tag[] = Html::tag('code', Html::encode($this->content), ['class' => $this->lang]);
+        $tag[] = Html::tag('code', $this->content, ['class' => $this->lang]);
         $tag[] = Html::endTag('pre');
         return implode('', $tag);
     }

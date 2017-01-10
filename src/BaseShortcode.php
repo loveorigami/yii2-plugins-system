@@ -54,9 +54,7 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
                         continue;
                     }
 
-                    if ($value instanceof \Closure) {
-                        $parser = call_user_func($value, $event);
-                    } elseif (is_callable($value)) {
+                    if (is_callable($value)) {
                         $parser = [
                             'callback' => $value,
                             'config' => ArrayHelper::merge(
@@ -66,7 +64,8 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
                     } else {
                         continue;
                     }
-                    /** add to collection*/
+
+                    /** add to collection */
                     self::addShortcode([$key => $parser]);
                 }
             }

@@ -84,12 +84,12 @@ class Shortcode
         if (is_array($callback) && isset($callback['callback'])) {
             $is_widget = true;
             $callback = $this->callbacks[$tag]['callback'];
+            if (!is_array($attr)) $attr = [$attr];
+            $attr = ArrayHelper::merge($this->callbacks[$tag]['config'], $attr);
         }
 
         if (isset($m[5])) {
             if ($is_widget) {
-                if (!is_array($attr)) $attr = [$attr];
-                $attr = ArrayHelper::merge($this->callbacks[$tag]['config'], $attr);
                 $attr['content'] = $m[5];
             };
             // enclosing tag - extra parameter

@@ -6,7 +6,7 @@ use lo\plugins\BaseShortcode;
 /**
  * Plugin Name: Code Highlighting
  * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/tree/master/src/plugins/code
- * Version: 1.9
+ * Version: 1.10
  * Description: A shortcode for code highlighting in view. Use as [code lang="php"]...content...[/code]
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami
