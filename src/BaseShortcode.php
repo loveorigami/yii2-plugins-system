@@ -48,15 +48,15 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
             $shortcodes = static::shortcodes();
 
             if ($shortcodes && is_array($shortcodes)) {
-                foreach ($shortcodes as $key => $value) {
+                foreach ($shortcodes as $tag => $callback) {
 
-                    if (self::hasShortcode($key)) {
+                    if (self::hasShortcode($tag)) {
                         continue;
                     }
 
-                    if (is_callable($value)) {
+                    if (is_callable($callback)) {
                         $parser = [
-                            'callback' => $value,
+                            'callback' => $callback,
                             'config' => ArrayHelper::merge(
                                 static::$config, $event->data
                             )
@@ -64,12 +64,11 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
                     } else {
                         continue;
                     }
-
                     /** add to collection */
-                    self::addShortcode([$key => $parser]);
+                    self::addShortcode($tag, $parser);
                 }
             }
-            $event->output = self::getContent($event->output);
+            $event->output = self::doShortcode($event->output);
         }
     }
 
@@ -77,19 +76,20 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
      * @param $content
      * @return string
      */
-    public static function getContent($content)
+    public static function doShortcode($content)
     {
         $shortcode = self::getShortcodeObject();
-        return $shortcode->parse($content);
+        return $shortcode->process($content);
     }
 
     /**
-     * @param array $data
+     * @param $tag
+     * @param $parser
      */
-    public static function addShortcode(array $data)
+    public static function addShortcode($tag, $parser)
     {
         $shortcode = self::getShortcodeObject();
-        $shortcode->registerCallbacks($data);
+        $shortcode->addShortcode($tag, $parser);
     }
 
     /**

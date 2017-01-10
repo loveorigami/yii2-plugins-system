@@ -11,35 +11,89 @@ use yii\helpers\ArrayHelper;
 class Shortcode
 {
     /**
+     * The regex for attributes.
+     *
+     * This regex covers the following attribute situations:
+     *  - key = "value"
+     *  - key = 'value'
+     *  - key = value
+     *  - "value"
+     *  - value
+     *
+     * @var string
+     */
+    private $attrPattern = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
+
+    /**
      * Associative array of shortcodes and their
      * respective callbacks
      */
-    private $callbacks = [];
+    private $_shortcodes = [];
 
     /**
-     * @param $key
+     * @param $tag
      * @return bool
      */
-    public function hasShortcode($key)
+    public function hasShortcode($tag)
     {
-        if (isset($this->callbacks[$key])) {
+        if (isset($this->_shortcodes[$tag])) {
             return true;
         }
         return false;
     }
 
     /**
-     * @param array $data
+     * @param $tag
+     * @param array $parser
+     * @throws \ErrorException
      */
-    public function registerCallbacks($data)
+    public function addShortcode($tag, $parser)
     {
-        foreach ($data as $key => $value) {
-            if ($this->hasShortcode($key)) {
-                continue;
-            } else {
-                $this->callbacks[$key] = $value;
+        if ($this->hasShortcode($tag)) {
+            return;
+        } else {
+            $this->_shortcodes[$tag] = $parser;
+        }
+    }
+
+    /**
+     * @param string $tag
+     */
+    public function removeShortcode($tag)
+    {
+        if (array_key_exists($tag, $this->_shortcodes)) {
+            unset($this->_shortcodes[$tag]);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getShortcodes()
+    {
+        return $this->_shortcodes;
+    }
+
+    /**
+     * Tests whether content has a particular shortcode
+     * @param $content
+     * @return bool
+     */
+    public function contentHasShortcodes($content)
+    {
+        preg_match_all($this->shortcodeRegex(), $content, $matches, PREG_SET_ORDER);
+
+        if (empty($matches)) {
+            return false;
+        }
+
+        foreach ($matches as $shortcode) {
+            if (isset($shortcode[2])) {
+                return true;
             }
         }
+
+        return false;
     }
 
     /**
@@ -47,20 +101,13 @@ class Shortcode
      * @param string $content Content to parse for shortcodes
      * @return string
      */
-    public function parse($content)
+    public function process($content)
     {
-        $result = $content;
-
-        $shortcodes = $this->getShortcodeList($content);
-        foreach ($shortcodes as $shortcode) {
-            // Only process known/supported shortcodes
-            if (in_array($shortcode, array_keys($this->callbacks))) {
-                $regexp = $this->getShortcodeRegexp($shortcode);
-                $result = preg_replace_callback("/$regexp/s", array($this, 'parseSingle'), $result);
-            }
+        if (!$this->contentHasShortcodes($content)) {
+            return $content;
         }
 
-        return $result;
+        return preg_replace_callback($this->shortcodeRegex(), [$this, 'processTag'], $content);
     }
 
     /**
@@ -69,7 +116,7 @@ class Shortcode
      * @param array $m Shortcode matches
      * @return string
      */
-    protected function parseSingle($m)
+    protected function processTag($m)
     {
         // allow [[foo]] syntax for escaping a tag
         if ($m[1] == '[' && $m[6] == ']') {
@@ -77,10 +124,10 @@ class Shortcode
         }
 
         $tag = $m[2];
-        $attr = $this->shortcodeParseAtts($m[3]);
+        $attr = $this->parseAttributes($m[3]);
 
-        $callback = $this->callbacks[$tag]['callback'];
-        $config = $this->callbacks[$tag]['config'];
+        $callback = $this->_shortcodes[$tag]['callback'];
+        $config = $this->_shortcodes[$tag]['config'];
 
         $attr = ArrayHelper::merge($config, $attr);
 
@@ -95,21 +142,30 @@ class Shortcode
     }
 
     /**
-     * Get the list of all shortcodes found in given content
-     * @param string $content Content to process
-     * @return array
+     * Remove all shortcode tags from the given content.
+     * @uses $shortcode_tags
+     * @param string $content Content to remove shortcode tags.
+     * @return string Content without shortcode tags.
      */
-    protected function getShortcodeList($content)
+    public function stripAllShortcodes($content)
     {
-        $result = [];
-
-        preg_match_all("/\[([A-Za-z_]+[^\ \]]+)/", $content, $matches);
-        if (!empty($matches[1])) {
-            foreach ($matches[1] as $match) {
-                $result[$match] = $match;
-            }
+        if (empty($this->shortcodes)) {
+            return $content;
         }
-        return $result;
+        return preg_replace_callback($this->shortcodeRegex(), array($this, 'stripShortcodeTag'), $content);
+    }
+
+    /**
+     * Strips a tag leaving escaped tags
+     * @param $tag
+     * @return string
+     */
+    private function stripShortcodeTag($tag)
+    {
+        if ($tag[1] == '[' && $tag[6] == ']') {
+            return substr($tag[0], 1, -1);
+        }
+        return $tag[1] . $tag[6];
     }
 
     /**
@@ -118,42 +174,42 @@ class Shortcode
      * @param string $text
      * @return array
      */
-    protected function shortcodeParseAtts($text)
+    protected function parseAttributes($text)
     {
-        $atts = [];
-        $pattern = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
         $text = preg_replace("/[\x{00a0}\x{200b}]+/u", " ", $text);
-        if (preg_match_all($pattern, $text, $match, PREG_SET_ORDER)) {
-            foreach ($match as $m) {
-                if (!empty($m[1]))
-                    $atts[strtolower($m[1])] = stripcslashes($m[2]);
-                elseif (!empty($m[3]))
-                    $atts[strtolower($m[3])] = stripcslashes($m[4]);
-                elseif (!empty($m[5]))
-                    $atts[strtolower($m[5])] = stripcslashes($m[6]);
-                elseif (isset($m[7]) and strlen($m[7]))
-                    $atts[] = stripcslashes($m[7]);
-                elseif (isset($m[8]))
-                    $atts[] = stripcslashes($m[8]);
-            }
-        } else {
-            $atts = ltrim($text);
+        if (!preg_match_all($this->attrPattern, $text, $matches, PREG_SET_ORDER)) {
+            return array(ltrim($text));
         }
-        return (array)$atts;
+        $attr = [];
+        foreach ($matches as $match) {
+            if (!empty($match[1])) {
+                $attr[strtolower($match[1])] = stripcslashes($match[2]);
+            } elseif (!empty($match[3])) {
+                $attr[strtolower($match[3])] = stripcslashes($match[4]);
+            } elseif (!empty($match[5])) {
+                $attr[strtolower($match[5])] = stripcslashes($match[6]);
+            } elseif (isset($match[7]) && strlen($match[7])) {
+                $attr[] = stripcslashes($match[7]);
+            } elseif (isset($match[8])) {
+                $attr[] = stripcslashes($match[8]);
+            }
+        }
+        return (array)$attr;
     }
 
     /**
      * Returns a regular expression for matching a shortcode tag
      * Borrowed from WordPress wp/wp-includes/shortcode.php
-     * @param $tagregexp
      * @return string
      */
-    protected function getShortcodeRegexp($tagregexp)
+    protected function shortcodeRegex()
     {
+        $tagRegex = join('|', array_map('preg_quote', array_keys($this->_shortcodes)));
         return
-            '\\['                              // Opening bracket
+            '/'
+            . '\\['                              // Opening bracket
             . '(\\[?)'                           // 1: Optional second opening bracket for escaping shortcodes: [[tag]]
-            . "($tagregexp)"                     // 2: Shortcode name
+            . "($tagRegex)"                      // 2: Shortcode name
             . '(?![\\w-])'                       // Not followed by word character or hyphen
             . '('                                // 3: Unroll the loop: Inside the opening shortcode tag
             . '[^\\]\\/]*'                   // Not a closing bracket or forward slash
@@ -178,7 +234,8 @@ class Shortcode
             . '\\[\\/\\2\\]'             // Closing shortcode tag
             . ')?'
             . ')'
-            . '(\\]?)';                          // 6: Optional second closing brocket for escaping shortcodes: [[tag]]
+            . '(\\]?)'                           // 6: Optional second closing brocket for escaping shortcodes: [[tag]]
+            . '/s';
     }
 
 }
