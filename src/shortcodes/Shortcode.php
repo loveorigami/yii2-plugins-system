@@ -76,22 +76,16 @@ class Shortcode
             return substr($m[0], 1, -1);
         }
 
-        $is_widget = false;
         $tag = $m[2];
         $attr = $this->shortcodeParseAtts($m[3]);
-        $callback = $this->callbacks[$tag];
 
-        if (is_array($callback) && isset($callback['callback'])) {
-            $is_widget = true;
-            $callback = $this->callbacks[$tag]['callback'];
-            if (!is_array($attr)) $attr = [$attr];
-            $attr = ArrayHelper::merge($this->callbacks[$tag]['config'], $attr);
-        }
+        $callback = $this->callbacks[$tag]['callback'];
+        $config = $this->callbacks[$tag]['config'];
+
+        $attr = ArrayHelper::merge($config, $attr);
 
         if (isset($m[5])) {
-            if ($is_widget) {
-                $attr['content'] = $m[5];
-            };
+            $attr['content'] = $m[5];
             // enclosing tag - extra parameter
             return $m[1] . call_user_func($callback, $attr, $m[5], $tag) . $m[6];
         } else {
@@ -145,7 +139,7 @@ class Shortcode
         } else {
             $atts = ltrim($text);
         }
-        return $atts;
+        return (array)$atts;
     }
 
     /**
