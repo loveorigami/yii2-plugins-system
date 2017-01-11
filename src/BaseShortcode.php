@@ -15,7 +15,7 @@ use yii\web\Response;
  */
 abstract class BaseShortcode extends BasePlugin implements IShortcode
 {
-    protected static $formats = ['html'];
+    protected static $formats = [Response::FORMAT_HTML];
 
     /**
      * Base Handler
@@ -51,7 +51,7 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
         $format = $sender->format;
         $content = $sender->content;
 
-        if ($content && in_array($format, self::$formats)) {
+        if ($content && in_array($format, static::$formats)) {
             /** @get shortcodes from handlers */
             $shortcodes = static::shortcodes();
 
@@ -75,8 +75,8 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
                     /** add to collection */
                     self::addShortcode($tag, $parser);
                 }
+                $sender->content = self::doShortcode($content);
             }
-            $sender->content = self::doShortcode($content);
         }
     }
 
