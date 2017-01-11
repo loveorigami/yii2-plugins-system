@@ -76,8 +76,8 @@ for example:
     public static function events()
     {
         return [
-            yii\base\View::class => [
-                View::EVENT_AFTER_RENDER => ['foo', self::$config]
+            yii\web\Response::class => [
+                yii\web\Response::EVENT_AFTER_PREPARE => ['foo', self::$config]
             ],
         ];
     }
