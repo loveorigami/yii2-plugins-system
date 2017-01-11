@@ -95,12 +95,7 @@ more about `$eventSenderClassName` and `$eventName` you can be found on the info
     public static function foo($event)
     {
         $term = ($event->data['term']) ? $event->data['term'] : self::$config['term'];
-
-        if (isset($event->output)) {
-            $content = $event->output;
-            $event->output =  str_replace($term,"<h1>$term</h1>", $content);
-        }
-
+        $event->sender->content =  str_replace($term,"<h1>$term</h1>", $event->sender->content);
         return true;
     }
 ```
