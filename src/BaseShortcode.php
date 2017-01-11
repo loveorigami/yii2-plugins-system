@@ -58,10 +58,6 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
             if ($shortcodes && is_array($shortcodes)) {
                 foreach ($shortcodes as $tag => $callback) {
 
-                    if (self::hasShortcode($tag)) {
-                        continue;
-                    }
-
                     if (is_callable($callback)) {
                         $parser = [
                             'callback' => $callback,
@@ -98,16 +94,6 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
     {
         $shortcode = self::getShortcodeObject();
         $shortcode->addShortcode($tag, $parser);
-    }
-
-    /**
-     * @param string $key
-     * @return bool
-     */
-    public static function hasShortcode($key)
-    {
-        $shortcode = self::getShortcodeObject();
-        return $shortcode->hasShortcode($key);
     }
 
     /**
