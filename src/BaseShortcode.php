@@ -6,7 +6,7 @@ use lo\plugins\interfaces\IShortcode;
 use lo\plugins\shortcodes\Shortcode;
 use Yii;
 use yii\base\Event;
-use yii\base\View;
+use yii\web\Response;
 
 /**
  * Class BaseShorcode
@@ -15,6 +15,8 @@ use yii\base\View;
  */
 abstract class BaseShortcode extends BasePlugin implements IShortcode
 {
+    protected static $formats = ['html'];
+
     /**
      * Base Handler
      */
@@ -26,8 +28,8 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
     final public static function events()
     {
         return [
-            View::class => [
-                View::EVENT_AFTER_RENDER => [self::HANDLER_PARSE_SHORCODES, static::$config]
+            Response::class => [
+                Response::EVENT_AFTER_PREPARE => [self::HANDLER_PARSE_SHORCODES, static::$config]
             ],
         ];
     }
@@ -44,7 +46,13 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
      */
     public static function parseShortcodes($event)
     {
-        if (isset($event->output)) {
+        /** @var Response $sender */
+        $sender = $event->sender;
+        $format = $sender->format;
+        $content = $sender->content;
+
+        if ($content && in_array($format, self::$formats)) {
+            /** @get shortcodes from handlers */
             $shortcodes = static::shortcodes();
 
             if ($shortcodes && is_array($shortcodes)) {
@@ -68,7 +76,7 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
                     self::addShortcode($tag, $parser);
                 }
             }
-            $event->output = self::doShortcode($event->output);
+            $sender->content = self::doShortcode($content);
         }
     }
 
