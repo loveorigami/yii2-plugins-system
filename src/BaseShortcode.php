@@ -1,12 +1,13 @@
 <?php
 namespace lo\plugins;
 
-use lo\core\helpers\ArrayHelper;
+use lo\plugins\components\View;
+use lo\plugins\components\ViewEvent;
 use lo\plugins\interfaces\IShortcode;
 use lo\plugins\shortcodes\Shortcode;
 use Yii;
-use yii\base\Event;
-use yii\web\Response;
+use yii\base\InvalidCallException;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class BaseShorcode
@@ -15,8 +16,6 @@ use yii\web\Response;
  */
 abstract class BaseShortcode extends BasePlugin implements IShortcode
 {
-    protected static $formats = [Response::FORMAT_HTML];
-
     /**
      * Base Handler
      */
@@ -28,8 +27,8 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
     final public static function events()
     {
         return [
-            Response::class => [
-                Response::EVENT_AFTER_PREPARE => [self::HANDLER_PARSE_SHORCODES, static::$config]
+            View::class => [
+                View::EVENT_CONTENT_MANIPULATION  => [self::HANDLER_PARSE_SHORCODES, static::$config]
             ],
         ];
     }
@@ -42,58 +41,41 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
      *          .....
      *      },
      *  ]
-     * @param Event $event
+     * @param ViewEvent $event
      */
     public static function parseShortcodes($event)
     {
-        /** @var Response $sender */
-        $sender = $event->sender;
-        $format = $sender->format;
-        $content = $sender->content;
+        $content = $event->content;
+        $obj = self::getShortcodeObject();
 
-        if ($content && in_array($format, static::$formats)) {
-            /** @get shortcodes from handlers */
-            $shortcodes = static::shortcodes();
-
-            if ($shortcodes && is_array($shortcodes)) {
-                foreach ($shortcodes as $tag => $callback) {
-
-                    if (is_callable($callback)) {
-                        $parser = [
-                            'callback' => $callback,
-                            'config' => ArrayHelper::merge(
-                                static::$config, $event->data
-                            )
-                        ];
-                    } else {
-                        continue;
-                    }
-                    /** add to collection */
-                    self::addShortcode($tag, $parser);
-                }
-                $sender->content = self::doShortcode($content);
-            }
+        if (!$obj->hasShortcodesInContent($content)) {
+            return;
         }
-    }
 
-    /**
-     * @param $content
-     * @return string
-     */
-    public static function doShortcode($content)
-    {
-        $shortcode = self::getShortcodeObject();
-        return $shortcode->process($content);
-    }
+        /** @get shortcodes from handlers */
+        $shortcodes = static::shortcodes();
 
-    /**
-     * @param $tag
-     * @param $parser
-     */
-    public static function addShortcode($tag, $parser)
-    {
-        $shortcode = self::getShortcodeObject();
-        $shortcode->addShortcode($tag, $parser);
+        if ($shortcodes && is_array($shortcodes)) {
+            foreach ($shortcodes as $tag => $callback) {
+
+                if (is_callable($callback)) {
+                    $parser = [
+                        'callback' => $callback,
+                        'config' => ArrayHelper::merge(
+                            static::$config, $event->data
+                        )
+                    ];
+                } else {
+                    throw new InvalidCallException("Shortcode $tag is not callable");
+                }
+
+                /** add to collection */
+                $obj->addShortcode($tag, $parser);
+            }
+
+            $event->content = $obj->doShortcode($content);
+            $obj->removeAllShortcodes();
+        }
     }
 
     /**

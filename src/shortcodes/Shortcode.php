@@ -22,7 +22,7 @@ class Shortcode
      *
      * @var string
      */
-    private $attrPattern = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
+    private $attrPattern = '/([\w-]+)\s*=\s*"([^"]*)"(?:\s|$)|([\w-]+)\s*=\s*\'([^\']*)\'(?:\s|$)|([\w-]+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
 
     /**
      * Associative array of shortcodes and their
@@ -34,7 +34,7 @@ class Shortcode
      * @param $tag
      * @return bool
      */
-    public function hasShortcode($tag)
+    public function existsShortcode($tag)
     {
         if (isset($this->_shortcodes[$tag])) {
             return true;
@@ -49,7 +49,7 @@ class Shortcode
      */
     public function addShortcode($tag, $parser)
     {
-        if ($this->hasShortcode($tag)) {
+        if ($this->existsShortcode($tag)) {
             return;
         } else {
             $this->_shortcodes[$tag] = $parser;
@@ -67,33 +67,58 @@ class Shortcode
     }
 
     /**
-     * @return array
+     * Clear all shortcodes.
+     *
+     * This function is simple, it clears all of the shortcode tags by replacing the
+     * shortcodes global by a empty array. This is actually a very efficient method
+     * for removing all shortcodes.
+     *
+     * @since 2.5.0
      */
-    public function getShortcodes()
+    public function removeAllShortcodes()
     {
-        return $this->_shortcodes;
+        $this->_shortcodes = [];
     }
 
     /**
      * Tests whether content has a particular shortcode
      * @param $content
+     * @param $tag
      * @return bool
      */
-    public function contentHasShortcodes($content)
+    public function hasShortcode($content, $tag)
     {
-        preg_match_all($this->shortcodeRegex(), $content, $matches, PREG_SET_ORDER);
-
-        if (empty($matches)) {
+        if (false === strpos($content, '[')) {
             return false;
         }
 
-        foreach ($matches as $shortcode) {
-            if (isset($shortcode[2])) {
-                return true;
+        if ($this->existsShortcode($tag)) {
+            preg_match_all('/' . $this->shortcodeRegex() . '/', $content, $matches, PREG_SET_ORDER);
+            if (empty($matches)) {
+                return false;
+            }
+
+            foreach ($matches as $shortcode) {
+                if ($tag === $shortcode[2]) {
+                    return true;
+                } elseif (!empty($shortcode[5]) && $this->hasShortcode($shortcode[5], $tag)) {
+                    return true;
+                }
             }
         }
-
         return false;
+    }
+
+    /**
+     * @param $content
+     * @return bool
+     */
+    public function hasShortcodesInContent($content)
+    {
+        if (false === strpos($content, '[')) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -101,12 +126,8 @@ class Shortcode
      * @param string $content Content to parse for shortcodes
      * @return string
      */
-    public function process($content)
+    public function doShortcode($content)
     {
-        if (!$this->contentHasShortcodes($content)) {
-            return $content;
-        }
-
         return preg_replace_callback($this->shortcodeRegex(), [$this, 'processTag'], $content);
     }
 
@@ -149,7 +170,7 @@ class Shortcode
      */
     public function stripAllShortcodes($content)
     {
-        if (empty($this->shortcodes)) {
+        if (empty($this->_shortcodes)) {
             return $content;
         }
         return preg_replace_callback($this->shortcodeRegex(), array($this, 'stripShortcodeTag'), $content);
