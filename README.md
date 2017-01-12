@@ -47,7 +47,7 @@ That's all, now you have module installed and configured in advanced template.
 
 Next, open `@frontend/config/main.php` and add following:
 
-```
+```php
 'bootstrap' => ['log', 'plugins'],
 ...
 'components' => [
@@ -64,7 +64,7 @@ Next, open `@frontend/config/main.php` and add following:
 
 Also do the same thing with `@backend/config/main.php`:
 
-```
+```php
 'bootstrap' => ['log', 'plugins'],
 ...
 'components' => [
@@ -82,7 +82,6 @@ Also do the same thing with `@backend/config/main.php`:
 ## Core plugins (examples)
 
 * [Hello world!] (src/plugins/helloworld)
-* [Code Highlighting] (src/plugins/code)
 * [Http Authentication] (src/plugins/httpauth)
 
 ## Your plugins
