@@ -26,6 +26,7 @@ class EventsDiffDto
      */
     public function getDiff()
     {
+        // todo diff with handler_class and handler_method and count config
         return $this->_data;
     }
 }
