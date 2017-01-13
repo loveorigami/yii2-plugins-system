@@ -47,12 +47,18 @@ class Shortcode
      * @param array $parser
      * @throws \ErrorException
      */
-    public function addShortcode($tag, $parser)
+    public function addShortcode($parser)
     {
-        if ($this->existsShortcode($tag)) {
+        /** @var ShortcodeParserDto */
+        $shortcode = new ShortcodeParserDto($parser);
+
+        if ($this->existsShortcode($shortcode->tag)) {
             return;
         } else {
-            $this->_shortcodes[$tag] = $parser;
+            $this->_shortcodes[$shortcode->tag] = [
+                'callback' => $shortcode->callback,
+                'config' => $shortcode->config
+            ];
         }
     }
 

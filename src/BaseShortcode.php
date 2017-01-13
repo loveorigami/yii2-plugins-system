@@ -61,6 +61,7 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
 
                 if (is_callable($callback)) {
                     $parser = [
+                        'tag' => $tag,
                         'callback' => $callback,
                         'config' => ArrayHelper::merge(
                             static::$config, $event->data
@@ -71,7 +72,7 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
                 }
 
                 /** add to collection */
-                $obj->addShortcode($tag, $parser);
+                $obj->addShortcode($parser);
             }
 
             $event->content = $obj->doShortcode($content);
