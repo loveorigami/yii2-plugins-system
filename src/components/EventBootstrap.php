@@ -39,6 +39,15 @@ class EventBootstrap implements BootstrapInterface
     public function bootstrap($app)
     {
         Yii::$container->setSingleton(Shortcode::class);
+
+        if (!isset(Yii::$app->i18n->translations['plugin'])) {
+            Yii::$app->i18n->translations['plugin'] = [
+                'class' => 'yii\i18n\PhpMessageSource',
+                'sourceLanguage' => 'en',
+                'basePath' => '@lo/plugins/messages'
+            ];
+        }
+
         self::getEventManager($app);
     }
 
