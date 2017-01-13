@@ -51,6 +51,7 @@ return [
     'Name' => 'Name',
     'New event installed' => 'New event installed',
 
+    ' - Page {page}' => ' - Page {page}',
     'Plugin ID' => 'Plugin ID',
     'Pos.' => 'Pos.',
     'Position' => 'Position',
