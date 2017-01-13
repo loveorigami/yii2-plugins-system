@@ -22,7 +22,7 @@ class Shortcode
      *
      * @var string
      */
-    private $attrPattern = '/([\w-]+)\s*=\s*"([^"]*)"(?:\s|$)|([\w-]+)\s*=\s*\'([^\']*)\'(?:\s|$)|([\w-]+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
+    private $attrPattern = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
 
     /**
      * Associative array of shortcodes and their
@@ -80,6 +80,7 @@ class Shortcode
         $this->_shortcodes = [];
     }
 
+
     /**
      * Tests whether content has a particular shortcode
      * @param $content
@@ -93,19 +94,21 @@ class Shortcode
         }
 
         if ($this->existsShortcode($tag)) {
-            preg_match_all('/' . $this->shortcodeRegex() . '/', $content, $matches, PREG_SET_ORDER);
-            if (empty($matches)) {
-                return false;
-            }
+            return true;
+        }
 
-            foreach ($matches as $shortcode) {
-                if ($tag === $shortcode[2]) {
-                    return true;
-                } elseif (!empty($shortcode[5]) && $this->hasShortcode($shortcode[5], $tag)) {
-                    return true;
-                }
+        preg_match_all($this->shortcodeRegex(), $content, $matches, PREG_SET_ORDER);
+
+        if (empty($matches)) {
+            return false;
+        }
+
+        foreach ($matches as $shortcode) {
+            if ($tag === $shortcode[2]) {
+                return true;
             }
         }
+
         return false;
     }
 
@@ -116,8 +119,16 @@ class Shortcode
      */
     public function doShortcode($content)
     {
-        return preg_replace_callback($this->shortcodeRegex(), [$this, 'processTag'], $content);
+        if (false === strpos($content, '[')) {
+            return $content;
+        }
+
+        if (empty($this->_shortcodes) || !is_array($this->_shortcodes))
+            return $content;
+
+        return preg_replace_callback($this->shortcodeRegex(), [$this, 'doShortcodeTag'], $content);
     }
+
 
     /**
      * Parse single shortcode
@@ -125,7 +136,7 @@ class Shortcode
      * @param array $m Shortcode matches
      * @return string
      */
-    protected function processTag($m)
+    protected function doShortcodeTag($m)
     {
         // allow [[foo]] syntax for escaping a tag
         if ($m[1] == '[' && $m[6] == ']') {
@@ -139,15 +150,12 @@ class Shortcode
         $config = $this->_shortcodes[$tag]['config'];
 
         $attr = ArrayHelper::merge($config, $attr);
+        $content = isset($m[5]) ? $m[5] : null;
 
-        if (isset($m[5])) {
-            $attr['content'] = $m[5];
-            // enclosing tag - extra parameter
-            return $m[1] . call_user_func($callback, $attr, $m[5], $tag) . $m[6];
-        } else {
-            // self-closing tag
-            return $m[1] . call_user_func($callback, $attr, null, $tag) . $m[6];
-        }
+        $attr['content'] = $content;
+
+        return $m[1] . call_user_func($callback, $attr, $content, $tag) . $m[6];
+
     }
 
     /**
@@ -178,6 +186,30 @@ class Shortcode
     }
 
     /**
+     * Get the list of all shortcodes found in given content
+     * @param string $content Content to process
+     * @return array
+     */
+    public function getShortcodesFromContent($content)
+    {
+        if (false === strpos($content, '[')) {
+            return [];
+        }
+
+        $result = [];
+
+        preg_match_all("/\[([A-Za-z_]+[^\ \]]+)/", $content, $matches);
+
+        if (!empty($matches[1])) {
+            foreach ($matches[1] as $match) {
+                $result[$match] = $match;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Parses attributes from a shortcode
      * Borrowed from WordPress wp/wp-includes/shortcode.php
      * @param string $text
@@ -189,7 +221,7 @@ class Shortcode
         if (!preg_match_all($this->attrPattern, $text, $matches, PREG_SET_ORDER)) {
             return array(ltrim($text));
         }
-        $attr = [];
+        $attr = array();
         foreach ($matches as $match) {
             if (!empty($match[1])) {
                 $attr[strtolower($match[1])] = stripcslashes($match[2]);
@@ -207,9 +239,21 @@ class Shortcode
     }
 
     /**
-     * Returns a regular expression for matching a shortcode tag
-     * Borrowed from WordPress wp/wp-includes/shortcode.php
-     * @return string
+     * Retrieve the shortcode regular expression for searching.
+     *
+     * The regular expression combines the shortcode tags in the regular expression
+     * in a regex class.
+     *
+     * The regular expression contains 6 different sub matches to help with parsing.
+     *
+     * 1 - An extra [ to allow for escaping shortcodes with double [[]]
+     * 2 - The shortcode name
+     * 3 - The shortcode argument list
+     * 4 - The self closing /
+     * 5 - The content of a shortcode when it wraps some content.
+     * 6 - An extra ] to allow for escaping shortcodes with double [[]]
+     *
+     * @return string The shortcode search regular expression
      */
     protected function shortcodeRegex()
     {
@@ -246,6 +290,5 @@ class Shortcode
             . '(\\]?)'                           // 6: Optional second closing brocket for escaping shortcodes: [[tag]]
             . '/s';
     }
-
 }
 

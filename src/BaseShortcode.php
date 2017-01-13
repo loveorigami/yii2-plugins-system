@@ -28,7 +28,7 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
     {
         return [
             View::class => [
-                View::EVENT_DO_BODY  => [self::HANDLER_PARSE_SHORCODES, static::$config]
+                View::EVENT_DO_BODY => [self::HANDLER_PARSE_SHORCODES, static::$config]
             ],
         ];
     }
@@ -47,6 +47,7 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
     {
         $content = $event->content;
         $obj = self::getShortcodeObject();
+        $tags = $obj->getShortcodesFromContent($content);
 
         /** @get shortcodes from handlers */
         $shortcodes = static::shortcodes();
@@ -54,7 +55,7 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
         if ($shortcodes && is_array($shortcodes)) {
             foreach ($shortcodes as $tag => $callback) {
 
-                if (!$obj->hasShortcode($content, $tag)) {
+                if (!in_array($tag, $tags)) {
                     continue;
                 }
 
