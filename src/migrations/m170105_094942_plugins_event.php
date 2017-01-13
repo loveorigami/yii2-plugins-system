@@ -49,13 +49,13 @@ class m170105_094942_plugins_event extends Migration
 
         $this->insert($this->tn(self::TBL), [
             'id' => 1,
-            'plugin_id' => Plugin::CORE_EVENT + 1, // Code Highlighting
+            'plugin_id' => Plugin::CORE_EVENT + 1, // Hello, world
             'app_id' => BasePlugin::APP_FRONTEND,
-            'trigger_class' => 'yii\base\View',
-            'trigger_event' => 'afterRender',
-            'handler_class' => 'lo\plugins\plugins\code\Code',
-            'handler_method' => 'shortcode',
-            'data' => '{"style":"github","lang":"php"}',
+            'trigger_class' => 'yii\web\Response',
+            'trigger_event' => 'afterPrepare',
+            'handler_class' => 'lo\plugins\core\helloworld\HelloWorld',
+            'handler_method' => 'hello',
+            'data' => '{"search":"Hello, world!","replace":"Hello, Yii!","color":"#FFDB51"}',
             'status' => Event::STATUS_ACTIVE
         ]);
 
