@@ -14,7 +14,7 @@ use yii\web\Response;
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami
  */
-class Helloworld extends BasePlugin
+class HelloWorld extends BasePlugin
 {
     /**
      * @var array

@@ -38,13 +38,13 @@ class m170105_094917_plugins_plugin extends Migration
         $this->insert($this->tn(self::TBL), [
             'id' => Plugin::CORE_EVENT + 1,
             'status' => Plugin::STATUS_ACTIVE,
-            'name' => 'Code Highlighting plugin',
-            'url' => 'https://github.com/loveorigami/yii2-plugins-system/tree/master/src/plugins/code',
-            'version' => '1.4',
+            'name' => 'Hello World plugin',
+            'url' => 'https://github.com/loveorigami/yii2-plugins-system/tree/master/src/core/code',
+            'version' => '1.6',
             'author' => 'Lukyanov Andrey',
             'author_url' => 'https://github.com/loveorigami',
-            'text' => 'A shortcode for code highlighting in view. Use as [code lang="php"]...content...[/code]',
-            'hash' => md5('lo\plugins\plugins\code\Code'),
+            'text' => 'A simple hello world plugin',
+            'hash' => md5('lo\plugins\core\helloworld\HelloWorld'),
         ]);
     }
 
