@@ -27,6 +27,10 @@ use yii\bootstrap\Nav;
             'url'     => ['/plugins/plugin/install'],
         ],
         [
+            'label'   => Yii::t('plugin', 'Categories'),
+            'url'     => ['/plugins/category/index'],
+        ],
+        [
             'label'   => Yii::t('plugin', 'Info'),
             'url'     => ['/plugins/plugin/info'],
         ],

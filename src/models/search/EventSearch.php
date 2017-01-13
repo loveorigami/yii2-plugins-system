@@ -16,7 +16,7 @@ class EventSearch extends Event
     public function rules()
     {
         return [
-            [['id', 'plugin_id', 'app_id', 'status'], 'integer'],
+            [['id', 'plugin_id', 'category_id', 'app_id', 'status'], 'integer'],
             [[ 'trigger_class', 'trigger_event', 'handler_class', 'handler_method', 'data'], 'safe'],
         ];
     }
@@ -28,7 +28,7 @@ class EventSearch extends Event
      */
     public function search($params)
     {
-        $query = Event::find();
+        $query = Event::find()->with('category');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -45,8 +45,9 @@ class EventSearch extends Event
         $query->andFilterWhere([
             'id' => $this->id,
             'plugin_id' => $this->plugin_id,
-            'status' => $this->status,
             'app_id' => $this->app_id,
+            'category_id' => $this->category_id,
+            'status' => $this->status
         ]);
 
         $query->andFilterWhere(['like', 'trigger_class', $this->trigger_class])

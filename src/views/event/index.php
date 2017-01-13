@@ -2,6 +2,7 @@
 
 use lo\plugins\helpers\BS;
 use lo\plugins\models\App;
+use lo\plugins\models\Category;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -33,7 +34,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return BS::appLabel($model->app_id);
                 },
-                'filter' => ArrayHelper::map(App::find()->all(), 'id', 'name'),
+                'filter' => ArrayHelper::map(App::find()->orderBy('name')->all(), 'id', 'name'),
+                'format' => "raw"
+            ],
+            [
+                'attribute' => 'category_id',
+                'label' => Yii::t('plugin', 'Category'),
+                'value' => function ($model) {
+                    if ($model->category_id) {
+                        return BS::label($model->category->name);
+                    }
+                    return '';
+                },
+                'filter' => ArrayHelper::map(Category::find()->orderBy('name')->all(), 'id', 'name'),
                 'format' => "raw"
             ],
             [
@@ -53,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => "raw"
             ],
             [
-                'attribute' =>'pos',
+                'attribute' => 'pos',
                 'label' => Yii::t('plugin', 'Pos.')
             ],
             [

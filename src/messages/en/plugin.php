@@ -26,7 +26,10 @@ return [
     'Author' => 'Author',
     'Author Url' => 'Author Url',
 
+    'Categories' => 'Categories',
+    'Category' => 'Category',
     'Create' => 'Create',
+    'Create Category' => 'Create Category',
     'Create Item' => 'Create Plugin',
     'Create {modelClass}' => 'Create {modelClass}',
 

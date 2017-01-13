@@ -26,7 +26,10 @@ return [
     'Author' => 'Автор',
     'Author Url' => 'Url автора',
 
+    'Categories' => 'Категории',
+    'Category' => 'Категория',
     'Create' => 'Добавить',
+    'Create Category' => 'Создать категорию',
     'Create Item' => 'Создать плагин',
     'Create {modelClass}' => 'Создать {modelClass}',
 

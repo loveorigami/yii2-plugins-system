@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
  * @property integer $id
  * @property integer $plugin_id
  * @property integer $app_id
+ * @property integer $category_id
  * @property string $trigger_class
  * @property string $trigger_event
  * @property string $handler_class
@@ -23,6 +24,7 @@ use yii\db\ActiveRecord;
  * @property string $data
  * @property integer $status
  * @property Plugin $plugin
+ * @property Category $category
  */
 class Event extends ActiveRecord
 {
@@ -62,6 +64,7 @@ class Event extends ActiveRecord
             'id' => Yii::t('plugin', 'ID'),
             'app_id' => Yii::t('plugin', 'App ID'),
             'plugin_id' => Yii::t('plugin', 'Plugin ID'),
+            'category_id' => Yii::t('plugin', 'Category'),
             'trigger_class' => Yii::t('plugin', 'Trigger Class'),
             'trigger_event' => Yii::t('plugin', 'Trigger Event'),
             'handler_class' => Yii::t('plugin', 'Handler Class'),
@@ -78,6 +81,14 @@ class Event extends ActiveRecord
     public function getPlugin()
     {
         return $this->hasOne(Plugin::class, ['id' => 'plugin_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory()
+    {
+        return $this->hasOne(Category::class, ['id' => 'category_id']);
     }
 
     /**
