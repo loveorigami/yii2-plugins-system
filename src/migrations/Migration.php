@@ -7,6 +7,13 @@ use yii\db\ColumnSchemaBuilder;
  */
 class Migration extends \yii\db\Migration
 {
+    const TBL_APP = 'app';
+    const TBL_CATEGORY = 'category';
+    const TBL_PLUGIN = 'plugin';
+    const TBL_EVENT = 'event';
+
+    const SEO_CATEGORY = 1;
+
     /**
      * @inheritdoc
      */

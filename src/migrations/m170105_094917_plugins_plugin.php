@@ -5,11 +5,9 @@ use lo\plugins\models\Plugin;
 
 class m170105_094917_plugins_plugin extends Migration
 {
-    const TBL = 'plugin';
-
     public function up()
     {
-        $this->createTable($this->tn(self::TBL), [
+        $this->createTable($this->tn(self::TBL_PLUGIN), [
             'id' => $this->primaryKey(),
             'status' => $this->tinyInteger(1)->notNull()->defaultValue(0),
             'name' => $this->string(),
@@ -21,9 +19,9 @@ class m170105_094917_plugins_plugin extends Migration
             'hash' => $this->string(32),
         ]);
 
-        $this->createIndex('idx_plugins_item_status', $this->tn(self::TBL), 'status');
+        $this->createIndex('idx_plugins_item_status', $this->tn(self::TBL_PLUGIN), 'status');
 
-        $this->insert($this->tn(self::TBL), [
+        $this->insert($this->tn(self::TBL_PLUGIN), [
             'id' => Plugin::CORE_EVENT,
             'status' => Plugin::STATUS_ACTIVE,
             'name' => 'Core Events',
@@ -35,7 +33,7 @@ class m170105_094917_plugins_plugin extends Migration
             'hash' => '',
         ]);
 
-        $this->insert($this->tn(self::TBL), [
+        $this->insert($this->tn(self::TBL_PLUGIN), [
             'id' => Plugin::CORE_EVENT + 1,
             'status' => Plugin::STATUS_ACTIVE,
             'name' => 'Hello World plugin',
@@ -50,7 +48,7 @@ class m170105_094917_plugins_plugin extends Migration
 
     public function down()
     {
-        $this->dropTable($this->tn(self::TBL));
+        $this->dropTable($this->tn(self::TBL_PLUGIN));
     }
 
 }
