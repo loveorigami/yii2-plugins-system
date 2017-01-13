@@ -41,7 +41,17 @@ $disabled = $model->plugin_id != Plugin::CORE_EVENT;
         </div>
 
         <div class="col-md-5">
-            <?= $form->field($model, 'app_id')->dropDownList(ArrayHelper::map(App::find()->all(), 'id', 'name')) ?>
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $form->field($model, 'app_id')->dropDownList(ArrayHelper::map(App::find()->all(), 'id', 'name')) ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'category_id')->dropDownList(ArrayHelper::map(\lo\plugins\models\Category::find()->orderBy('name')->all(), 'id', 'name'), [
+                        'prompt' =>  ' '
+                    ]) ?>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <?= $form->field($model, 'status')->dropDownList([
