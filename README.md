@@ -37,7 +37,7 @@ Let's start with defining module in `@backend/config/main.php`:
     'plugins' => [
         'class' => 'lo\plugins\Module',
         'pluginsDir'=>[
-            '@lo/plugins/plugins', // default dir with core plugins
+            '@lo/plugins/core', // default dir with core plugins
             // '@common/plugins', // dir with our plugins
         ]
     ],
@@ -81,8 +81,8 @@ Also do the same thing with `@backend/config/main.php`:
 
 ## Core plugins (examples)
 
-* [Hello world!] (src/plugins/helloworld)
-* [Http Authentication] (src/plugins/httpauth)
+* [Hello world!] (src/core/helloworld)
+* [Http Authentication] (src/core/httpauth)
 
 ## Your plugins
 

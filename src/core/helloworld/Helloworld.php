@@ -1,5 +1,5 @@
 <?php
-namespace lo\plugins\plugins\helloworld;
+namespace lo\plugins\core\helloworld;
 
 use lo\plugins\BasePlugin;
 use yii\helpers\ArrayHelper;
@@ -8,8 +8,8 @@ use yii\web\Response;
 
 /**
  * Plugin Name: Hello World
- * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/tree/master/src/plugins/helloworld
- * Version: 1.8
+ * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/tree/master/src/core/helloworld
+ * Version: 1.9
  * Description: A simple hello world plugin
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami

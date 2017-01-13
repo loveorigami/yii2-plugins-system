@@ -1,5 +1,5 @@
 <?php
-namespace lo\plugins\plugins\httpauth;
+namespace lo\plugins\core\httpauth;
 
 use lo\plugins\BasePlugin;
 use Yii;
@@ -8,8 +8,8 @@ use yii\web\UnauthorizedHttpException;
 
 /**
  * Plugin Name: Http Authentication
- * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/blob/master/src/plugins/httpauth
- * Version: 1.4
+ * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/blob/master/src/core/httpauth
+ * Version: 1.5
  * Description: Authentication for backend
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami
