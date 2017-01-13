@@ -110,18 +110,6 @@ class Shortcode
     }
 
     /**
-     * @param $content
-     * @return bool
-     */
-    public function hasShortcodesInContent($content)
-    {
-        if (false === strpos($content, '[')) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Parse shortcodes in given content
      * @param string $content Content to parse for shortcodes
      * @return string

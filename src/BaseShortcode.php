@@ -48,15 +48,15 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
         $content = $event->content;
         $obj = self::getShortcodeObject();
 
-        if (!$obj->hasShortcodesInContent($content)) {
-            return;
-        }
-
         /** @get shortcodes from handlers */
         $shortcodes = static::shortcodes();
 
         if ($shortcodes && is_array($shortcodes)) {
             foreach ($shortcodes as $tag => $callback) {
+
+                if (!$obj->hasShortcode($content, $tag)) {
+                    continue;
+                }
 
                 if (is_callable($callback)) {
                     $parser = [
