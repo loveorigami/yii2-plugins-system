@@ -28,7 +28,7 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
     {
         return [
             View::class => [
-                View::EVENT_CONTENT_MANIPULATION  => [self::HANDLER_PARSE_SHORCODES, static::$config]
+                View::EVENT_DO_BODY  => [self::HANDLER_PARSE_SHORCODES, static::$config]
             ],
         ];
     }

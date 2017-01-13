@@ -18,7 +18,7 @@ class View extends WebView
     /**
      * @event Event an event that is triggered by [[contentManipulation()]].
      */
-    const EVENT_CONTENT_MANIPULATION = 'contentManipulation';
+    const EVENT_DO_BODY = 'doBody';
 
     /**
      * @var string
@@ -28,13 +28,13 @@ class View extends WebView
     /**
      * Content manipulation. Need for correct replacement shortcodes
      */
-    public function contentManipulation()
+    public function doBody()
     {
-        if ($this->hasEventHandlers(self::EVENT_CONTENT_MANIPULATION)) {
+        if ($this->hasEventHandlers(self::EVENT_DO_BODY)) {
             $event = new ViewEvent([
                 'content' => $this->_content,
             ]);
-            $this->trigger(self::EVENT_CONTENT_MANIPULATION, $event);
+            $this->trigger(self::EVENT_DO_BODY, $event);
             $this->_content = $event->content;
         }
     }
@@ -65,7 +65,7 @@ class View extends WebView
         $this->beginPage();
         $this->head();
         $this->beginBody();
-        $this->contentManipulation();
+        $this->doBody();
         echo $this->_content;
         $this->endBody();
         $this->endPage(true);
@@ -80,7 +80,7 @@ class View extends WebView
     {
         if(!$this->_content){
             $this->_content = ob_get_clean();
-            $this->contentManipulation();
+            $this->doBody();
             ob_start();
         }
 
