@@ -16,6 +16,12 @@ abstract class BasePlugin implements IPlugin
     const APP_API = 4;
     const APP_CONSOLE = 5;
 
+    const TYPE_CORE = 1;
+    const TYPE_PLUGIN = 2;
+    const TYPE_SHORTCODE = 3;
+
+    const SHORTCODES_METHOD = 'shortcodes';
+
     /**
      * Application id, where plugin will be worked.
      * Support values: frontend, backend, common, api

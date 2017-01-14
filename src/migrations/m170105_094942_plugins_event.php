@@ -11,8 +11,8 @@ class m170105_094942_plugins_event extends Migration
             'status' => $this->tinyInteger(1)->notNull()->defaultValue(0),
             'app_id' => $this->integer()->notNull()->defaultValue(self::APP_FRONTEND),
             'category_id' => $this->integer(),
-            'type_id' => $this->integer(),
-            'plugin_id' => $this->integer()->notNull()->defaultValue(self::CORE_EVENT),
+            'type_id' => $this->integer()->defaultValue(self::TYPE_CORE),
+            'plugin_id' => $this->integer()->notNull()->defaultValue(self::EVENTS_CORE),
             'trigger_class' => $this->string(),
             'trigger_event' => $this->string(),
             'handler_class' => $this->string(),
@@ -55,27 +55,27 @@ class m170105_094942_plugins_event extends Migration
             'id' => 1,
             'app_id' => self::APP_FRONTEND,
             'type_id' => self::TYPE_CORE,
-            'plugin_id' => self::CORE_EVENT,
+            'plugin_id' => self::EVENTS_CORE,
             'category_id' => self::CAT_SEO,
             'trigger_class' => 'yii\web\View',
             'trigger_event' => 'beginPage',
             'handler_class' => 'lo\plugins\core\SeoHandler',
             'handler_method' => 'updateTitle',
-            'status' => self::EVENT_ACTIVE
+            'status' => self::EVENTS_ACTIVE
         ]);
 
         $this->insert($this->tn(self::TBL_EVENT), [
             'id' => 2,
             'app_id' => self::APP_FRONTEND,
             'type_id' => self::TYPE_PLUGIN,
-            'plugin_id' => self::CORE_EVENT + 1, // Hello, world
+            'plugin_id' => self::EVENTS_CORE + 1, // Hello, world
             'category_id' => self::CAT_PLUGINS,
             'trigger_class' => 'yii\web\Response',
             'trigger_event' => 'afterPrepare',
             'handler_class' => 'lo\plugins\core\helloworld\HelloWorld',
             'handler_method' => 'hello',
             'data' => '{"search":"Hello, world!","replace":"Hello, Yii!","color":"#FFDB51"}',
-            'status' => self::EVENT_ACTIVE
+            'status' => self::EVENTS_ACTIVE
         ]);
 
     }

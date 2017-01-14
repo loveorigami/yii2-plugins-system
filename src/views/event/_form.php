@@ -12,7 +12,7 @@ use lo\widgets\Jsoneditor;
  * @var $model lo\plugins\models\Event
  * @var $form yii\widgets\ActiveForm
  */
-$disabled = $model->plugin_id != Plugin::CORE_EVENT;
+$disabled = $model->plugin_id != Plugin::EVENTS_CORE;
 ?>
 
 <div class="event-form">

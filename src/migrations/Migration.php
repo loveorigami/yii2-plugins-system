@@ -27,13 +27,14 @@ class Migration extends \yii\db\Migration
     const APP_API = BasePlugin::APP_API;
     const APP_CONSOLE = BasePlugin::APP_CONSOLE;
 
-    const CORE_EVENT = Plugin::CORE_EVENT;
+    const TYPE_CORE = BasePlugin::TYPE_CORE;
+    const TYPE_PLUGIN = BasePlugin::TYPE_PLUGIN;
+    const TYPE_SHORTCODE = BasePlugin::TYPE_SHORTCODE;
+
+    const EVENTS_CORE = Plugin::EVENTS_CORE;
     const PLUGIN_ACTIVE = Plugin::STATUS_ACTIVE;
 
-    const TYPE_PLUGIN = Event::TYPE_PLUGIN;
-    const TYPE_SHORTCODE = Event::TYPE_SHORTCODE;
-    const TYPE_CORE = Event::TYPE_CORE;
-    const EVENT_ACTIVE = Event::STATUS_ACTIVE;
+    const EVENTS_ACTIVE = Event::STATUS_ACTIVE;
 
     /**
      * @inheritdoc

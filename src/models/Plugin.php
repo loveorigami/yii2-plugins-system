@@ -26,7 +26,7 @@ class Plugin extends ActiveRecord
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
 
-    const CORE_EVENT = 1;
+    const EVENTS_CORE = 1;
 
     /**
      * @inheritdoc

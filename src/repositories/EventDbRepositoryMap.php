@@ -11,6 +11,7 @@ class EventDbRepositoryMap
 {
     public $id;
     public $app_id;
+    public $type_id;
     public $trigger_class;
     public $trigger_event;
     public $handler_class;

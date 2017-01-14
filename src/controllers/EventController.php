@@ -2,6 +2,7 @@
 
 namespace lo\plugins\controllers;
 
+use lo\plugins\BasePlugin;
 use lo\plugins\models\Plugin;
 use Yii;
 use lo\plugins\models\Event;
@@ -62,7 +63,8 @@ class EventController extends Controller
     public function actionCreate()
     {
         $model = new Event();
-        $model->plugin_id = Plugin::CORE_EVENT;
+        $model->plugin_id = Plugin::EVENTS_CORE;
+        $model->type_id = BasePlugin::TYPE_CORE;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect('index');

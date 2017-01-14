@@ -25,7 +25,7 @@ class PluginDbRepository extends PluginRepository
      */
     public function findAll()
     {
-        $items = Plugin::find()->where(['<>', 'id', Plugin::CORE_EVENT])->all();
+        $items = Plugin::find()->where(['<>', 'id', Plugin::EVENTS_CORE])->all();
         return $items;
     }
 
@@ -46,7 +46,7 @@ class PluginDbRepository extends PluginRepository
      */
     protected function populate()
     {
-        $this->_data = Plugin::find()->where(['<>', 'id', Plugin::CORE_EVENT])->asArray()->all();
+        $this->_data = Plugin::find()->where(['<>', 'id', Plugin::EVENTS_CORE])->asArray()->all();
     }
 
     /**

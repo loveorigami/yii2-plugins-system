@@ -32,10 +32,6 @@ class Event extends ActiveRecord
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
 
-    const TYPE_PLUGIN = 1;
-    const TYPE_SHORTCODE = 2;
-    const TYPE_CORE = 3;
-
     /**
      * @inheritdoc
      */
