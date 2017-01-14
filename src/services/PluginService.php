@@ -102,7 +102,7 @@ class PluginService
         if ($pluginInfoDb) {
             /** Update plugin */
             $data = ArrayHelper::merge($pluginInfoDb, $pluginInfoDir);
-            $plugin = $this->pluginDbRepository->savePlugin($hash, $data);
+            $pluginModel = $this->pluginDbRepository->savePlugin($hash, $data);
 
             $eventsArrayDb = $this->eventDbRepository->findEventsByHandler($pluginClass);
 
@@ -121,19 +121,19 @@ class PluginService
             /** Get Installed events */
             foreach (array_filter(array_diff($eventsDiffDir->getDiff(), $eventsDiffDb->getDiff())) as $key) {
                 $data = $eventsPoolDir->getInfo($key);
-                $event = $this->eventDbRepository->addEvent($data);
-                $this->pluginDbRepository->link($plugin, $event);
+                $eventModel = $this->eventDbRepository->addEvent($data);
+                $this->pluginDbRepository->link($pluginModel, $eventModel);
             }
 
             Yii::$app->session->setFlash('success', 'Plugin updated');
 
         } else {
             /** Install plugin */
-            $plugin = $this->pluginDbRepository->addPlugin($pluginInfoDir);
+            $pluginModel = $this->pluginDbRepository->addPlugin($pluginInfoDir);
 
             foreach ($eventsArrayDir as $data) {
-                $event = $this->eventDbRepository->addEvent($data);
-                $this->pluginDbRepository->link($plugin, $event);
+                $eventModel = $this->eventDbRepository->addEvent($data);
+                $this->pluginDbRepository->link($pluginModel, $eventModel);
             }
 
             Yii::$app->session->setFlash('success', 'Plugin installed');
