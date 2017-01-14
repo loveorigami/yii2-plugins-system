@@ -14,9 +14,10 @@ use yii\db\ActiveRecord;
  * This is the model class for table "{{%plugins__event}}".
  *
  * @property integer $id
- * @property integer $plugin_id
  * @property integer $app_id
+ * @property integer $type_id
  * @property integer $category_id
+ * @property integer $plugin_id
  * @property string $trigger_class
  * @property string $trigger_event
  * @property string $handler_class
@@ -30,6 +31,10 @@ class Event extends ActiveRecord
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
+
+    const TYPE_PLUGIN = 1;
+    const TYPE_SHORTCODE = 2;
+    const TYPE_CORE = 3;
 
     /**
      * @inheritdoc
@@ -46,7 +51,7 @@ class Event extends ActiveRecord
     {
         return [
             [['plugin_id', 'app_id', 'trigger_class', 'trigger_event', 'handler_class', 'handler_method'], 'required'],
-            [['plugin_id', 'category_id', 'status', 'pos'], 'integer'],
+            [['plugin_id', 'type_id', 'category_id', 'status', 'pos'], 'integer'],
             [['trigger_class', 'trigger_event', 'handler_class', 'handler_method'], 'string', 'max' => 255],
             [['pos'], 'default', 'value' => 1],
             [['data'], JsonValidator::class],
@@ -63,6 +68,7 @@ class Event extends ActiveRecord
         return [
             'id' => Yii::t('plugin', 'ID'),
             'app_id' => Yii::t('plugin', 'App ID'),
+            'type_id' => Yii::t('plugin', 'Type'),
             'plugin_id' => Yii::t('plugin', 'Plugin ID'),
             'category_id' => Yii::t('plugin', 'Category'),
             'trigger_class' => Yii::t('plugin', 'Trigger Class'),

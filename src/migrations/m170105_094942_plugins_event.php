@@ -1,10 +1,6 @@
 <?php
 namespace lo\plugins\migrations;
 
-use lo\plugins\BasePlugin;
-use lo\plugins\models\Event;
-use lo\plugins\models\Plugin;
-
 class m170105_094942_plugins_event extends Migration
 {
 
@@ -13,9 +9,10 @@ class m170105_094942_plugins_event extends Migration
         $this->createTable($this->tn(self::TBL_EVENT), [
             'id' => $this->primaryKey(),
             'status' => $this->tinyInteger(1)->notNull()->defaultValue(0),
-            'app_id' => $this->integer()->notNull()->defaultValue(BasePlugin::APP_FRONTEND),
+            'app_id' => $this->integer()->notNull()->defaultValue(self::APP_FRONTEND),
             'category_id' => $this->integer(),
-            'plugin_id' => $this->integer()->notNull()->defaultValue(Plugin::CORE_EVENT),
+            'type_id' => $this->integer(),
+            'plugin_id' => $this->integer()->notNull()->defaultValue(self::CORE_EVENT),
             'trigger_class' => $this->string(),
             'trigger_event' => $this->string(),
             'handler_class' => $this->string(),
@@ -26,6 +23,7 @@ class m170105_094942_plugins_event extends Migration
         ]);
 
         $this->createIndex('idx_plugins_event_app', $this->tn(self::TBL_EVENT), 'app_id');
+        $this->createIndex('idx_plugins_event_type', $this->tn(self::TBL_EVENT), 'type_id');
         $this->createIndex('idx_plugins_event_category', $this->tn(self::TBL_EVENT), 'category_id');
         $this->createIndex('idx_plugins_event_status', $this->tn(self::TBL_EVENT), 'status');
         $this->createIndex('idx_plugins_event_pos', $this->tn(self::TBL_EVENT), 'pos');
@@ -55,26 +53,29 @@ class m170105_094942_plugins_event extends Migration
 
         $this->insert($this->tn(self::TBL_EVENT), [
             'id' => 1,
-            'plugin_id' => Plugin::CORE_EVENT,
-            'category_id' => self::SEO_CATEGORY,
-            'app_id' => BasePlugin::APP_FRONTEND,
+            'app_id' => self::APP_FRONTEND,
+            'type_id' => self::TYPE_CORE,
+            'plugin_id' => self::CORE_EVENT,
+            'category_id' => self::CAT_SEO,
             'trigger_class' => 'yii\web\View',
             'trigger_event' => 'beginPage',
             'handler_class' => 'lo\plugins\core\SeoHandler',
             'handler_method' => 'updateTitle',
-            'status' => Event::STATUS_ACTIVE
+            'status' => self::EVENT_ACTIVE
         ]);
 
         $this->insert($this->tn(self::TBL_EVENT), [
             'id' => 2,
-            'plugin_id' => Plugin::CORE_EVENT + 1, // Hello, world
-            'app_id' => BasePlugin::APP_FRONTEND,
+            'app_id' => self::APP_FRONTEND,
+            'type_id' => self::TYPE_PLUGIN,
+            'plugin_id' => self::CORE_EVENT + 1, // Hello, world
+            'category_id' => self::CAT_PLUGINS,
             'trigger_class' => 'yii\web\Response',
             'trigger_event' => 'afterPrepare',
             'handler_class' => 'lo\plugins\core\helloworld\HelloWorld',
             'handler_method' => 'hello',
             'data' => '{"search":"Hello, world!","replace":"Hello, Yii!","color":"#FFDB51"}',
-            'status' => Event::STATUS_ACTIVE
+            'status' => self::EVENT_ACTIVE
         ]);
 
     }

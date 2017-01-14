@@ -12,8 +12,18 @@ class m170105_094235_plugins_category extends Migration
         ]);
 
         $this->insert($this->tn(self::TBL_CATEGORY), [
-            'id' => self::SEO_CATEGORY,
-            'name' => 'SEO',
+            'id' => self::CAT_SHORTCODES,
+            'name' => 'Shortcodes'
+        ]);
+
+        $this->insert($this->tn(self::TBL_CATEGORY), [
+            'id' => self::CAT_PLUGINS,
+            'name' => 'Plugins'
+        ]);
+
+        $this->insert($this->tn(self::TBL_CATEGORY), [
+            'id' => self::CAT_SEO,
+            'name' => 'SEO'
         ]);
     }
 

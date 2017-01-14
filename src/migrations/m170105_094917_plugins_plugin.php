@@ -1,8 +1,6 @@
 <?php
 namespace lo\plugins\migrations;
 
-use lo\plugins\models\Plugin;
-
 class m170105_094917_plugins_plugin extends Migration
 {
     public function up()
@@ -22,8 +20,8 @@ class m170105_094917_plugins_plugin extends Migration
         $this->createIndex('idx_plugins_item_status', $this->tn(self::TBL_PLUGIN), 'status');
 
         $this->insert($this->tn(self::TBL_PLUGIN), [
-            'id' => Plugin::CORE_EVENT,
-            'status' => Plugin::STATUS_ACTIVE,
+            'id' => self::CORE_EVENT,
+            'status' => self::PLUGIN_ACTIVE,
             'name' => 'Core Events',
             'url' => '',
             'version' => '1.0',
@@ -34,8 +32,8 @@ class m170105_094917_plugins_plugin extends Migration
         ]);
 
         $this->insert($this->tn(self::TBL_PLUGIN), [
-            'id' => Plugin::CORE_EVENT + 1,
-            'status' => Plugin::STATUS_ACTIVE,
+            'id' => self::CORE_EVENT + 1,
+            'status' => self::PLUGIN_ACTIVE,
             'name' => 'Hello World plugin',
             'url' => 'https://github.com/loveorigami/yii2-plugins-system/tree/master/src/core/code',
             'version' => '1.6',

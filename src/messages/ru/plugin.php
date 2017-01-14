@@ -66,6 +66,7 @@ return [
     'Trigger' => 'Trigger',
     'Trigger Class' => 'Trigger class',
     'Trigger Event' => 'Trigger event',
+    'Type' => 'Тип',
 
     'Unable to find specified class' => 'Не удалось найти указанный класс',
     'Update' => 'Обновить',

@@ -14,6 +14,10 @@ use yii\db\ActiveRecord;
  */
 class Category extends ActiveRecord
 {
+    const CAT_PLUGINS = 1;
+    const CAT_SHORTCODES = 2;
+    const CAT_SEO = 2;
+
     /**
      * @inheritdoc
      */

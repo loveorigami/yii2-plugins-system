@@ -1,5 +1,10 @@
 <?php
 namespace lo\plugins\migrations;
+
+use lo\plugins\BasePlugin;
+use lo\plugins\models\Category;
+use lo\plugins\models\Event;
+use lo\plugins\models\Plugin;
 use yii\db\ColumnSchemaBuilder;
 
 /**
@@ -12,7 +17,23 @@ class Migration extends \yii\db\Migration
     const TBL_PLUGIN = 'plugin';
     const TBL_EVENT = 'event';
 
-    const SEO_CATEGORY = 1;
+    const CAT_PLUGINS = Category::CAT_PLUGINS;
+    const CAT_SHORTCODES = Category::CAT_SHORTCODES;
+    const CAT_SEO = Category::CAT_SEO;
+
+    const APP_FRONTEND = BasePlugin::APP_FRONTEND;
+    const APP_COMMON = BasePlugin::APP_COMMON;
+    const APP_BACKEND = BasePlugin::APP_BACKEND;
+    const APP_API = BasePlugin::APP_API;
+    const APP_CONSOLE = BasePlugin::APP_CONSOLE;
+
+    const CORE_EVENT = Plugin::CORE_EVENT;
+    const PLUGIN_ACTIVE = Plugin::STATUS_ACTIVE;
+
+    const TYPE_PLUGIN = Event::TYPE_PLUGIN;
+    const TYPE_SHORTCODE = Event::TYPE_SHORTCODE;
+    const TYPE_CORE = Event::TYPE_CORE;
+    const EVENT_ACTIVE = Event::STATUS_ACTIVE;
 
     /**
      * @inheritdoc

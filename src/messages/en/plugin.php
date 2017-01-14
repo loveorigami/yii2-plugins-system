@@ -66,6 +66,7 @@ return [
     'Trigger' => 'Trigger',
     'Trigger Class' => 'Trigger Class',
     'Trigger Event' => 'Trigger Event',
+    'Type' => 'Type',
 
     'Unable to find specified class' => 'Unable to find specified class',
     'Update' => 'Update',
