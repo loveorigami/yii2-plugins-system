@@ -38,6 +38,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'tooltip',
             'data',
             [
+                'attribute' => 'status',
+                'options' => ['style' => 'width: 75px; align: center;'],
+                'value' => function ($model) {
+                    return $model->status == $model::STATUS_ACTIVE ? BS::label('Enabled', BS::TYPE_SUCCESS) : BS::label('Disabled', BS::TYPE_DANGER);
+                },
+                'filter' => [
+                    1 => Yii::t('plugin', 'Enabled'),
+                    0 => Yii::t('plugin', 'Disabled')
+                ],
+                'format' => "raw"
+            ],
+            [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',
                 'options' => ['style' => 'width: 75px;'],
