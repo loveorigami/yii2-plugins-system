@@ -14,6 +14,10 @@ class ShortcodeService
      */
     private $shortcodeParser;
 
+    /**
+     * ShortcodeService constructor.
+     * @param ShortcodeParser $shortcodeParser
+     */
     public function __construct(
         ShortcodeParser $shortcodeParser
     )
@@ -22,24 +26,30 @@ class ShortcodeService
     }
 
 
+    /**
+     * @param $content
+     * @return array
+     */
     public function getShortcodesFromContent($content)
     {
-
+       return $this->shortcodeParser->getShortcodesFromContent($content);
     }
+
+
 
     /**
      * @param $content
      */
     public static function parseShortcodes($content)
     {
-        $obj = self::getShortcodeObject();
-        $tags = $obj->getShortcodesFromContent($content);
+        //$obj = self::getShortcodeObject();
+       // $tags = $obj->getShortcodesFromContent($content);
 
         /** @get shortcodes from handlers */
         //$shortcodes = static::shortcodes();
         $shortcodes = []; // get from DB
 
-        if ($shortcodes && is_array($shortcodes)) {
+/*        if ($shortcodes && is_array($shortcodes)) {
             foreach ($shortcodes as $tag => $callback) {
 
                 if (!in_array($tag, $tags)) {
@@ -58,22 +68,13 @@ class ShortcodeService
                     throw new InvalidCallException("Shortcode $tag is not callable");
                 }
 
-                /** add to collection */
+
                 $obj->addShortcode($parser);
             }
 
             $content = $obj->doShortcode($content);
             $obj->removeAllShortcodes();
-        }
+        }*/
     }
 
-    /**
-     * @return ShortcodeParser
-     */
-    protected static function getShortcodeObject()
-    {
-        /** @var ShortcodeParser $shortcode */
-        $shortcode = Yii::$container->get(ShortcodeParser::class);
-        return $shortcode;
-    }
 }
