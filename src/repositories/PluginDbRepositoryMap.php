@@ -1,13 +1,13 @@
 <?php
 
-namespace lo\plugins\dto;
+namespace lo\plugins\repositories;
 use lo\plugins\models\Plugin;
 
 /**
- * Class PluginDto
- * @package lo\plugins\dto
+ * Class PluginRepositoryMap
+ * @package lo\plugins\repositories
  */
-class PluginDto
+class PluginDbRepositoryMap
 {
     public $id;
     public $name;

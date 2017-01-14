@@ -1,13 +1,13 @@
 <?php
 
-namespace lo\plugins\dto;
+namespace lo\plugins\repositories;
 use lo\plugins\models\Event;
 
 /**
- * Class EventDto
- * @package lo\plugins\dto
+ * Class EventDbRepositoryMap
+ * @package lo\plugins\repositories
  */
-class EventDto
+class EventDbRepositoryMap
 {
     public $id;
     public $app_id;

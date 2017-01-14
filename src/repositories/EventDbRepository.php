@@ -2,7 +2,6 @@
 
 namespace lo\plugins\repositories;
 
-use lo\plugins\dto\EventDto;
 use lo\plugins\models\Event;
 
 class EventDbRepository extends EventRepository
@@ -67,7 +66,7 @@ class EventDbRepository extends EventRepository
      */
     public function addEvent($data)
     {
-        $data = (array) new EventDto($data);
+        $data = (array) new EventDbRepositoryMap($data);
         $model = new Event();
         $model->setAttributes($data);
         $this->add($model);
@@ -79,7 +78,7 @@ class EventDbRepository extends EventRepository
      */
     public function deleteEvent($data)
     {
-        $data = new EventDto($data);
+        $data = new EventDbRepositoryMap($data);
         $model = $this->find($data->id);
         $model->delete();
     }

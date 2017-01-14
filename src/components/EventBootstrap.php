@@ -7,7 +7,7 @@
 namespace lo\plugins\components;
 
 use lo\plugins\BasePlugin;
-use lo\plugins\shortcodes\Shortcode;
+use lo\plugins\shortcodes\ShortcodeParser;
 use Yii;
 use yii\base\BootstrapInterface;
 use yii\base\Application;
@@ -38,7 +38,7 @@ class EventBootstrap implements BootstrapInterface
      */
     public function bootstrap($app)
     {
-        Yii::$container->setSingleton(Shortcode::class);
+        Yii::$container->setSingleton(ShortcodeParser::class);
 
         if (!isset(Yii::$app->i18n->translations['plugin'])) {
             Yii::$app->i18n->translations['plugin'] = [

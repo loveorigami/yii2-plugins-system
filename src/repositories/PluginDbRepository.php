@@ -2,7 +2,6 @@
 
 namespace lo\plugins\repositories;
 
-use lo\plugins\dto\PluginDto;
 use lo\plugins\models\Event;
 use lo\plugins\models\Plugin;
 
@@ -79,7 +78,7 @@ class PluginDbRepository extends PluginRepository
      */
     public function savePlugin($hash, $data)
     {
-        $data = (array) new PluginDto($data);
+        $data = (array) new PluginDbRepositoryMap($data);
         $model = $this->findByHash($hash);
         $model->setAttributes($data);
         $this->save($model);
@@ -92,7 +91,7 @@ class PluginDbRepository extends PluginRepository
      */
     public function addPlugin($data)
     {
-        $data = (array) new PluginDto($data);
+        $data = (array) new PluginDbRepositoryMap($data);
         $model = new Plugin();
         $model->setAttributes($data);
         $this->add($model);

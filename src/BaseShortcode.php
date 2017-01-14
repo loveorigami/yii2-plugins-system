@@ -4,7 +4,7 @@ namespace lo\plugins;
 use lo\plugins\components\View;
 use lo\plugins\components\ViewEvent;
 use lo\plugins\interfaces\IShortcode;
-use lo\plugins\shortcodes\Shortcode;
+use lo\plugins\shortcodes\ShortcodeParser;
 use Yii;
 use yii\base\InvalidCallException;
 use yii\helpers\ArrayHelper;
@@ -81,12 +81,12 @@ abstract class BaseShortcode extends BasePlugin implements IShortcode
     }
 
     /**
-     * @return Shortcode
+     * @return ShortcodeParser
      */
     protected static function getShortcodeObject()
     {
-        /** @var Shortcode $shortcode */
-        $shortcode = Yii::$container->get(Shortcode::class);
+        /** @var ShortcodeParser $shortcode */
+        $shortcode = Yii::$container->get(ShortcodeParser::class);
         return $shortcode;
     }
 }

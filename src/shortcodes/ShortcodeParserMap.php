@@ -3,10 +3,10 @@
 namespace lo\plugins\shortcodes;
 
 /**
- * Class ShortcodeParserDto
- * @package lo\plugins\dto
+ * Class ShortcodeParserMap
+ * @package lo\plugins\shortcodes
  */
-class ShortcodeParserDto
+class ShortcodeParserMap
 {
     public $tag;
     public $callback;

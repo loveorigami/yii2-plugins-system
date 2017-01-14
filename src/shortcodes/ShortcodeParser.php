@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
  * @package lo\plugins\shorcodes
  * @author Lukyanov Andrey <loveorigami@mail.ru>
  */
-class Shortcode
+class ShortcodeParser
 {
     /**
      * The regex for attributes.
@@ -43,14 +43,13 @@ class Shortcode
     }
 
     /**
-     * @param $tag
+     * @param $parser
      * @param array $parser
-     * @throws \ErrorException
      */
     public function addShortcode($parser)
     {
-        /** @var ShortcodeParserDto */
-        $shortcode = new ShortcodeParserDto($parser);
+        /** @var ShortcodeParserMap */
+        $shortcode = new ShortcodeParserMap($parser);
 
         if ($this->existsShortcode($shortcode->tag)) {
             return;
