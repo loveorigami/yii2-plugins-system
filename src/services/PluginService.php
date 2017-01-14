@@ -113,13 +113,13 @@ class PluginService
             $eventsPoolDb = new EventsPoolDto($eventsArrayDb);
 
             /** Get Deleted events */
-            foreach (array_filter(array_diff($eventsDiffDb->getDiff(), $eventsDiffDir->getDiff())) as $key) {
+            foreach (array_filter(array_diff($eventsDiffDb->getDiff(), $eventsDiffDir->getDiff())) as $key => $value) {
                 $data = $eventsPoolDb->getInfo($key);
                 $this->eventDbRepository->deleteEvent($data);
             }
 
             /** Get Installed events */
-            foreach (array_filter(array_diff($eventsDiffDir->getDiff(), $eventsDiffDb->getDiff())) as $key) {
+            foreach (array_filter(array_diff($eventsDiffDir->getDiff(), $eventsDiffDb->getDiff())) as $key => $value) {
                 $data = $eventsPoolDir->getInfo($key);
                 $eventModel = $this->eventDbRepository->addEvent($data);
                 $this->pluginDbRepository->link($pluginModel, $eventModel);

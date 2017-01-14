@@ -24,7 +24,7 @@ class EventDbRepository extends EventRepository
      */
     public function populate($pluginClass)
     {
-        $this->_data = Event::find()->where(['handler_class' =>$pluginClass])->indexBy('handler_method')->all();
+        $this->_data = Event::find()->where(['handler_class' =>$pluginClass])->all();
     }
 
     /**

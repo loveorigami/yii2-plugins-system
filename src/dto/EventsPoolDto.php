@@ -1,23 +1,28 @@
 <?php
 
 namespace lo\plugins\dto;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class EventsPoolDto
  * @package lo\plugins\dto
+ * @author Lukyanov Andrey <loveorigami@mail.ru>
  */
 class EventsPoolDto
 {
     public $data = [];
 
     /**
-     * PluginsPoolDto constructor.
+     * EventsPoolDto constructor.
      * @param array $data
      */
     public function __construct($data = [])
     {
-        foreach ($data as $hash => $item) {
-            $this->data[$hash] = $item;
+        foreach ($data as $item) {
+            $hash = ArrayHelper::getValue($item, 'handler_class');
+            if ($hash) {
+                $this->data[$hash] = $item;
+            }
         }
     }
 

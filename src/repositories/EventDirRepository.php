@@ -15,7 +15,7 @@ class EventDirRepository extends EventRepository
         foreach ($pluginClass::events() as $className => $events) {
             foreach ($events as $eventName => $handler) {
                 $handlerMethod = is_array($handler) ? $handler[0] : $handler;
-                $this->_data[$handlerMethod] = [
+                $this->_data[] = [
                     'app_id' => $this->checkApp($pluginClass),
                     'trigger_class' => $className,
                     'trigger_event' => $eventName,
