@@ -60,6 +60,8 @@ return [
     'Position' => 'Position',
 
     'Status' => 'Status',
+    'Shortcode' => 'Shortcode',
+    'Shortcodes' => 'Shortcodes',
 
     'Tag' => 'Tag',
     'Text' => 'Text',

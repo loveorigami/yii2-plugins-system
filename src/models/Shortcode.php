@@ -15,6 +15,7 @@ use yii\db\ActiveRecord;
  * @property integer $app_id
  * @property integer $category_id
  * @property integer $plugin_id
+ * @property string $handler_class
  * @property string $tag
  * @property string $tooltip
  * @property string $data
@@ -63,7 +64,9 @@ class Shortcode extends ActiveRecord
             'handler_class' => Yii::t('plugin', 'Handler Class'),
             'tag' => Yii::t('plugin', 'Tag'),
             'tooltip' => Yii::t('plugin', 'Tooltip'),
-            'data' => Yii::t('plugin', 'Data')
+            'data' => Yii::t('plugin', 'Data'),
+            'text' => Yii::t('plugin', 'Text'),
+            'status' => Yii::t('plugin', 'Status')
         ];
     }
 

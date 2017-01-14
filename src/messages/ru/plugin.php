@@ -33,7 +33,7 @@ return [
     'Create Item' => 'Создать плагин',
     'Create {modelClass}' => 'Создать {modelClass}',
 
-    'Data' => 'Data',
+    'Data' => 'Конфигурация',
     'Delete' => 'Удалить',
     'Disabled' => 'Не активно',
 
@@ -60,6 +60,8 @@ return [
     'Position' => 'Позиция',
 
     'Status' => 'Статус',
+    'Shortcode' => 'Шорткод',
+    'Shortcodes' => 'Шорткоды',
 
     'Tag' => 'Тег',
     'Text' => 'Описание',

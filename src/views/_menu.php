@@ -23,8 +23,8 @@ use yii\bootstrap\Nav;
             'url'     => ['/plugins/event/index'],
         ],
         [
-            'label'   => Yii::t('plugin', 'Install'),
-            'url'     => ['/plugins/plugin/install'],
+            'label'   => Yii::t('plugin', 'Shortcodes'),
+            'url'     => ['/plugins/shortcode/index'],
         ],
         [
             'label'   => Yii::t('plugin', 'Categories'),
@@ -33,6 +33,10 @@ use yii\bootstrap\Nav;
         [
             'label'   => Yii::t('plugin', 'Info'),
             'url'     => ['/plugins/plugin/info'],
+        ],
+        [
+            'label'   => Yii::t('plugin', 'Install'),
+            'url'     => ['/plugins/plugin/install'],
         ],
     ]
 ]) 

@@ -73,6 +73,7 @@ class Event extends ActiveRecord
             'data' => Yii::t('plugin', 'Data'),
             'pos' => Yii::t('plugin', 'Position'),
             'status' => Yii::t('plugin', 'Status'),
+            'text' => Yii::t('plugin', 'Text'),
         ];
     }
 

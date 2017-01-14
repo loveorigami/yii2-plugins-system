@@ -2,13 +2,15 @@
 
 namespace lo\plugins\models\search;
 
+use lo\plugins\models\Shortcode;
 use yii\data\ActiveDataProvider;
-use lo\plugins\models\Event;
 
 /**
- * EventSearch represents the model behind the search form about `lo\plugins\models\Event`.
+ * Class ShortcodeSearch
+ * @package lo\plugins\models\search
+ * @author Lukyanov Andrey <loveorigami@mail.ru>
  */
-class EventSearch extends Event
+class ShortcodeSearch extends Shortcode
 {
     /**
      * @inheritdoc
@@ -17,7 +19,7 @@ class EventSearch extends Event
     {
         return [
             [['id', 'plugin_id', 'category_id', 'app_id', 'status'], 'integer'],
-            [[ 'trigger_class', 'trigger_event', 'handler_class', 'handler_method', 'data'], 'safe'],
+            [['handler_class', 'data', 'tag', 'tooltip'], 'safe'],
         ];
     }
 
@@ -28,7 +30,7 @@ class EventSearch extends Event
      */
     public function search($params)
     {
-        $query = Event::find()->with('category');
+        $query = Shortcode::find()->with('category');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -50,10 +52,9 @@ class EventSearch extends Event
             'status' => $this->status
         ]);
 
-        $query->andFilterWhere(['like', 'trigger_class', $this->trigger_class])
-            ->andFilterWhere(['like', 'trigger_event', $this->trigger_event])
-            ->andFilterWhere(['like', 'handler_class', $this->handler_class])
-            ->andFilterWhere(['like', 'handler_method', $this->handler_method])
+        $query->andFilterWhere(['like', 'handler_class', $this->handler_class])
+            ->andFilterWhere(['like', 'tag', $this->tag])
+            ->andFilterWhere(['like', 'tooltip', $this->tooltip])
             ->andFilterWhere(['like', 'data', $this->data]);
 
         return $dataProvider;
