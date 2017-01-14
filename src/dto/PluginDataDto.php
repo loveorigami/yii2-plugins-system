@@ -18,6 +18,7 @@ class PluginDataDto
     public $new_hash;
     public $version;
     public $new_version;
+    public $type;
 
     /**
      * PluginDataDto constructor.
@@ -38,6 +39,22 @@ class PluginDataDto
     public function isInstalled()
     {
         return ($this->hash) ? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShortcodes()
+    {
+        return ($this->type == 'shortcodes') ? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEvents()
+    {
+        return ($this->type == 'events') ? true : false;
     }
 
     /**

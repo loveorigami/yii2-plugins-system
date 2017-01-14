@@ -22,19 +22,20 @@ class PluginDirRepository extends PluginRepository
         $this->_dirs = $dirs;
     }
 
+    protected $_methods = ['events', 'shortcodes'];
+
     /**
      * populate pool storage
      */
     protected function populate()
     {
         ClassHelper::getAllClasses($this->_dirs, function ($class) {
-            /** @var BasePlugin|BaseShortcode $class */
-            if (
-                is_callable([$class, 'events']) ||
-                is_callable([$class, 'shortcodes'])
-            ) {
-                $this->_data[] = $this->getInfo($class);
-                return $class;
+            foreach ($this->_methods as $type) {
+                /** @var BasePlugin|BaseShortcode $class */
+                if (is_callable([$class, $type])) {
+                    $this->_data[] = $this->getInfo($class, $type);
+                    return $class;
+                }
             }
             return null;
         });
@@ -42,9 +43,10 @@ class PluginDirRepository extends PluginRepository
 
     /**
      * @param $pluginClass
+     * @param $type
      * @return array
      */
-    protected function getInfo($pluginClass)
+    protected function getInfo($pluginClass, $type)
     {
         $plugin_info = ClassHelper::getPluginInfo($pluginClass);
 
@@ -57,6 +59,7 @@ class PluginDirRepository extends PluginRepository
 
         return [
             'handler_class' => $pluginClass,
+            'type' => $type,
             'name' => trim(ArrayHelper::getValue($name, 1, 'plugin - ' . $pluginClass)),
             'url' => trim(ArrayHelper::getValue($url, 1)),
             'text' => trim(ArrayHelper::getValue($text, 1)),

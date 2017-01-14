@@ -99,17 +99,16 @@ class PluginService
         $pluginInfoDb = $pluginsPoolDb->getInfo($hash);
 
         $pluginDataDto = new PluginDataDto($pluginInfoDir);
+
         $pluginClass = $pluginDataDto->getPluginClass();
 
-        $pluginObj = new $pluginClass();
-
         /** install shortcodes */
-        if ($pluginObj instanceof BaseShortcode) {
+        if ($pluginDataDto->isShortcodes()) {
             $this->installShortcodes($hash, $pluginClass, $pluginInfoDb, $pluginInfoDir);
         }
 
         /** install events */
-        if ($pluginObj instanceof BasePlugin) {
+        if ($pluginDataDto->isEvents()) {
             $this->installEvents($hash, $pluginClass, $pluginInfoDb, $pluginInfoDir);
         }
 
