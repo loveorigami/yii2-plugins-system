@@ -5,7 +5,7 @@ namespace lo\plugins\interfaces;
  * Interface IPlugin
  * @package lo\plugins\components
  */
-interface IShortcode extends IPlugin
+interface IShortcode
 {
     /**
      *  [

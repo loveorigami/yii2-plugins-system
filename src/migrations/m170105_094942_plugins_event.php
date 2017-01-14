@@ -11,7 +11,6 @@ class m170105_094942_plugins_event extends Migration
             'status' => $this->tinyInteger(1)->notNull()->defaultValue(0),
             'app_id' => $this->integer()->notNull()->defaultValue(self::APP_FRONTEND),
             'category_id' => $this->integer(),
-            'type_id' => $this->integer()->defaultValue(self::TYPE_CORE),
             'plugin_id' => $this->integer()->notNull()->defaultValue(self::EVENTS_CORE),
             'trigger_class' => $this->string(),
             'trigger_event' => $this->string(),
@@ -23,7 +22,6 @@ class m170105_094942_plugins_event extends Migration
         ]);
 
         $this->createIndex('idx_plugins_event_app', $this->tn(self::TBL_EVENT), 'app_id');
-        $this->createIndex('idx_plugins_event_type', $this->tn(self::TBL_EVENT), 'type_id');
         $this->createIndex('idx_plugins_event_category', $this->tn(self::TBL_EVENT), 'category_id');
         $this->createIndex('idx_plugins_event_status', $this->tn(self::TBL_EVENT), 'status');
         $this->createIndex('idx_plugins_event_pos', $this->tn(self::TBL_EVENT), 'pos');
@@ -54,7 +52,6 @@ class m170105_094942_plugins_event extends Migration
         $this->insert($this->tn(self::TBL_EVENT), [
             'id' => 1,
             'app_id' => self::APP_FRONTEND,
-            'type_id' => self::TYPE_CORE,
             'plugin_id' => self::EVENTS_CORE,
             'category_id' => self::CAT_SEO,
             'trigger_class' => 'yii\web\View',
@@ -67,7 +64,6 @@ class m170105_094942_plugins_event extends Migration
         $this->insert($this->tn(self::TBL_EVENT), [
             'id' => 2,
             'app_id' => self::APP_FRONTEND,
-            'type_id' => self::TYPE_PLUGIN,
             'plugin_id' => self::EVENTS_CORE + 1, // Hello, world
             'category_id' => self::CAT_PLUGINS,
             'trigger_class' => 'yii\web\Response',

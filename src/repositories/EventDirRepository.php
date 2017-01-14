@@ -17,7 +17,6 @@ class EventDirRepository extends EventRepository
                 $handlerMethod = is_array($handler) ? $handler[0] : $handler;
                 $this->_data[] = [
                     'app_id' => $this->checkApp($pluginClass),
-                    'type_id' => $this->checkType($pluginClass),
                     'trigger_class' => $className,
                     'trigger_event' => $eventName,
                     'handler_class' => $pluginClass,
@@ -38,18 +37,4 @@ class EventDirRepository extends EventRepository
         if (!isset($pluginClass::$appId)) return BasePlugin::APP_FRONTEND;
         return $pluginClass::$appId;
     }
-
-    /**
-     * Convert string AppId to int app_id
-     * @param $pluginClass
-     * @return int $app_id
-     */
-    protected function checkType($pluginClass)
-    {
-        if (is_callable($pluginClass, BasePlugin::SHORTCODES_METHOD)) {
-            return BasePlugin::TYPE_SHORTCODE;
-        }
-        return BasePlugin::TYPE_PLUGIN;
-    }
-
 }

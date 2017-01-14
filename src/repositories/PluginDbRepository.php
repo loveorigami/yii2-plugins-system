@@ -4,6 +4,7 @@ namespace lo\plugins\repositories;
 
 use lo\plugins\models\Event;
 use lo\plugins\models\Plugin;
+use lo\plugins\models\Shortcode;
 
 class PluginDbRepository extends PluginRepository
 {
@@ -102,8 +103,16 @@ class PluginDbRepository extends PluginRepository
      * @param Plugin $model
      * @param Event $event
      */
-    public function link(Plugin $model, Event $event){
+    public function linkEvent(Plugin $model, Event $event){
         $model->link('events', $event);
+    }
+
+    /**
+     * @param Plugin $model
+     * @param Shortcode $shortcode
+     */
+    public function linkShortcode(Plugin $model, Shortcode $shortcode){
+        $model->link('shortcodes', $shortcode);
     }
 
 }

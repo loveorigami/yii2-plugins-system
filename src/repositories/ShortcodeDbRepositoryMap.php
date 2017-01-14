@@ -1,26 +1,26 @@
 <?php
 
 namespace lo\plugins\repositories;
-use lo\plugins\models\Event;
+use lo\plugins\models\Shortcode;
 
 /**
- * Class EventDbRepositoryMap
+ * Class ShortcodeDbRepositoryMap
  * @package lo\plugins\repositories
+ * @author Lukyanov Andrey <loveorigami@mail.ru>
  */
-class EventDbRepositoryMap
+class ShortcodeDbRepositoryMap
 {
     public $id;
     public $app_id;
-    public $trigger_class;
-    public $trigger_event;
     public $handler_class;
-    public $handler_method;
+    public $tag;
+    public $tooltip;
     public $data;
     public $text;
-    public $status = Event::STATUS_ACTIVE;
+    public $status = Shortcode::STATUS_ACTIVE;
 
     /**
-     * PluginDataDto constructor.
+     * ShortcodeDbRepositoryMap constructor.
      * @param array $data
      */
     public function __construct($data = [])

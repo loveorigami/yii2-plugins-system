@@ -63,5 +63,4 @@ class EventManager extends Component
             }
         }
     }
-
 }

@@ -77,6 +77,14 @@ class Plugin extends ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getShortcodes()
+    {
+        return $this->hasMany(Shortcode::class, ['plugin_id' => 'id']);
+    }
+
+    /**
      * @inheritdoc
      * @return PluginQuery the active query used by this AR class.
      */

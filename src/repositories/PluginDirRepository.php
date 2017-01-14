@@ -3,6 +3,7 @@
 namespace lo\plugins\repositories;
 
 use lo\plugins\BasePlugin;
+use lo\plugins\BaseShortcode;
 use lo\plugins\helpers\ClassHelper;
 use yii\helpers\ArrayHelper;
 
@@ -27,14 +28,13 @@ class PluginDirRepository extends PluginRepository
     protected function populate()
     {
         ClassHelper::getAllClasses($this->_dirs, function ($class) {
-            /** @var BasePlugin $class */
-            if (is_callable([$class, 'events'])) {
-                if (!is_array($class::events())) {
-                    return null;
-                } else {
-                    $this->_data[] = $this->getInfo($class);
-                    return $class;
-                }
+            /** @var BasePlugin|BaseShortcode $class */
+            if (
+                is_callable([$class, 'events']) ||
+                is_callable([$class, 'shortcodes'])
+            ) {
+                $this->_data[] = $this->getInfo($class);
+                return $class;
             }
             return null;
         });
@@ -65,7 +65,5 @@ class PluginDirRepository extends PluginRepository
             'new_version' => trim(ArrayHelper::getValue($version, 1, '1.0')),
             'new_hash' => md5($pluginClass)
         ];
-
     }
-
 } 

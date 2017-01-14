@@ -137,7 +137,7 @@ class PluginController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->id != $model::CORE_EVENT) {
+        if ($model->id != $model::EVENTS_CORE) {
             $model->delete();
         } else {
             throw new Exception('Core plugin not deleted');

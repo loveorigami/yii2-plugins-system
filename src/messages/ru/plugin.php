@@ -61,8 +61,10 @@ return [
 
     'Status' => 'Статус',
 
+    'Tag' => 'Тег',
     'Text' => 'Описание',
     'This plugin alredy installed' => 'Этот плагин уже установлен',
+    'Tooltip' => 'Подсказка',
     'Trigger' => 'Trigger',
     'Trigger Class' => 'Trigger class',
     'Trigger Event' => 'Trigger event',

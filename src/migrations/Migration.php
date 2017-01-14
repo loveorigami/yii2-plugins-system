@@ -16,6 +16,7 @@ class Migration extends \yii\db\Migration
     const TBL_CATEGORY = 'category';
     const TBL_PLUGIN = 'plugin';
     const TBL_EVENT = 'event';
+    const TBL_SHORTCODE = 'shortcode';
 
     const CAT_PLUGINS = Category::CAT_PLUGINS;
     const CAT_SHORTCODES = Category::CAT_SHORTCODES;
@@ -26,10 +27,6 @@ class Migration extends \yii\db\Migration
     const APP_BACKEND = BasePlugin::APP_BACKEND;
     const APP_API = BasePlugin::APP_API;
     const APP_CONSOLE = BasePlugin::APP_CONSOLE;
-
-    const TYPE_CORE = BasePlugin::TYPE_CORE;
-    const TYPE_PLUGIN = BasePlugin::TYPE_PLUGIN;
-    const TYPE_SHORTCODE = BasePlugin::TYPE_SHORTCODE;
 
     const EVENTS_CORE = Plugin::EVENTS_CORE;
     const PLUGIN_ACTIVE = Plugin::STATUS_ACTIVE;

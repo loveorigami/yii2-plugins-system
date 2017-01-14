@@ -7,12 +7,13 @@
 namespace lo\plugins\components;
 
 use lo\plugins\BasePlugin;
+use lo\plugins\core\ShortcodeHandler;
+use lo\plugins\models\Event as ModelEvent;
 use lo\plugins\shortcodes\ShortcodeParser;
 use Yii;
-use yii\base\BootstrapInterface;
 use yii\base\Application;
-
-use lo\plugins\models\Event as ModelEvent;
+use yii\base\BootstrapInterface;
+use yii\base\Event;
 
 /**
  * Bootstrap class initiates event manager.
@@ -39,6 +40,10 @@ class EventBootstrap implements BootstrapInterface
     public function bootstrap($app)
     {
         Yii::$container->setSingleton(ShortcodeParser::class);
+
+        Event::on(View::class,  View::EVENT_DO_BODY, [
+            ShortcodeHandler::class, ShortcodeHandler::PARSE_SHORTCODES
+        ]);
 
         if (!isset(Yii::$app->i18n->translations['plugin'])) {
             Yii::$app->i18n->translations['plugin'] = [

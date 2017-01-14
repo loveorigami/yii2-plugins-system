@@ -2,6 +2,8 @@
 
 namespace lo\plugins\services;
 
+use lo\plugins\BasePlugin;
+use lo\plugins\BaseShortcode;
 use lo\plugins\dto\EventsDiffDto;
 use lo\plugins\dto\EventsPoolDto;
 use lo\plugins\dto\PluginDataDto;
@@ -11,6 +13,8 @@ use lo\plugins\repositories\EventDbRepository;
 use lo\plugins\repositories\EventDirRepository;
 use lo\plugins\repositories\PluginDbRepository;
 use lo\plugins\repositories\PluginDirRepository;
+use lo\plugins\repositories\ShortcodeDbRepository;
+use lo\plugins\repositories\ShortcodeDirRepository;
 use Yii;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
@@ -21,10 +25,12 @@ class PluginService
     /**
      *  Repositories
      */
-    private $eventDbRepository;
-    private $eventDirRepository;
     private $pluginDbRepository;
     private $pluginDirRepository;
+    private $eventDbRepository;
+    private $eventDirRepository;
+    private $shortcodeDbRepository;
+    private $shortcodeDirRepository;
 
     /**
      * Dto
@@ -34,24 +40,22 @@ class PluginService
     private $_pluginsDiffDb;
     private $_pluginsDiffDir;
 
-    /**
-     * PluginService constructor.
-     * @param PluginDirRepository $pluginDirRepository
-     * @param PluginDbRepository $pluginDbRepository
-     * @param EventDirRepository $eventDirRepository
-     * @param EventDbRepository $eventDbRepository
-     */
+
     public function __construct(
         PluginDirRepository $pluginDirRepository,
         PluginDbRepository $pluginDbRepository,
         EventDirRepository $eventDirRepository,
-        EventDbRepository $eventDbRepository
+        EventDbRepository $eventDbRepository,
+        ShortcodeDirRepository $shortcodeDirRepository,
+        ShortcodeDbRepository $shortcodeDbRepository
     )
     {
         $this->pluginDirRepository = $pluginDirRepository;
         $this->pluginDbRepository = $pluginDbRepository;
         $this->eventDirRepository = $eventDirRepository;
         $this->eventDbRepository = $eventDbRepository;
+        $this->shortcodeDirRepository = $shortcodeDirRepository;
+        $this->shortcodeDbRepository = $shortcodeDbRepository;
     }
 
 
@@ -97,9 +101,43 @@ class PluginService
         $pluginDataDto = new PluginDataDto($pluginInfoDir);
         $pluginClass = $pluginDataDto->getPluginClass();
 
+        $pluginObj = new $pluginClass();
+
+        /** install shortcodes */
+        if ($pluginObj instanceof BaseShortcode) {
+            $this->installShortcodes($hash, $pluginClass, $pluginInfoDb, $pluginInfoDir);
+        }
+
+        /** install events */
+        if ($pluginObj instanceof BasePlugin) {
+            $this->installEvents($hash, $pluginClass, $pluginInfoDb, $pluginInfoDir);
+        }
+
+    }
+
+    /**
+     * @param $hash
+     * @param $pluginClass
+     * @param $pluginInfoDb
+     * @param $pluginInfoDir
+     */
+    protected function installEvents($hash, $pluginClass, $pluginInfoDb, $pluginInfoDir)
+    {
+
         $eventsArrayDir = $this->eventDirRepository->findEventsByHandler($pluginClass);
 
-        if ($pluginInfoDb) {
+        if (!$pluginInfoDb) {
+            /** Install plugin */
+            $pluginModel = $this->pluginDbRepository->addPlugin($pluginInfoDir);
+
+            foreach ($eventsArrayDir as $data) {
+                $eventModel = $this->eventDbRepository->addEvent($data);
+                $this->pluginDbRepository->linkEvent($pluginModel, $eventModel);
+            }
+
+            Yii::$app->session->setFlash('success', 'Plugin installed');
+
+        } else {
             /** Update plugin */
             $data = ArrayHelper::merge($pluginInfoDb, $pluginInfoDir);
             $pluginModel = $this->pluginDbRepository->savePlugin($hash, $data);
@@ -122,21 +160,32 @@ class PluginService
             foreach (array_filter(array_diff($eventsDiffDir->getDiff(), $eventsDiffDb->getDiff())) as $key => $value) {
                 $data = $eventsPoolDir->getInfo($key);
                 $eventModel = $this->eventDbRepository->addEvent($data);
-                $this->pluginDbRepository->link($pluginModel, $eventModel);
+                $this->pluginDbRepository->linkEvent($pluginModel, $eventModel);
             }
 
             Yii::$app->session->setFlash('success', 'Plugin updated');
+        }
+    }
 
-        } else {
+    /**
+     * @param $hash
+     * @param $pluginClass
+     * @param $pluginInfoDb
+     * @param $pluginInfoDir
+     */
+    protected function installShortcodes($hash, $pluginClass, $pluginInfoDb, $pluginInfoDir)
+    {
+        $shortcodesArrayDir = $this->shortcodeDirRepository->findShortcodesByHandler($pluginClass);
+
+        if (!$pluginInfoDb) {
             /** Install plugin */
             $pluginModel = $this->pluginDbRepository->addPlugin($pluginInfoDir);
 
-            foreach ($eventsArrayDir as $data) {
-                $eventModel = $this->eventDbRepository->addEvent($data);
-                $this->pluginDbRepository->link($pluginModel, $eventModel);
+            foreach ($shortcodesArrayDir as $data) {
+                $shortcodeModel = $this->shortcodeDbRepository->addShortcode($data);
+                $this->pluginDbRepository->linkShortcode($pluginModel, $shortcodeModel);
             }
-
-            Yii::$app->session->setFlash('success', 'Plugin installed');
+            Yii::$app->session->setFlash('success', 'Shortcodes installed');
         }
     }
 

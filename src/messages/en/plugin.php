@@ -61,8 +61,10 @@ return [
 
     'Status' => 'Status',
 
+    'Tag' => 'Tag',
     'Text' => 'Text',
     'This plugin alredy installed' => 'This plugin alredy installed',
+    'Tooltip' => 'Tooltip',
     'Trigger' => 'Trigger',
     'Trigger Class' => 'Trigger Class',
     'Trigger Event' => 'Trigger Event',
