@@ -2,13 +2,13 @@
 
 namespace lo\plugins\services;
 
-use lo\plugins\BasePlugin;
-use lo\plugins\BaseShortcode;
 use lo\plugins\dto\EventsDiffDto;
 use lo\plugins\dto\EventsPoolDto;
 use lo\plugins\dto\PluginDataDto;
 use lo\plugins\dto\PluginsDiffDto;
 use lo\plugins\dto\PluginsPoolDto;
+use lo\plugins\dto\ShortcodesDiffDto;
+use lo\plugins\dto\ShortcodesPoolDto;
 use lo\plugins\repositories\EventDbRepository;
 use lo\plugins\repositories\EventDirRepository;
 use lo\plugins\repositories\PluginDbRepository;
@@ -185,6 +185,33 @@ class PluginService
                 $this->pluginDbRepository->linkShortcode($pluginModel, $shortcodeModel);
             }
             Yii::$app->session->setFlash('success', 'Shortcodes installed');
+        } else {
+            /** Update plugin */
+            $data = ArrayHelper::merge($pluginInfoDb, $pluginInfoDir);
+            $pluginModel = $this->pluginDbRepository->savePlugin($hash, $data);
+
+            $shortcodesArrayDb = $this->shortcodeDbRepository->findShortcodesByHandler($pluginClass);
+
+            $shortcodesDiffDir = new ShortcodesDiffDto($shortcodesArrayDir);
+            $shortcodesDiffDb = new ShortcodesDiffDto($shortcodesArrayDb);
+
+            $shortcodesPoolDir = new ShortcodesPoolDto($shortcodesArrayDir);
+            $shortcodesPoolDb = new ShortcodesPoolDto($shortcodesArrayDb);
+
+            /** Get Deleted shortcodes */
+            foreach (array_filter(array_diff($shortcodesDiffDb->getDiff(), $shortcodesDiffDir->getDiff())) as $key => $value) {
+                $data = $shortcodesPoolDb->getInfo($key);
+                $this->shortcodeDbRepository->deleteShortcode($data);
+            }
+
+            /** Get Installed shortcodes */
+            foreach (array_filter(array_diff($shortcodesDiffDir->getDiff(), $shortcodesDiffDb->getDiff())) as $key => $value) {
+                $data = $shortcodesPoolDir->getInfo($key);
+                $shortcodeModel = $this->shortcodeDbRepository->addShortcode($data);
+                $this->pluginDbRepository->linkShortcode($pluginModel, $shortcodeModel);
+            }
+
+            Yii::$app->session->setFlash('success', 'Shortcode updated');
         }
     }
 
