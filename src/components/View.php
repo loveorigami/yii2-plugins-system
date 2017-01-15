@@ -6,6 +6,7 @@
  */
 
 namespace lo\plugins\components;
+
 use yii\web\View as WebView;
 
 /**
@@ -23,7 +24,16 @@ class View extends WebView
     /**
      * @var string
      */
-    private $_content;
+    private $_body;
+
+    /**
+     * Marks the beginning of an HTML body section.
+     */
+    public function beginBody()
+    {
+        echo self::PH_BODY_BEGIN;
+        $this->trigger(self::EVENT_BEGIN_BODY);
+    }
 
     /**
      * Content manipulation. Need for correct replacement shortcodes
@@ -32,10 +42,10 @@ class View extends WebView
     {
         if ($this->hasEventHandlers(self::EVENT_DO_BODY)) {
             $event = new ViewEvent([
-                'content' => $this->_content,
+                'content' => $this->_body,
             ]);
             $this->trigger(self::EVENT_DO_BODY, $event);
-            $this->_content = $event->content;
+            $this->_body = $event->content;
         }
     }
 
@@ -57,7 +67,7 @@ class View extends WebView
     public function renderAjax($view, $params = [], $context = null)
     {
         $viewFile = $this->findViewFile($view, $context);
-        $this->_content = $this->renderFile($viewFile, $params, $context);
+        $this->_body = $this->renderFile($viewFile, $params, $context);
 
         ob_start();
         ob_implicit_flush(false);
@@ -66,7 +76,7 @@ class View extends WebView
         $this->head();
         $this->beginBody();
         $this->doBody();
-        echo $this->_content;
+        echo $this->_body;
         $this->endBody();
         $this->endPage(true);
 
@@ -78,8 +88,8 @@ class View extends WebView
      */
     public function endBody()
     {
-        if(!$this->_content){
-            $this->_content = ob_get_clean();
+        if (!$this->_body) {
+            $this->_body = ob_get_clean();
             $this->doBody();
             ob_start();
         }
@@ -107,7 +117,13 @@ class View extends WebView
     public function endPage($ajaxMode = false)
     {
         $this->trigger(self::EVENT_END_PAGE);
-        $content = $this->_content.ob_get_clean();
+        $endPage = ob_get_clean();
+
+        if ($ajaxMode) {
+            $content = $endPage;
+        } else {
+            $content = $this->_body . $endPage;
+        }
 
         echo strtr($content, [
             self::PH_HEAD => $this->renderHeadHtml(),
