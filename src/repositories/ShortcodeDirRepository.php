@@ -8,19 +8,26 @@ use yii\helpers\ArrayHelper;
 class ShortcodeDirRepository extends ShortcodeRepository
 {
     /**
-     * @param BaseShortcode $pluginClass
      * [
-     *      'tag' => [
-     *          'callback' => [],
-     *          'tooltip' => '',
-     *          'config' => [],
-     *       ]
+     *    'tag' => [
+     *        'callback' => [],
+     *        'tooltip' => '',
+     *        'config' => [],
+     *     ]
      * ]
+     * @param BaseShortcode $pluginClass
+     * @throws \Exception
      */
     public function populate($pluginClass)
     {
         foreach ($pluginClass::shortcodes() as $tag => $item) {
             if ($tag) {
+                if (!isset($item['callback'])) {
+                    throw new \Exception("Callback is empty in shortcode $tag");
+                }
+                if (!is_callable($item['callback'])) {
+                    throw new \Exception("Callback is not callable in shortcode $tag");
+                }
                 $this->_data[] = [
                     'app_id' => $this->checkApp($pluginClass),
                     'handler_class' => $pluginClass,
