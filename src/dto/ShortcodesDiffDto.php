@@ -2,6 +2,7 @@
 
 namespace lo\plugins\dto;
 
+use lo\plugins\helpers\JsonHelper;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
@@ -24,7 +25,7 @@ class ShortcodesDiffDto
             $diff['handler_class'] = ArrayHelper::getValue($item, 'handler_class');
             $config = ArrayHelper::getValue($item, 'data', null);
             if ($config) {
-                $diff['data'] = array_keys(Json::decode($config)); // if added new config
+                $diff['data'] = $this->prepareConfig($config); // if added new config
             }
             $this->_data[$diff['handler_class']] = Json::encode($diff);
         }
@@ -38,4 +39,12 @@ class ShortcodesDiffDto
         return $this->_data;
     }
 
+    /**
+     * @param $data
+     * @return array
+     */
+    protected function prepareConfig($data)
+    {
+        return array_keys(JsonHelper::decode($data));
+    }
 }

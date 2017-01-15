@@ -4,6 +4,7 @@ namespace lo\plugins\models;
 
 use lo\plugins\BasePlugin;
 use lo\plugins\models\query\ShortcodeQuery;
+use lo\plugins\validators\ClassNameValidator;
 use lo\plugins\validators\JsonValidator;
 use Yii;
 use yii\db\ActiveRecord;
@@ -44,10 +45,11 @@ class Shortcode extends ActiveRecord
     public function rules()
     {
         return [
-            [['plugin_id', 'app_id', 'handler_class'], 'required'],
+            [['app_id', 'handler_class'], 'required'],
             [['plugin_id', 'app_id', 'category_id', 'status'], 'integer'],
             [['text', 'tag', 'tooltip'], 'string'],
             [['data'], JsonValidator::class],
+            [['handler_class'], ClassNameValidator::class],
         ];
     }
 

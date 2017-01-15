@@ -3,6 +3,7 @@
 namespace lo\plugins\repositories;
 
 use lo\plugins\models\Shortcode;
+use yii\helpers\Html;
 
 class ShortcodeDbRepository extends ShortcodeRepository
 {
@@ -24,40 +25,35 @@ class ShortcodeDbRepository extends ShortcodeRepository
      */
     public function populate($pluginClass)
     {
-        $this->_data = Shortcode::find()->where(['handler_class' =>$pluginClass])->all();
+        $this->_data = Shortcode::find()->where(['handler_class' => $pluginClass])->all();
     }
 
     /**
      * @param Shortcode $item
+     * @throws \Exception
      */
     public function add(Shortcode $item)
     {
         if (!$item->getIsNewRecord()) {
-            throw new \InvalidArgumentException('Model not exists');
+            throw new \InvalidArgumentException('Model is exists');
         }
-        $item->insert(false);
+        if (!$item->insert()) {
+            throw new \Exception(Html::errorSummary($item));
+        }
     }
 
     /**
      * @param Shortcode $item
+     * @throws \Exception
      */
     public function save(Shortcode $item)
     {
         if ($item->getIsNewRecord()) {
             throw new \InvalidArgumentException('Model not exists');
         }
-        $item->update(false);
-    }
-
-    /**
-     * @param Shortcode $item
-     */
-    public function delete(Shortcode $item)
-    {
-        if ($item->getIsNewRecord()) {
-            throw new \InvalidArgumentException('Model not exists');
+        if (!$item->update()) {
+            throw new \Exception(Html::errorSummary($item));
         }
-        $item->update(false);
     }
 
     /**
@@ -66,7 +62,7 @@ class ShortcodeDbRepository extends ShortcodeRepository
      */
     public function addShortcode($data)
     {
-        $data = (array) new ShortcodeDbRepositoryMap($data);
+        $data = (array)new ShortcodeDbRepositoryMap($data);
         $model = new Shortcode();
         $model->setAttributes($data);
         $this->add($model);

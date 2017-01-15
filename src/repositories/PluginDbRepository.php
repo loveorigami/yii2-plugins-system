@@ -5,6 +5,7 @@ namespace lo\plugins\repositories;
 use lo\plugins\models\Event;
 use lo\plugins\models\Plugin;
 use lo\plugins\models\Shortcode;
+use yii\helpers\Html;
 
 class PluginDbRepository extends PluginRepository
 {
@@ -52,24 +53,30 @@ class PluginDbRepository extends PluginRepository
 
     /**
      * @param Plugin $item
+     * @throws \Exception
      */
     public function add(Plugin $item)
     {
         if (!$item->getIsNewRecord()) {
-            throw new \InvalidArgumentException('Model not exists');
+            throw new \InvalidArgumentException('Model is exists');
         }
-        $item->insert(false);
+        if (!$item->insert()) {
+            throw new \Exception(Html::errorSummary($item));
+        }
     }
 
     /**
      * @param Plugin $item
+     * @throws \Exception
      */
     public function save(Plugin $item)
     {
         if ($item->getIsNewRecord()) {
             throw new \InvalidArgumentException('Model not exists');
         }
-        $item->update(false);
+        if (!$item->update()) {
+            throw new \Exception(Html::errorSummary($item));
+        }
     }
 
     /**

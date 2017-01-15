@@ -4,7 +4,6 @@ namespace lo\plugins\repositories;
 
 use lo\plugins\BaseShortcode;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Json;
 
 class ShortcodeDirRepository extends ShortcodeRepository
 {
@@ -27,7 +26,7 @@ class ShortcodeDirRepository extends ShortcodeRepository
                     'handler_class' => $pluginClass,
                     'tag' => $tag,
                     'tooltip' => ArrayHelper::getValue($item, 'tooltip'),
-                    'data' => isset($item['config']) ? Json::encode($item['config']) : ''
+                    'data' => isset($item['config']) ? $item['config'] : ''
                 ];
             }
         };

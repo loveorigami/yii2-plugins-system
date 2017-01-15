@@ -1,6 +1,8 @@
 <?php
 
 namespace lo\plugins\repositories;
+
+use lo\plugins\helpers\JsonHelper;
 use lo\plugins\models\Event;
 
 /**
@@ -29,6 +31,9 @@ class EventDbRepositoryMap
             if (property_exists($this, $key)) {
                 $this->$key = $value;
             }
+        }
+        if ($this->data) {
+            $this->data = JsonHelper::encode($this->data);
         }
     }
 }

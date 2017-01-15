@@ -1,6 +1,7 @@
 <?php
 
 namespace lo\plugins\repositories;
+use lo\plugins\helpers\JsonHelper;
 use lo\plugins\models\Shortcode;
 
 /**
@@ -29,6 +30,9 @@ class ShortcodeDbRepositoryMap
             if (property_exists($this, $key)) {
                 $this->$key = $value;
             }
+        }
+        if ($this->data) {
+            $this->data = JsonHelper::encode($this->data);
         }
     }
 }

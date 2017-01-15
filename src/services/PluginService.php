@@ -2,6 +2,8 @@
 
 namespace lo\plugins\services;
 
+use lo\plugins\components\FlashNotification;
+use lo\plugins\components\Transaction;
 use lo\plugins\dto\EventsDiffDto;
 use lo\plugins\dto\EventsPoolDto;
 use lo\plugins\dto\PluginDataDto;
@@ -15,13 +17,22 @@ use lo\plugins\repositories\PluginDbRepository;
 use lo\plugins\repositories\PluginDirRepository;
 use lo\plugins\repositories\ShortcodeDbRepository;
 use lo\plugins\repositories\ShortcodeDirRepository;
-use Yii;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 
 class PluginService
 {
+    /**
+     * @var FlashNotification
+     */
+    public $noty;
+
+    /**
+     * @var Transaction
+     */
+    private $transaction;
+
     /**
      *  Repositories
      */
@@ -42,6 +53,8 @@ class PluginService
 
 
     public function __construct(
+        FlashNotification $noty,
+        Transaction $transaction,
         PluginDirRepository $pluginDirRepository,
         PluginDbRepository $pluginDbRepository,
         EventDirRepository $eventDirRepository,
@@ -50,6 +63,8 @@ class PluginService
         ShortcodeDbRepository $shortcodeDbRepository
     )
     {
+        $this->noty = $noty;
+        $this->transaction = $transaction;
         $this->pluginDirRepository = $pluginDirRepository;
         $this->pluginDbRepository = $pluginDbRepository;
         $this->eventDirRepository = $eventDirRepository;
@@ -102,16 +117,23 @@ class PluginService
 
         $pluginClass = $pluginDataDto->getPluginClass();
 
-        /** install shortcodes */
-        if ($pluginDataDto->isShortcodes()) {
-            $this->installShortcodes($hash, $pluginClass, $pluginInfoDb, $pluginInfoDir);
-        }
+        $process = $this->transaction->begin();
 
-        /** install events */
-        if ($pluginDataDto->isEvents()) {
-            $this->installEvents($hash, $pluginClass, $pluginInfoDb, $pluginInfoDir);
-        }
+        try {
+            /** install shortcodes */
+            if ($pluginDataDto->isShortcodes()) {
+                $this->installShortcodes($hash, $pluginClass, $pluginInfoDb, $pluginInfoDir);
+            }
 
+            /** install events */
+            if ($pluginDataDto->isEvents()) {
+                $this->installEvents($hash, $pluginClass, $pluginInfoDb, $pluginInfoDir);
+            }
+            $this->transaction->commit($process);
+        } catch (\Exception $e) {
+            $this->transaction->rollBack($process);
+            $this->noty->error($e->getMessage());
+        }
     }
 
     /**
@@ -134,7 +156,7 @@ class PluginService
                 $this->pluginDbRepository->linkEvent($pluginModel, $eventModel);
             }
 
-            Yii::$app->session->setFlash('success', 'Plugin installed');
+            $this->noty->success('Plugin installed');
 
         } else {
             /** Update plugin */
@@ -162,7 +184,7 @@ class PluginService
                 $this->pluginDbRepository->linkEvent($pluginModel, $eventModel);
             }
 
-            Yii::$app->session->setFlash('success', 'Plugin updated');
+            $this->noty->success('Plugin updated');
         }
     }
 
@@ -184,7 +206,9 @@ class PluginService
                 $shortcodeModel = $this->shortcodeDbRepository->addShortcode($data);
                 $this->pluginDbRepository->linkShortcode($pluginModel, $shortcodeModel);
             }
-            Yii::$app->session->setFlash('success', 'Shortcodes installed');
+
+            $this->noty->success('Shortcodes installed');
+
         } else {
             /** Update plugin */
             $data = ArrayHelper::merge($pluginInfoDb, $pluginInfoDir);
@@ -211,7 +235,7 @@ class PluginService
                 $this->pluginDbRepository->linkShortcode($pluginModel, $shortcodeModel);
             }
 
-            Yii::$app->session->setFlash('success', 'Shortcode updated');
+            $this->noty->success('Shortcode updated');
         }
     }
 

@@ -3,7 +3,6 @@
 namespace lo\plugins\repositories;
 
 use lo\plugins\BasePlugin;
-use yii\helpers\Json;
 
 class EventDirRepository extends EventRepository
 {
@@ -21,7 +20,7 @@ class EventDirRepository extends EventRepository
                     'trigger_event' => $eventName,
                     'handler_class' => $pluginClass,
                     'handler_method' => $handlerMethod,
-                    'data' => isset($handler[1]) ? Json::encode($handler[1]) : ''
+                    'data' => isset($handler[1]) ? $handler[1] : ''
                 ];
             }
         };

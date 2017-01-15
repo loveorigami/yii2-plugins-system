@@ -83,7 +83,7 @@ class PluginController extends Controller
             return $this->render('install', compact('dataProvider'));
 
         } catch (Exception $e) {
-            Yii::$app->session->setFlash('error', $e->getMessage());
+            $this->pluginService->noty->error($e->getMessage());
             return $this->redirect('index');
         }
     }

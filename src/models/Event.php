@@ -46,7 +46,7 @@ class Event extends ActiveRecord
     public function rules()
     {
         return [
-            [['plugin_id', 'app_id', 'trigger_class', 'trigger_event', 'handler_class', 'handler_method'], 'required'],
+            [['app_id', 'trigger_class', 'trigger_event', 'handler_class', 'handler_method'], 'required'],
             [['plugin_id', 'category_id', 'status', 'pos'], 'integer'],
             [['trigger_class', 'trigger_event', 'handler_class', 'handler_method'], 'string', 'max' => 255],
             [['pos'], 'default', 'value' => 1],
