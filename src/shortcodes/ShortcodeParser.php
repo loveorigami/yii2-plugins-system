@@ -202,12 +202,12 @@ class ShortcodeParser
         }
 
         $result = [];
-        $ignore = 'CDATA|YII';
-        $regex = "\[(?!$ignore)([A-Za-z_]+[^\ \]]+)";
+        //$regex = "\[(?!CDATA|YII)([A-Za-z_]+[^\ \]]+)"; with ignore
+        $regex = "(\W)\[(?!CDATA|YII)([A-Za-z_]+[^\ \]]+)";
         preg_match_all('/' . $regex . '/', $content, $matches);
 
-        if (!empty($matches[1])) {
-            foreach ($matches[1] as $match) {
+        if (!empty($matches[2])) {
+            foreach ($matches[2] as $match) {
                 $result[$match] = $match;
             }
         }

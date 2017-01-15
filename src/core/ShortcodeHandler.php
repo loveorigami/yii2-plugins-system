@@ -23,7 +23,7 @@ class ShortcodeHandler
         $service = self::getShortcodeService();
         $shorcodes = $service->getShortcodesFromContent($content);
         //$content = $service->parseContent($shorcodes);
-        d($shorcodes);
+        //d($shorcodes);
         //echo $event->data->appId;
         /**
          *  todo find shortcodes in content from service
