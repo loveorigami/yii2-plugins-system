@@ -1,6 +1,7 @@
 <?php
 
 namespace lo\plugins\dto;
+
 use yii\helpers\ArrayHelper;
 
 /**
@@ -19,7 +20,11 @@ class ShortcodesPoolDto
     public function __construct($data = [])
     {
         foreach ($data as $item) {
-            $hash = ArrayHelper::getValue($item, 'handler_class');
+
+            $handler = ArrayHelper::getValue($item, 'handler_class');
+            $tag = ArrayHelper::getValue($item, 'tag');
+            $hash = md5($handler . $tag);
+
             if ($hash) {
                 $this->data[$hash] = $item;
             }

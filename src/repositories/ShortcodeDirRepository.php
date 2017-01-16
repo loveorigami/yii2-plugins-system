@@ -30,7 +30,7 @@ class ShortcodeDirRepository extends ShortcodeRepository
                         'handler_class' => $pluginClass,
                         'tag' => $tag,
                         'tooltip' => "[$tag]",
-                        'data' => ''
+                        'data' => null
                     ];
                 } else {
                     if (!isset($item['callback'])) {
@@ -44,7 +44,7 @@ class ShortcodeDirRepository extends ShortcodeRepository
                         'handler_class' => $pluginClass,
                         'tag' => $tag,
                         'tooltip' => ArrayHelper::getValue($item, 'tooltip', "[$tag]"),
-                        'data' => isset($item['config']) ? $item['config'] : ''
+                        'data' => ArrayHelper::getValue($item, 'config'),
                     ];
                 }
                 $this->_data[] = $data;

@@ -22,12 +22,15 @@ class ShortcodesDiffDto
     public function __construct($data = [])
     {
         foreach ($data as $item) {
-            $diff['handler_class'] = ArrayHelper::getValue($item, 'handler_class');
-            $config = ArrayHelper::getValue($item, 'data', null);
+            $diff['data'] = [];
+            $handler = ArrayHelper::getValue($item, 'handler_class');
+            $tag = ArrayHelper::getValue($item, 'tag');
+            $config = ArrayHelper::getValue($item, 'data');
             if ($config) {
                 $diff['data'] = $this->prepareConfig($config); // if added new config
             }
-            $this->_data[$diff['handler_class']] = Json::encode($diff);
+            $hash = md5($handler . $tag);
+            $this->_data[$hash] = Json::encode($diff);
         }
     }
 
