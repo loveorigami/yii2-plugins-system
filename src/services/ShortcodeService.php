@@ -2,79 +2,77 @@
 
 namespace lo\plugins\services;
 
+use lo\plugins\dto\ShortcodesDbCallbacksDto;
+use lo\plugins\repositories\ShortcodeDbRepository;
 use lo\plugins\shortcodes\ShortcodeParser;
-use Yii;
-use yii\base\InvalidCallException;
-use yii\helpers\ArrayHelper;
+
 
 class ShortcodeService
 {
     /**
-     *  Repositories
+     * @var ShortcodeParser
      */
     private $shortcodeParser;
 
     /**
+     * @var ShortcodeDbRepository
+     */
+    private $shortcodeDbRepository;
+
+    /**
+     * @var array
+     */
+    private $shortcodesCallback = [];
+
+    /**
      * ShortcodeService constructor.
      * @param ShortcodeParser $shortcodeParser
+     * @param ShortcodeDbRepository $shortcodeDbRepository
      */
     public function __construct(
-        ShortcodeParser $shortcodeParser
+        ShortcodeParser $shortcodeParser,
+        ShortcodeDbRepository $shortcodeDbRepository
     )
     {
         $this->shortcodeParser = $shortcodeParser;
+        $this->shortcodeDbRepository = $shortcodeDbRepository;
     }
-
-
+    
     /**
      * @param $content
      * @return array
      */
     public function getShortcodesFromContent($content)
     {
-       return $this->shortcodeParser->getShortcodesFromContent($content);
+        return $this->shortcodeParser->getShortcodesFromContent($content);
     }
 
-
+    /**
+     * @param $shortcodes
+     * @param $appId
+     */
+    public function setShortcodesFromDb($shortcodes, $appId)
+    {
+        $shortcodes = $this->shortcodeDbRepository->findShortcodesByNameAsArray($shortcodes, $appId);
+        if ($shortcodes) {
+            $callbacs =  new ShortcodesDbCallbacksDto($shortcodes);
+            $this->shortcodesCallback = $callbacs->data;
+        }
+    }
 
     /**
      * @param $content
+     * @return string
      */
-    public static function parseShortcodes($content)
+    public function parseShortcodes($content)
     {
-        //$obj = self::getShortcodeObject();
-       // $tags = $obj->getShortcodesFromContent($content);
+        if (!$this->shortcodesCallback) return $content;
 
-        /** @get shortcodes from handlers */
-        //$shortcodes = static::shortcodes();
-        $shortcodes = []; // get from DB
+        foreach ($this->shortcodesCallback as $parser) {
+            $this->shortcodeParser->addShortcode($parser);
+        }
 
-/*        if ($shortcodes && is_array($shortcodes)) {
-            foreach ($shortcodes as $tag => $callback) {
-
-                if (!in_array($tag, $tags)) {
-                    continue;
-                }
-
-                if (is_callable($callback)) {
-                    $parser = [
-                        'tag' => $tag,
-                        'callback' => $callback,
-                        'config' => ArrayHelper::merge(
-                            static::$config, $event->data
-                        )
-                    ];
-                } else {
-                    throw new InvalidCallException("Shortcode $tag is not callable");
-                }
-
-
-                $obj->addShortcode($parser);
-            }
-
-            $content = $obj->doShortcode($content);
-            $obj->removeAllShortcodes();
-        }*/
+        return $this->shortcodeParser->doShortcode($content);
     }
 
 }

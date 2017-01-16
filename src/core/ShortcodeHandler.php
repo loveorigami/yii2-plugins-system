@@ -21,14 +21,9 @@ class ShortcodeHandler
         $content =  $event->content;
         /** @var ShortcodeService $service */
         $service = self::getShortcodeService();
-        $shorcodes = $service->getShortcodesFromContent($content);
-        //$content = $service->parseContent($shorcodes);
-        //d($shorcodes);
-        //echo $event->data->appId;
-        /**
-         *  todo find shortcodes in content from service
-         *  find all shorcodes from db, index by tag, where in content
-         */
+        $shContent = $service->getShortcodesFromContent($content);
+        $service->setShortcodesFromDb($shContent, $event->data->appId);
+        $event->content = $service->parseShortcodes($content);
     }
 
     /**

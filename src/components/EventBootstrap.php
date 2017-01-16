@@ -41,7 +41,7 @@ class EventBootstrap implements BootstrapInterface
     public function bootstrap($app)
     {
         Yii::$container->setSingleton(ShortcodeParser::class);
-        Yii::$container->setSingleton(ShortcodeService::class);
+        Yii::$container->set(ShortcodeService::class);
 
 
         if (!isset(Yii::$app->i18n->translations['plugin'])) {

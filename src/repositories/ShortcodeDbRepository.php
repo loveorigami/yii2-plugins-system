@@ -29,6 +29,19 @@ class ShortcodeDbRepository extends ShortcodeRepository
     }
 
     /**
+     * @param $shortcodes
+     * @param $appId
+     * @return array
+     */
+    public function findShortcodesByNameAsArray($shortcodes, $appId)
+    {
+        return Shortcode::find()->where([
+            'tag' => $shortcodes,
+            'app_id' => $appId
+        ])->indexBy('tag')->asArray()->all();
+    }
+
+    /**
      * @param Shortcode $item
      * @throws \Exception
      */

@@ -211,7 +211,9 @@ class ShortcodeParser
                 $result[$match] = $match;
             }
         }
-
+        if ($result) {
+            return array_keys($result);
+        }
         return $result;
     }
 
