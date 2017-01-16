@@ -9,7 +9,9 @@ class ShortcodeDirRepository extends ShortcodeRepository
 {
     /**
      * [
-     *    'tag' => [
+     *     'tag' => function(){...},
+     *     'tag' => [MyShortcode::class, 'widget'],
+     *     'tag' => [
      *        'callback' => [],
      *        'tooltip' => '',
      *        'config' => [],
@@ -22,11 +24,13 @@ class ShortcodeDirRepository extends ShortcodeRepository
     {
         foreach ($pluginClass::shortcodes() as $tag => $item) {
             if ($tag) {
-                if (!isset($item['callback'])) {
-                    throw new \Exception("Callback is empty in shortcode $tag");
-                }
-                if (!is_callable($item['callback'])) {
-                    throw new \Exception("Callback is not callable in shortcode $tag");
+                if (!is_callable($item)) {
+                    if (!isset($item['callback'])) {
+                        throw new \Exception("Callback is empty in shortcode $tag");
+                    }
+                    if (!is_callable($item['callback'])) {
+                        throw new \Exception("Callback is not callable in shortcode $tag");
+                    }
                 }
                 $this->_data[] = [
                     'app_id' => $this->checkApp($pluginClass),
