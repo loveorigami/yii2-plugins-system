@@ -37,7 +37,8 @@ class ShortcodeDbRepository extends ShortcodeRepository
     {
         return Shortcode::find()->where([
             'tag' => $shortcodes,
-            'app_id' => $appId
+            'app_id' => $appId,
+            'status' => Shortcode::STATUS_ACTIVE
         ])->indexBy('tag')->asArray()->all();
     }
 

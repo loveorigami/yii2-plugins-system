@@ -37,7 +37,7 @@ class ShortcodeService
         $this->shortcodeParser = $shortcodeParser;
         $this->shortcodeDbRepository = $shortcodeDbRepository;
     }
-    
+
     /**
      * @param $content
      * @return array
