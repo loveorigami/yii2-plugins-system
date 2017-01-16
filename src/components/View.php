@@ -25,6 +25,7 @@ class View extends WebView
      * @var string
      */
     private $_body;
+    private $_from_ajax = false;
 
     /**
      * Marks the beginning of an HTML body section.
@@ -68,6 +69,7 @@ class View extends WebView
     {
         $viewFile = $this->findViewFile($view, $context);
         $this->_body = $this->renderFile($viewFile, $params, $context);
+        $this->_from_ajax = true;
 
         ob_start();
         ob_implicit_flush(false);
@@ -119,11 +121,11 @@ class View extends WebView
         $this->trigger(self::EVENT_END_PAGE);
         $endPage = ob_get_clean();
 
-        if ($ajaxMode) {
+        if ($this->_from_ajax) {
             $content = $endPage;
         } else {
             $content = $this->_body . $endPage;
-        }
+       }
 
         echo strtr($content, [
             self::PH_HEAD => $this->renderHeadHtml(),
