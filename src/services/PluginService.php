@@ -221,7 +221,7 @@ class PluginService
 
             $shortcodesPoolDir = new ShortcodesPoolDto($shortcodesArrayDir);
             $shortcodesPoolDb = new ShortcodesPoolDto($shortcodesArrayDb);
-
+            
             /** Get Deleted shortcodes */
             foreach (array_filter(array_diff($shortcodesDiffDb->getDiff(), $shortcodesDiffDir->getDiff())) as $key => $value) {
                 $data = $shortcodesPoolDb->getInfo($key);

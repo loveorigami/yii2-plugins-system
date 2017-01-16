@@ -22,6 +22,7 @@ class EventsDiffDto
     public function __construct($data = [])
     {
         foreach ($data as $item) {
+            $diff = [];
             $diff['handler_class'] = ArrayHelper::getValue($item, 'handler_class');
             $diff['handler_method'] = ArrayHelper::getValue($item, 'handler_method');
             $config = ArrayHelper::getValue($item, 'data', null);
