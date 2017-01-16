@@ -2,6 +2,7 @@
 
 namespace lo\plugins\repositories;
 
+use lo\plugins\models\Plugin;
 use lo\plugins\models\Shortcode;
 use yii\helpers\Html;
 
@@ -35,10 +36,12 @@ class ShortcodeDbRepository extends ShortcodeRepository
      */
     public function findShortcodesByNameAsArray($shortcodes, $appId)
     {
-        return Shortcode::find()->where([
-            'tag' => $shortcodes,
-            'app_id' => $appId,
-            'status' => Shortcode::STATUS_ACTIVE
+        return Shortcode::find()->alias('s')->innerJoinWith('plugin p')->where([
+            's.tag' => $shortcodes,
+            's.app_id' => $appId,
+            's.status' => Shortcode::STATUS_ACTIVE,
+            'p.status' => Plugin::STATUS_ACTIVE
+
         ])->indexBy('tag')->asArray()->all();
     }
 
