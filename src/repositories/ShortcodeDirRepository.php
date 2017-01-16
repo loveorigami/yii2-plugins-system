@@ -24,21 +24,30 @@ class ShortcodeDirRepository extends ShortcodeRepository
     {
         foreach ($pluginClass::shortcodes() as $tag => $item) {
             if ($tag) {
-                if (!is_callable($item)) {
+                if (is_callable($item)) {
+                    $data = [
+                        'app_id' => $this->checkApp($pluginClass),
+                        'handler_class' => $pluginClass,
+                        'tag' => $tag,
+                        'tooltip' => "[$tag]",
+                        'data' => ''
+                    ];
+                } else {
                     if (!isset($item['callback'])) {
                         throw new \Exception("Callback is empty in shortcode $tag");
                     }
                     if (!is_callable($item['callback'])) {
                         throw new \Exception("Callback is not callable in shortcode $tag");
                     }
+                    $data = [
+                        'app_id' => $this->checkApp($pluginClass),
+                        'handler_class' => $pluginClass,
+                        'tag' => $tag,
+                        'tooltip' => ArrayHelper::getValue($item, 'tooltip', "[$tag]"),
+                        'data' => isset($item['config']) ? $item['config'] : ''
+                    ];
                 }
-                $this->_data[] = [
-                    'app_id' => $this->checkApp($pluginClass),
-                    'handler_class' => $pluginClass,
-                    'tag' => $tag,
-                    'tooltip' => ArrayHelper::getValue($item, 'tooltip'),
-                    'data' => isset($item['config']) ? $item['config'] : ''
-                ];
+                $this->_data[] = $data;
             }
         };
     }
