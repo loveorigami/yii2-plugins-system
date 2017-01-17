@@ -11,15 +11,43 @@ use yii\helpers\ArrayHelper;
 class ShortcodeParser
 {
     /**
+     * Default ignore blocks
+     * @var array
+     */
+    protected $ignoreBlocks = [
+        '<!\[CDATA' => '\]\]>',
+        '<pre[^>]*>' => '<\/pre>',
+        '<form[^>]*>' => '<\/form>',
+        '<style[^>]*>' => '<\/style>',
+        '<script[^>]*>' => '<\/script>',
+        '<!--' => '-->',
+        '<code[^>]*>' => '<\/code>',
+    ];
+
+    /**
+     * Add ignore block
+     * @param String $openTag
+     * @param String $closeTag
+     */
+    public function addIgnoreBlock($openTag, $closeTag)
+    {
+        $this->ignoreBlocks[$openTag] = $closeTag;
+    }
+
+    /**
+     * regex for ignore blocks
+     * @var string
+     */
+    private $_ignorePattern;
+
+    /**
      * The regex for attributes.
-     *
      * This regex covers the following attribute situations:
      *  - key = "value"
      *  - key = 'value'
      *  - key = value
      *  - "value"
      *  - value
-     *
      * @var string
      */
     private $attrPattern = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
@@ -131,9 +159,43 @@ class ShortcodeParser
         if (empty($this->_shortcodes) || !is_array($this->_shortcodes))
             return $content;
 
-        return preg_replace_callback($this->shortcodeRegex(), [$this, 'doShortcodeTag'], $content);
+        /**
+         * Clear content from ignore blocks
+         */
+        $pattern = $this->getIgnorePattern();
+        $content = $str = preg_replace_callback("~$pattern~isu", ['self', '_stack'], $content);
+
+        /**
+         * Replase shorcodes in content
+         */
+        $content = preg_replace_callback($this->shortcodeRegex(), [$this, 'doShortcodeTag'], $content);
+        $content = strtr($content, self::_stack());
+
+        return $content;
     }
 
+    /**
+     * Calculate ignore blocks as callback.
+     * Накапливает исходный код безопасных блоков при использовании в качестве
+     * обратного вызова. При отдельном использовании возвращает накопленный
+     * массив.
+     *
+     * @param bool $matches
+     * @return array|string
+     */
+    private static function _stack($matches = false)
+    {
+        static $safe_blocks = [];
+        if ($matches !== false) {
+            $key = '<' . count($safe_blocks) . '>';
+            $safe_blocks[$key] = $matches[0];
+            return $key;
+        } else {
+            $tmp = $safe_blocks;
+            unset($safe_blocks);
+            return $tmp;
+        }
+    }
 
     /**
      * Parse single shortcode
@@ -197,24 +259,54 @@ class ShortcodeParser
      */
     public function getShortcodesFromContent($content)
     {
+        $content = $this->getContentWithoutIgnoreBlocks($content);
+
         if (false === strpos($content, '[')) {
             return [];
         }
 
         $result = [];
-        //$regex = "\[(?!CDATA|YII)([A-Za-z_]+[^\ \]]+)"; with ignore
-        $regex = "(\W)\[(?!CDATA|YII)([A-Za-z_]+[^\ \]]+)";
+
+        $regex = "\[([A-Za-z_]+[^\ \]]+)";
         preg_match_all('/' . $regex . '/', $content, $matches);
 
-        if (!empty($matches[2])) {
-            foreach ($matches[2] as $match) {
+        if (!empty($matches[1])) {
+            foreach ($matches[1] as $match) {
                 $result[$match] = $match;
             }
         }
+
         if ($result) {
             return array_keys($result);
         }
+
         return $result;
+    }
+
+    /**
+     * @param $content
+     * @return mixed
+     */
+    protected function getContentWithoutIgnoreBlocks($content)
+    {
+        $pattern = $this->getIgnorePattern();
+        return preg_replace("~$pattern~isu", '', $content);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getIgnorePattern()
+    {
+        if (!$this->_ignorePattern) {
+            $pattern = '(';
+            foreach ($this->ignoreBlocks as $start => $end) {
+                $pattern .= "$start.*?$end|";
+            }
+            $pattern .= '<.*?>)';
+            $this->_ignorePattern = $pattern;
+        }
+        return $this->_ignorePattern;
     }
 
     /**
