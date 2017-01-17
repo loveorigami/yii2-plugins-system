@@ -58,7 +58,7 @@ class Bootstrap implements BootstrapInterface
         $events = $repository->findEventsByApp($appId);
         if ($events) {
             foreach ($events as $event) {
-                $triggerClass = $event->getTriggerEvent();
+                $triggerClass = $event->getTriggerClass();
                 $triggerEvent = $event->getTriggerEvent();
                 $handler = $event->getHandler();
                 if (is_array($handler) && is_callable($handler[0])) {
