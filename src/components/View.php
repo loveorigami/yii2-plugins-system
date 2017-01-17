@@ -17,7 +17,7 @@ use yii\web\View as WebView;
 class View extends WebView
 {
     /**
-     * @event Event an event that is triggered by [[contentManipulation()]].
+     * @event Event an event that is triggered by [[doBody()]].
      */
     const EVENT_DO_BODY = 'doBody';
 
@@ -26,15 +26,6 @@ class View extends WebView
      */
     private $_body;
     private $_from_ajax = false;
-
-    /**
-     * Marks the beginning of an HTML body section.
-     */
-    public function beginBody()
-    {
-        echo self::PH_BODY_BEGIN;
-        $this->trigger(self::EVENT_BEGIN_BODY);
-    }
 
     /**
      * Content manipulation. Need for correct replacement shortcodes
