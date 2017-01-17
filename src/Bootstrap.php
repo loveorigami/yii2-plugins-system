@@ -10,6 +10,7 @@ use lo\plugins\shortcodes\ShortcodeParser;
 use Yii;
 use yii\base\BootstrapInterface;
 use yii\base\Event;
+use yii\base\InvalidConfigException;
 
 /**
  * Class Bootstrap
@@ -20,6 +21,7 @@ class Bootstrap implements BootstrapInterface
 {
     /**
      * @param \yii\base\Application $app
+     * @throws InvalidConfigException
      */
     public function bootstrap($app)
     {
@@ -32,7 +34,12 @@ class Bootstrap implements BootstrapInterface
         }
 
         /** @var PluginsManager $pluginsManager */
-        $pluginsManager = $app->plugins;
+        if (isset($app->plugins)) {
+            $pluginsManager = $app->plugins;
+        } else {
+            throw new InvalidConfigException('Component "plugins" must be set');
+        }
+
         $appId = $pluginsManager->appId;
 
         if ($pluginsManager->enablePlugins && $appId) {
