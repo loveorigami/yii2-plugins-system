@@ -31,20 +31,20 @@ class Bootstrap implements BootstrapInterface
             ];
         }
 
-        /** @var PluginsManager $pluginManager */
-        $pluginManager = $app->plugins;
-        $appId = $pluginManager->appId;
+        /** @var PluginsManager $pluginsManager */
+        $pluginsManager = $app->plugins;
+        $appId = $pluginsManager->appId;
 
-        if ($pluginManager->enablePlugins && $appId) {
+        if ($pluginsManager->enablePlugins && $appId) {
             $this->registerEvents($appId);
         }
 
-        if ($pluginManager->shortcodesParse) {
+        if ($pluginsManager->shortcodesParse) {
             Yii::$container->setSingleton(ShortcodeParser::class);
             Yii::$container->set(ShortcodeService::class);
             Event::on(View::class, View::EVENT_DO_BODY, [
                 ShortcodeHandler::class, ShortcodeHandler::PARSE_SHORTCODES
-            ], $pluginManager);
+            ], $pluginsManager);
         }
     }
 
