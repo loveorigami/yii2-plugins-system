@@ -48,12 +48,18 @@ That's all, now you have module installed and configured in advanced template.
 Next, open `@frontend/config/main.php` and add following:
 
 ```php
-'bootstrap' => ['log', 'plugins'],
 ...
 'components' => [
     'plugins' => [
-        'class' => lo\plugins\components\EventBootstrap::class,
-        'appId' => 1 // lo\plugins\BasePlugin::APP_FRONTEND
+        'class' => lo\plugins\components\PluginsManager::class,
+        'appId' => 1 // lo\plugins\BasePlugin::APP_FRONTEND,
+        // by default
+        'enablePlugins' => true,
+        'shortcodesParse' => true,
+        'shortcodesIgnoreBlocks' => [
+            '<pre[^>]*>' => '<\/pre>',
+            //'<div class="content[^>]*>' => '<\/div>',
+        ]
     ],
     'view' => [
         'class' => lo\plugins\components\View::class,
@@ -65,11 +71,10 @@ Next, open `@frontend/config/main.php` and add following:
 Also do the same thing with `@backend/config/main.php`:
 
 ```php
-'bootstrap' => ['log', 'plugins'],
 ...
 'components' => [
     'plugins' => [
-        'class' => lo\plugins\components\EventBootstrap::class,
+        'class' => lo\plugins\components\PluginsManager::class,
         'appId' => 2 // lo\plugins\BasePlugin::APP_BACKEND
     ],
     'view' => [

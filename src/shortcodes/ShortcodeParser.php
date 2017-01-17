@@ -25,11 +25,24 @@ class ShortcodeParser
     ];
 
     /**
+     * Add ignore blocks from array
+     * @param array $blocks
+     */
+    public function addIgnoreBlocks($blocks)
+    {
+        if (is_array($blocks)) {
+            foreach ($blocks as $openTag => $closeTag) {
+                $this->addIgnoreBlock($openTag, $closeTag);
+            }
+        }
+    }
+
+    /**
      * Add ignore block
      * @param String $openTag
      * @param String $closeTag
      */
-    public function addIgnoreBlock($openTag, $closeTag)
+    protected function addIgnoreBlock($openTag, $closeTag)
     {
         $this->ignoreBlocks[$openTag] = $closeTag;
     }

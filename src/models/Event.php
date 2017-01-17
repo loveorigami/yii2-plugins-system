@@ -2,7 +2,7 @@
 
 namespace lo\plugins\models;
 
-use lo\plugins\BasePlugin;
+use lo\plugins\helpers\JsonHelper;
 use lo\plugins\models\query\EventQuery;
 use lo\plugins\validators\CallableValidator;
 use lo\plugins\validators\ClassNameValidator;
@@ -103,38 +103,29 @@ class Event extends ActiveRecord
     }
 
     /**
-     * @param null $appId
+     * @return string
+     */
+    public function getTriggerClass()
+    {
+        return $this->trigger_class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTriggerEvent()
+    {
+        return $this->trigger_event;
+    }
+
+    /**
      * @return array
      */
-    public static function eventList($appId = null)
+    public function getHandler()
     {
-        if (!$appId) return [];
-
-        $attributes = ['trigger_class', 'trigger_event', 'plugin_id', 'pos', 'handler_method']; // handler_class
-        $order = array_combine($attributes, array_fill(0, count($attributes), SORT_ASC));
-
-        $allEvents = self::find()
-            ->alias('e')
-            ->innerJoinWith(['plugin p'])
-            ->where(['AND',
-                ['e.status' => Event::STATUS_ACTIVE],
-                ['p.status' => Plugin::STATUS_ACTIVE],
-                ['e.app_id' => [$appId, BasePlugin::APP_COMMON]]
-            ])
-            ->orderBy($order)
-            ->all();
-
-        $result = [];
-
-        foreach ($allEvents as $data) {
-            if ($data->data) {
-                $handler = [[$data->handler_class, $data->handler_method], json_decode($data->data, true)];
-            } else {
-                $handler = [$data->handler_class, $data->handler_method];
-            }
-            $result[$data->trigger_class][$data->trigger_event][] = $handler;
-        }
-
-        return $result;
+        return [
+            [$this->handler_class, $this->handler_method],
+            JsonHelper::decode($this->data)
+        ];
     }
 }

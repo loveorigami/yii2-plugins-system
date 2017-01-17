@@ -39,6 +39,14 @@ class ShortcodeService
     }
 
     /**
+     * @param $blocks
+     */
+    public function addIgnoreBlocks($blocks)
+    {
+       $this->shortcodeParser->addIgnoreBlocks($blocks);
+    }
+
+    /**
      * @param $content
      * @return array
      */
@@ -55,7 +63,7 @@ class ShortcodeService
     {
         $shortcodes = $this->shortcodeDbRepository->findShortcodesByNameAsArray($shortcodes, $appId);
         if ($shortcodes) {
-            $callbacs =  new ShortcodesDbCallbacksDto($shortcodes);
+            $callbacs = new ShortcodesDbCallbacksDto($shortcodes);
             $this->shortcodesCallback = $callbacs->data;
         }
     }

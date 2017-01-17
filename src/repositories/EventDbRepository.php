@@ -2,7 +2,9 @@
 
 namespace lo\plugins\repositories;
 
+use lo\plugins\BasePlugin;
 use lo\plugins\models\Event;
+use lo\plugins\models\Plugin;
 use yii\helpers\Html;
 
 class EventDbRepository extends EventRepository
@@ -18,6 +20,27 @@ class EventDbRepository extends EventRepository
             throw new \InvalidArgumentException('Model not found');
         }
         return $item;
+    }
+
+    public function findEventsByApp($appId)
+    {
+        if (!$appId) return [];
+
+        $attributes = ['trigger_class', 'trigger_event', 'plugin_id', 'pos', 'handler_method']; // handler_class
+        $order = array_combine($attributes, array_fill(0, count($attributes), SORT_ASC));
+
+        $events = Event::find()
+            ->alias('e')
+            ->innerJoinWith(['plugin p'])
+            ->where(['AND',
+                ['e.status' => Event::STATUS_ACTIVE],
+                ['p.status' => Plugin::STATUS_ACTIVE],
+                ['e.app_id' => [$appId, BasePlugin::APP_COMMON]]
+            ])
+            ->orderBy($order)
+            ->all();
+
+        return $events;
     }
 
     /**
@@ -78,4 +101,4 @@ class EventDbRepository extends EventRepository
         $model = $this->find($data->id);
         $model->delete();
     }
-} 
+}
