@@ -22,7 +22,7 @@ class ShortcodesDiffDto
     public function __construct($data = [])
     {
         foreach ($data as $item) {
-            $diff['data'] = [];
+            $diff = [];
             $handler = ArrayHelper::getValue($item, 'handler_class');
             $tag = ArrayHelper::getValue($item, 'tag');
             $config = ArrayHelper::getValue($item, 'data');
