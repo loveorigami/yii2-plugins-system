@@ -1,8 +1,8 @@
 <?php
 
-use lo\core\helpers\ArrayHelper;
 use lo\plugins\models\App;
 use lo\widgets\Jsoneditor;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
