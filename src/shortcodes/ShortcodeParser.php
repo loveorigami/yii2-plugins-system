@@ -72,6 +72,12 @@ class ShortcodeParser
     private $_shortcodes = [];
 
     /**
+     * Pool of parsered shortcodes
+     * @var array
+     */
+    private $_pool = [];
+
+    /**
      * @param $tag
      * @return bool
      */
@@ -126,6 +132,26 @@ class ShortcodeParser
         $this->_shortcodes = [];
     }
 
+    /**
+     * @param $tag
+     */
+    private function addToPool($tag)
+    {
+        if (!isset($this->_pool[$tag])) {
+            $this->_pool[$tag] = $tag;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isFinishedParse()
+    {
+        if (count($this->_pool) == count($this->_shortcodes)) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Tests whether content has a particular shortcode
@@ -176,14 +202,32 @@ class ShortcodeParser
          * Clear content from ignore blocks
          */
         $pattern = $this->getIgnorePattern();
-        $content = $str = preg_replace_callback("~$pattern~isu", ['self', '_stack'], $content);
+        $content = preg_replace_callback("~$pattern~isu", ['self', '_stack'], $content);
+
+        /**
+         * parse nested
+         */
+        $content = $this->parseContent($content);
 
         /**
          * Replase shorcodes in content
          */
-        $content = preg_replace_callback($this->shortcodeRegex(), [$this, 'doShortcodeTag'], $content);
         $content = strtr($content, self::_stack());
 
+        return $content;
+    }
+
+    /**
+     * parse nested shortcodes
+     * @param $content
+     * @return string
+     */
+    protected function parseContent($content)
+    {
+        $content = preg_replace_callback($this->shortcodeRegex(), [$this, 'doShortcodeTag'], $content);
+        if (!$this->isFinishedParse()) {
+            $content = $this->parseContent($content);
+        }
         return $content;
     }
 
@@ -233,9 +277,8 @@ class ShortcodeParser
         $content = isset($m[5]) ? $m[5] : null;
 
         $attr['content'] = $content;
-
+        $this->addToPool($tag);
         return $m[1] . call_user_func($callback, $attr, $content, $tag) . $m[6];
-
     }
 
     /**

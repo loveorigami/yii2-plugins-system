@@ -43,7 +43,7 @@ class ShortcodeService
      */
     public function addIgnoreBlocks($blocks)
     {
-       $this->shortcodeParser->addIgnoreBlocks($blocks);
+        $this->shortcodeParser->addIgnoreBlocks($blocks);
     }
 
     /**
