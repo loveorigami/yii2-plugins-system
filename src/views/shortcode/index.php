@@ -5,6 +5,7 @@ use lo\plugins\models\App;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\StringHelper;
 
 /**
  * @var $this yii\web\View
@@ -36,7 +37,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'tag',
             'tooltip',
-            'data',
+            [
+                'attribute' => 'data',
+                'value' => function ($model) {
+                    return StringHelper::truncate($model->data, 60);
+                },
+            ],
             [
                 'attribute' => 'status',
                 'options' => ['style' => 'width: 75px; align: center;'],
