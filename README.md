@@ -15,7 +15,7 @@ Yii2-plugins-system can be installed using composer. Run following command to do
 install Yii2-plugins-system:
 
 ```bash
-composer require "loveorigami/yii2-plugins-system": "2.0"
+composer require "loveorigami/yii2-plugins-system": ">=3.*"
 ```
 
 ### 2. Update database schema
@@ -83,6 +83,9 @@ Also do the same thing with `@backend/config/main.php`:
     ...
 ]
 ```
+
+## Shortcodes
+* [Yii2-shortcodes-pack](https://github.com/loveorigami/yii2-shortcodes-pack)
 
 ## Core plugins (examples)
 
