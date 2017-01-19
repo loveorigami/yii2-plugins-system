@@ -9,7 +9,7 @@
   ],
   "type": "yii2-extension",
   "license": "MIT",
-  "version": "3.0",
+  "version": "3.0.0",
   "support": {
     "source": "https://github.com/loveorigami/yii2-plugins-system",
     "issues": "https://github.com/loveorigami/yii2-plugins-system/issues"
