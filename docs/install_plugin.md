@@ -1,6 +1,6 @@
 # Install plugin
 
-After [creating](create_plugin.md) your `Test` plugin first, you must make sure that the our directory plugins included in the module configuration
+After [creating](create_plugin.md) your `TestPlugin` first, you must make sure that the our directory plugins included in the module configuration
 
 ```php
 'modules' => [

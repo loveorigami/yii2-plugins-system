@@ -7,7 +7,7 @@ To create your plugin you need to run the following required steps
 
 ### 2. In this folder create:
 * `README.md` with usage instruction for this plugin
-* New named as folder class `Test`, with information about plugin
+* New class `TestPlugin`, with information about plugin
 
 ```php
 
@@ -24,7 +24,7 @@ namespace common\plugins\test;
  * Author URI: https://github.com/loveorigami
  */
  
-class Test extends BasePlugin
+class TestPlugin extends BasePlugin
 {
 ...
 }
@@ -37,9 +37,7 @@ class Test extends BasePlugin
 
     /**
      * Application id, where plugin will be worked.
-     * Support values: frontend, backend, common
-     * Default: frontend
-     * @var appId string
+     * @var appId integer
      */
     public static $appId = self::APP_FRONTEND;
 
