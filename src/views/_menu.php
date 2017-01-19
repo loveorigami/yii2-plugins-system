@@ -6,38 +6,35 @@
 
 use yii\bootstrap\Nav;
 
-?>
-
-<?= Nav::widget([
+echo Nav::widget([
     'options' => [
         'class' => 'nav-tabs',
         'style' => 'margin-bottom: 15px'
     ],
     'items' => [
         [
-            'label'   => Yii::t('plugin', 'Items'),
-            'url'     => ['/plugins/plugin/index'],
+            'label' => Yii::t('plugin', 'Items'),
+            'url' => ['/plugins/plugin/index'],
         ],
         [
-            'label'   => Yii::t('plugin', 'Events'),
-            'url'     => ['/plugins/event/index'],
+            'label' => Yii::t('plugin', 'Events'),
+            'url' => ['/plugins/event/index'],
         ],
         [
-            'label'   => Yii::t('plugin', 'Shortcodes'),
-            'url'     => ['/plugins/shortcode/index'],
+            'label' => Yii::t('plugin', 'Shortcodes'),
+            'url' => ['/plugins/shortcode/index'],
         ],
         [
-            'label'   => Yii::t('plugin', 'Categories'),
-            'url'     => ['/plugins/category/index'],
+            'label' => Yii::t('plugin', 'Categories'),
+            'url' => ['/plugins/category/index'],
         ],
         [
-            'label'   => Yii::t('plugin', 'Info'),
-            'url'     => ['/plugins/plugin/info'],
+            'label' => Yii::t('plugin', 'Info'),
+            'url' => ['/plugins/plugin/info'],
         ],
         [
-            'label'   => Yii::t('plugin', 'Install'),
-            'url'     => ['/plugins/plugin/install'],
+            'label' => Yii::t('plugin', 'Install'),
+            'url' => ['/plugins/plugin/install'],
         ],
     ]
-]) 
-?>
+]);
