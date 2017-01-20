@@ -1,9 +1,4 @@
 <?php
-/**
- * EventManager class file.
- * @copyright (c) 2013, Galament
- * @license http://www.opensource.org/licenses/bsd-license.php
- */
 
 namespace lo\plugins\components;
 
