@@ -49,6 +49,8 @@ Next, open `@frontend/config/main.php` and add following:
 
 ```php
 ...
+'bootstrap' => ['log', 'plugins'],
+...
 'components' => [
     'plugins' => [
         'class' => lo\plugins\components\PluginsManager::class,
@@ -68,14 +70,21 @@ Next, open `@frontend/config/main.php` and add following:
 ]
 ```
 
-Also do the same thing with `@backend/config/main.php`:
+Also do the same thing with 
+* `@backend/config/main.php`
+* `@console/config/main.php`
+* `@api/config/main.php`
+* our modules 
+* etc...
 
 ```php
+...
+'bootstrap' => ['log', 'plugins'],
 ...
 'components' => [
     'plugins' => [
         'class' => lo\plugins\components\PluginsManager::class,
-        'appId' => 2 // lo\plugins\BasePlugin::APP_BACKEND
+        'appId' => 2 // lo\plugins\BasePlugin::APP_BACKEND or our appId
     ],
     'view' => [
         'class' => lo\plugins\components\View::class,
@@ -83,6 +92,13 @@ Also do the same thing with `@backend/config/main.php`:
     ...
 ]
 ```
+
+## Base AppId ```lo\plugins\BasePlugin::```
+* const APP_FRONTEND = 1;
+* const APP_BACKEND = 2;
+* const APP_COMMON = 3;
+* const APP_API = 4;
+* const APP_CONSOLE = 5;
 
 ## Shortcodes
 * [Yii2-shortcodes-pack](https://github.com/loveorigami/yii2-shortcodes-pack)
