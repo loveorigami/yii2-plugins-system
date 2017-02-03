@@ -29,8 +29,5 @@
     "psr-4": {
       "lo\\plugins\\": "src/"
     }
-  },
-  "extra": {
-    "bootstrap": "lo\\plugins\\Bootstrap"
   }
 }
