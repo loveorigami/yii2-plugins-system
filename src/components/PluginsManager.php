@@ -58,13 +58,6 @@ class PluginsManager extends Component implements BootstrapInterface
      */
     public function bootstrap($app)
     {
-        if (!isset(Yii::$app->i18n->translations['plugin'])) {
-            Yii::$app->i18n->translations['plugin'] = [
-                'class' => 'yii\i18n\PhpMessageSource',
-                'sourceLanguage' => 'en',
-                'basePath' => '@lo/plugins/messages'
-            ];
-        }
 
         if (!isset($app->plugins)) {
             throw new InvalidConfigException('Component "plugins" must be set');

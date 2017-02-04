@@ -2,6 +2,7 @@
 
 namespace lo\plugins;
 
+use Yii;
 use yii\base\InvalidConfigException;
 
 class Module extends \yii\base\Module
@@ -15,6 +16,14 @@ class Module extends \yii\base\Module
     public function init()
     {
         parent::init();
+
+        if (!isset(Yii::$app->i18n->translations['plugin'])) {
+            Yii::$app->i18n->translations['plugin'] = [
+                'class' => 'yii\i18n\PhpMessageSource',
+                'sourceLanguage' => 'en',
+                'basePath' => '@lo/plugins/messages'
+            ];
+        }
 
         //user did not define the Navbar?
         if (!$this->pluginsDir) {
