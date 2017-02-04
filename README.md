@@ -105,8 +105,9 @@ Also do the same thing with
 
 ## Core plugins (examples)
 
-* [Hello world!] (src/core/helloworld)
+* [External links] (src/core/extralinks)
 * [Http Authentication] (src/core/httpauth)
+* [Hello world!] (src/core/helloworld)
 
 ## Your plugins
 
