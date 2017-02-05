@@ -3,6 +3,7 @@
 namespace lo\plugins\repositories;
 
 use lo\plugins\BasePlugin;
+use lo\plugins\models\Category;
 
 class EventDirRepository extends EventRepository
 {
@@ -18,6 +19,7 @@ class EventDirRepository extends EventRepository
                 $handlerMethod = is_array($handler) ? $handler[0] : $handler;
                 $this->_data[] = [
                     'app_id' => $this->checkApp($pluginClass),
+                    'category_id' => Category::CAT_PLUGINS,
                     'trigger_class' => $className,
                     'trigger_event' => $eventName,
                     'handler_class' => $pluginClass,
