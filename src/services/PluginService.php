@@ -144,7 +144,6 @@ class PluginService
      */
     protected function installEvents($hash, $pluginClass, $pluginInfoDb, $pluginInfoDir)
     {
-
         $eventsArrayDir = $this->eventDirRepository->findEventsByHandler($pluginClass);
 
         if (!$pluginInfoDb) {

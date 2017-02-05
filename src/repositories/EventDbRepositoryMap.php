@@ -19,6 +19,7 @@ class EventDbRepositoryMap
     public $handler_method;
     public $data;
     public $text;
+    public $pos;
     public $status = Event::STATUS_ACTIVE;
 
     /**

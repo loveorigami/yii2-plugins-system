@@ -11,7 +11,9 @@ class EventDirRepository extends EventRepository
      */
     public function populate($pluginClass)
     {
+        $pos = 0;
         foreach ($pluginClass::events() as $className => $events) {
+            $pos++;
             foreach ($events as $eventName => $handler) {
                 $handlerMethod = is_array($handler) ? $handler[0] : $handler;
                 $this->_data[] = [
@@ -20,7 +22,8 @@ class EventDirRepository extends EventRepository
                     'trigger_event' => $eventName,
                     'handler_class' => $pluginClass,
                     'handler_method' => $handlerMethod,
-                    'data' => isset($handler[1]) ? $handler[1] : ''
+                    'pos' => $pos,
+                    'data' => isset($handler[1]) ? $handler[1] : []
                 ];
             }
         };
