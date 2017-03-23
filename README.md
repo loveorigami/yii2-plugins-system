@@ -22,7 +22,7 @@ composer require "loveorigami/yii2-plugins-system": ">=3.*"
 
 The last thing you need to do is updating your database schema by applying the
 migrations. Make sure that you have properly configured `db` application component,
-add in our console config namespace migration (more [here](http://www.yiiframework.com/doc-2.0/guide-db-migrations.html#namespaced-migrations)
+add in our console config namespace migration - [more here](http://www.yiiframework.com/doc-2.0/guide-db-migrations.html#namespaced-migrations)
 
 ```php
 return [
