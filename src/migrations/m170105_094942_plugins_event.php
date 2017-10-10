@@ -58,7 +58,8 @@ class m170105_094942_plugins_event extends Migration
             'trigger_event' => 'beginPage',
             'handler_class' => 'lo\plugins\core\SeoHandler',
             'handler_method' => 'updateTitle',
-            'status' => self::EVENTS_ACTIVE
+            'status' => self::EVENTS_ACTIVE,
+            'pos' => 1
         ]);
 
         $this->insert($this->tn(self::TBL_EVENT), [
