@@ -20,15 +20,12 @@ class SeoHandler
     public static function clearUrl()
     {
         $request = Yii::$app->request->url;
-
-        // Проверяем, если есть в урле index.php или ?r=, то кидаем 404 ошибку
         if (
-            (strpos($request, 'index.php') !== false) ||
-            (strpos($request, '?r=') !== false) ||
-            (strpos($request, 'site') !== false) ||
-            (strpos($request, 'site/index') !== false)
+            ($request == '/index.php') ||
+            ($request == '/site') ||
+            ($request == '/site/index')
         ) {
-            Yii::$app->response->redirect('/', 301);
+            Yii::$app->response->redirect(Yii::$app->homeUrl, 301);
         }
     }
 
