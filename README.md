@@ -121,14 +121,14 @@ Also do the same thing with
 
 ## Core plugins (examples)
 
-* [External links] (src/core/extralinks)
-* [Http Authentication] (src/core/httpauth)
-* [Hello world!] (src/core/helloworld)
+* [External links](src/core/extralinks)
+* [Http Authentication](src/core/httpauth)
+* [Hello world!](src/core/helloworld)
 
 ## Your plugins
 
-* [Create] (docs/create_plugin.md)
-* [Install] (docs/install_plugin.md)
+* [Create](docs/create_plugin.md)
+* [Install](docs/install_plugin.md)
 
 ## Contributing to this project
 
