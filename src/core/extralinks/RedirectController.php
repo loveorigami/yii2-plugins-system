@@ -34,6 +34,11 @@ class RedirectController extends Controller
             if ($config['enabledB64Encode']) {
                 $url = base64_decode($url);
             }
+
+            if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
+                throw new BadRequestHttpException;
+            }
+
             return $this->redirect($url);
         }
 
