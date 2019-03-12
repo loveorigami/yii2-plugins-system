@@ -1,4 +1,5 @@
 <?php
+
 namespace lo\plugins\core\extralinks;
 
 use lo\plugins\BasePlugin;
@@ -11,7 +12,7 @@ use yii\web\Response;
 /**
  * Plugin Name: External Links
  * Plugin URI: https://github.com/loveorigami/yii2-plugins-system/tree/master/src/core/extralinks
- * Version: 1.4
+ * Version: 2.0
  * Description: AutoCorrect external links after rendering html page
  * Author: Andrey Lukyanov
  * Author URI: https://github.com/loveorigami
@@ -25,10 +26,13 @@ class ExternalLinks extends BasePlugin
         'noReplaceLinksOnDomains' => [
             //'google.com'
         ],
+        'noReplaceLinksOnSubDomains' => [
+            //'google.com'
+        ],
         'noReplaceLocalDomain' => true,
         'redirectRoute' => '/externallinks/redirect',
         'redirectRouteParam' => 'url',
-        'enabledB64Encode' => true
+        'enabledB64Encode' => true,
     ];
 
     /**
@@ -36,7 +40,7 @@ class ExternalLinks extends BasePlugin
      */
     public static $configController = [
         'redirectRouteParam' => 'url',
-        'enabledB64Encode' => true
+        'enabledB64Encode' => true,
     ];
 
     /**
@@ -46,10 +50,10 @@ class ExternalLinks extends BasePlugin
     {
         return [
             Response::class => [
-                Response::EVENT_AFTER_PREPARE => ['parse', self::$configResponse]
+                Response::EVENT_AFTER_PREPARE => ['parse', self::$configResponse],
             ],
             RedirectController::class => [
-                RedirectController::EVENT_LOAD_CONFIG => ['loadConfig', self::$configController]
+                RedirectController::EVENT_LOAD_CONFIG => ['loadConfig', self::$configController],
             ],
         ];
     }
@@ -96,7 +100,7 @@ class ExternalLinks extends BasePlugin
     }
 
     /**
-     * @param $content
+     * @param       $content
      * @param array $links
      * @return string
      */
@@ -109,9 +113,26 @@ class ExternalLinks extends BasePlugin
             }
 
             if ($dataLink = parse_url($link)) {
-                //Для этого хоста не нужно менять ссылку
+                // Для этого хоста не нужно менять ссылку
                 $host = ArrayHelper::getValue($dataLink, 'host');
                 if (in_array($host, self::$_config['noReplaceLinksOnDomains'])) {
+                    continue;
+                }
+
+                // Не заменять ссылки для субдоменов из списка
+                $noReplace = false;
+
+                foreach (self::$_config['noReplaceLinksOnSubDomains'] as $sub) {
+                    $pos = strpos($host, $sub);
+                    //echo $host . PHP_EOL;
+                    //echo $sub . "\r\n";
+                    if ($pos !== false) {
+                        $noReplace = true;
+                        continue;
+                    }
+                }
+
+                if ($noReplace) {
                     continue;
                 }
             }
